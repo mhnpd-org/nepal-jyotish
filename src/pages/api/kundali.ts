@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getPanchanga, PanchangaResult } from '@bidyashish/panchang';
+import * as panchang from '@bidyashish/panchang';
+import type { PanchangaResult, PlanetPosition } from '@bidyashish/panchang';
+import { PLANET_NAMES, type PlanetName } from '@internal/types/planets';
 
 export interface KundaliRequest {
   date: string; // ISO string or "YYYY-MM-DD"
@@ -15,6 +17,7 @@ export interface KundaliResponse {
   longitude: number;
   timezone: string;
   panchanga: PanchangaResult;
+  planets?: Array<{ planet: string; position: PlanetPosition }>;
 }
 
 export default async function handler(
@@ -46,12 +49,31 @@ export default async function handler(
     );
 
     // Fetch Panchanga
-    const panchanga = await getPanchanga(
+    const panchanga = await panchang.getPanchanga(
       utcDate,
       body.latitude,
       body.longitude,
       body.timezone
     );
+
+    // Use AstronomicalCalculator to fetch each planet's position
+    const calculator = new panchang.AstronomicalCalculator();
+    const planetNames: PlanetName[] = [...PLANET_NAMES];
+
+    const planets = await Promise.all(
+      planetNames.map(async (planet) => {
+        try {
+          const pos = await calculator.calculatePlanetPosition(planet, utcDate as Date);
+          return { planet, position: pos as PlanetPosition };
+        } catch (e) {
+          console.warn(`Could not calculate position for ${planet}:`, e);
+          return null;
+        }
+      })
+    );
+
+  // Filter out failed calculations
+  const filteredPlanets = (planets.filter(Boolean) as Array<{ planet: string; position: PlanetPosition }>);
 
     const response: KundaliResponse = {
       dateTime: utcDate.toISOString(),
@@ -59,6 +81,7 @@ export default async function handler(
       longitude: body.longitude,
       timezone: body.timezone,
       panchanga,
+      planets: filteredPlanets,
     };
 
     res.status(200).json(response);

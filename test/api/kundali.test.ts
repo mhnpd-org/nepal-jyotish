@@ -24,6 +24,17 @@ describe('Kundali API', () => {
     expect(res._getStatusCode()).toBe(200);
     const json = JSON.parse(res._getData());
     expect(json).toHaveProperty('panchanga');
-    expect(json).toMatchObject({ latitude: body.latitude, longitude: body.longitude, timezone: body.timezone });
+  expect(json).toMatchObject({ latitude: body.latitude, longitude: body.longitude, timezone: body.timezone });
+    // Planets should be present and be an array
+    expect(Array.isArray(json.planets)).toBe(true);
+    if (Array.isArray(json.planets) && json.planets.length > 0) {
+      const first = json.planets[0];
+      expect(first).toHaveProperty('planet');
+      expect(first).toHaveProperty('position');
+      expect(first.position).toHaveProperty('longitude');
+      expect(first.position).toHaveProperty('latitude');
+      expect(first.position).toHaveProperty('distance');
+      expect(first.position).toHaveProperty('longitudeSpeed');
+    }
   });
 });
