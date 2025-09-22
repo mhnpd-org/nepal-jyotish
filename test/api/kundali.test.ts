@@ -75,9 +75,6 @@ describe("Kundali API", () => {
     const json = JSON.parse(res._getData());
     expect(Array.isArray(json.planetaryPositions)).toBe(true);
 
-    console.log(JSON.stringify(json.planetaryPositions, null, 2)); // Debug log
-    console.log("Full API Response:", JSON.stringify(json, null, 2)); // Debug log
-
     // Expected longitudes from provided table (degrees + minutes)
     const expectedLongitudes: Record<string, number> = {
       Sun: 88.88333333333334,
@@ -98,8 +95,6 @@ describe("Kundali API", () => {
       // Ketu 104°23' -> 104.38333333333334
       Ketu: 104.38333333333334
     };
-
-    console.log(expectedLongitudes, json.planetaryPositions);
 
     const planets = json.planetaryPositions;
 

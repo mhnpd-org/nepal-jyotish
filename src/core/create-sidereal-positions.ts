@@ -97,13 +97,10 @@ export function createSiderealPositions(
       degreesInSign,
       rashiName,
       rashiLabel: rashiName,
-
       house,
       houseLabel,
-
       nakshatra: nakshatraIndex,
-      nakshatraName: nakshatraName as any,
-
+      nakshatraName: nakshatraName,
       degreeInRashi: degreesInSign,
       degreeInNakshatra,
       pada
