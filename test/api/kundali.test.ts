@@ -1,7 +1,7 @@
 import { createMocks } from "node-mocks-http";
 import type { NextApiRequest, NextApiResponse } from "next";
 import handler from "../../src/pages/api/kundali";
-import type { PlanetaryPosition } from "../../src/pages/api/kundali-types";
+import type { PlanetaryPosition } from "../../src/types/kundali-types";
 
 describe("Kundali API", () => {
   it("returns 400 when required fields are missing", async () => {

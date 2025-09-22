@@ -11,8 +11,8 @@ import type {
   PanchangaResult,
   PlanetName,
   Rashi
-} from "./kundali-types";
-import { RASHI } from "./kundali-types";
+} from "../../types/kundali-types";
+import { RASHI } from "../../types/kundali-types";
 
 // Constants
 const SUPPORTED_PLANETS = [
