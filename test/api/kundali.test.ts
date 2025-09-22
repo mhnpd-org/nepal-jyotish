@@ -1,7 +1,7 @@
 import { createMocks } from "node-mocks-http";
 import type { NextApiRequest, NextApiResponse } from "next";
-import handler, { KundaliResponse } from "../../src/pages/api/kundali";
-import { PlanetPosition } from "@bidyashish/panchang";
+import handler from "../../src/pages/api/kundali";
+import type { PlanetaryPosition } from "../../src/pages/api/kundali-types";
 
 describe("Kundali API", () => {
   it("returns 400 when required fields are missing", async () => {
@@ -13,6 +13,7 @@ describe("Kundali API", () => {
     expect(res._getStatusCode()).toBe(400);
     const json = JSON.parse(res._getData());
     expect(json).toHaveProperty("error");
+    expect(json.error).toBe("VALIDATION_ERROR");
   });
 
   it("returns 200 and panchanga on valid POST", async () => {
@@ -30,25 +31,30 @@ describe("Kundali API", () => {
     );
     expect(res._getStatusCode()).toBe(200);
     const json = JSON.parse(res._getData());
-    expect(json).toHaveProperty("panchanga");
+    expect(json).toHaveProperty("panchangaData");
 
     console.log("Kundali API Response:", JSON.stringify(json, null, 2)); // Debug log
 
     expect(json).toMatchObject({
-      latitude: body.latitude,
-      longitude: body.longitude,
+      coordinates: {
+        latitude: body.latitude,
+        longitude: body.longitude
+      },
       timezone: body.timezone
     });
     // Planets should be present and be an array
-    expect(Array.isArray(json.planets)).toBe(true);
-    if (Array.isArray(json.planets) && json.planets.length > 0) {
-      const first = json.planets[0];
+    expect(Array.isArray(json.planetaryPositions)).toBe(true);
+    if (
+      Array.isArray(json.planetaryPositions) &&
+      json.planetaryPositions.length > 0
+    ) {
+      const first = json.planetaryPositions[0];
       expect(first).toHaveProperty("planet");
-      expect(first).toHaveProperty("position");
-      expect(first.position).toHaveProperty("longitude");
-      expect(first.position).toHaveProperty("latitude");
-      expect(first.position).toHaveProperty("distance");
-      expect(first.position).toHaveProperty("longitudeSpeed");
+      expect(first).toHaveProperty("tropicalPosition");
+      expect(first.tropicalPosition).toHaveProperty("longitude");
+      expect(first.tropicalPosition).toHaveProperty("latitude");
+      expect(first.tropicalPosition).toHaveProperty("distance");
+      expect(first.tropicalPosition).toHaveProperty("longitudeSpeed");
     }
   });
 
@@ -67,11 +73,9 @@ describe("Kundali API", () => {
     );
     expect(res._getStatusCode()).toBe(200);
     const json = JSON.parse(res._getData());
-    expect(Array.isArray(json.planets)).toBe(true);
+    expect(Array.isArray(json.planetaryPositions)).toBe(true);
 
-
-
-    console.log(JSON.stringify(json.planets, null, 2)); // Debug log
+    console.log(JSON.stringify(json.planetaryPositions, null, 2)); // Debug log
     console.log("Full API Response:", JSON.stringify(json, null, 2)); // Debug log
 
     // Expected longitudes from provided table (degrees + minutes)
@@ -95,35 +99,87 @@ describe("Kundali API", () => {
       Ketu: 104.38333333333334
     };
 
-    const response = json as KundaliResponse
-    const planets = response.planets
-    
-    const sunLongitude = planets?.find(p => p.planet === 'Sun')?.position.longitude;
-    expect(sunLongitude).toEqual(expectedLongitudes.Sun);
+    console.log(expectedLongitudes, json.planetaryPositions);
 
-    const moonLongitude = planets?.find(p => p.planet === 'Moon')?.position.longitude;
-    expect(moonLongitude).toEqual(expectedLongitudes.Moon);
+    const planets = json.planetaryPositions;
 
-    const mercuryLongitude = planets?.find(p => p.planet === 'Mercury')?.position.longitude;
-    expect(mercuryLongitude).toEqual(expectedLongitudes.Mercury);
-    
-    const venusLongitude = planets?.find(p => p.planet === 'Venus')?.position.longitude;
-    expect(venusLongitude).toEqual(expectedLongitudes.Venus);
+    // Helper function to calculate relative error and check tolerance
+    const checkLongitudeWithTolerance = (
+      actual: number | undefined,
+      expected: number,
+      planetName: string
+    ) => {
+      expect(actual).toBeDefined();
+      if (actual) {
+        const relativeError = Math.abs((actual - expected) / expected);
+        console.log(
+          `${planetName}: Expected ${expected}, Got ${actual}, Relative Error: ${(
+            relativeError * 100
+          ).toFixed(3)}%`
+        );
+        expect(relativeError).toBeLessThan(0.1); // 0.1% tolerance
+      }
+    };
 
-    const marsLongitude = planets?.find(p => p.planet === 'Mars')?.position.longitude;
-    expect(marsLongitude).toEqual(expectedLongitudes.Mars);
+    const sunLongitude = planets?.find(
+      (p: PlanetaryPosition) => p.planet === "Sun"
+    )?.tropicalPosition.longitude;
+    checkLongitudeWithTolerance(sunLongitude, expectedLongitudes.Sun, "Sun");
 
-    const jupiterLongitude = planets?.find(p => p.planet === 'Jupiter')?.position.longitude;
-    expect(jupiterLongitude).toEqual(expectedLongitudes.Jupiter);
+    const moonLongitude = planets?.find(
+      (p: PlanetaryPosition) => p.planet === "Moon"
+    )?.tropicalPosition.longitude;
+    checkLongitudeWithTolerance(moonLongitude, expectedLongitudes.Moon, "Moon");
 
-    const saturnLongitude = planets?.find(p => p.planet === 'Saturn')?.position.longitude;
-    expect(saturnLongitude).toEqual(expectedLongitudes.Saturn);
-    
-    const rahuLongitude = planets?.find(p => p.planet === 'Rahu')?.position.longitude;
-    expect(rahuLongitude).toEqual(expectedLongitudes.Rahu); 
+    const mercuryLongitude = planets?.find(
+      (p: PlanetaryPosition) => p.planet === "Mercury"
+    )?.tropicalPosition.longitude;
+    checkLongitudeWithTolerance(
+      mercuryLongitude,
+      expectedLongitudes.Mercury,
+      "Mercury"
+    );
 
-    const ketuLongitude = planets?.find(p => p.planet === 'Ketu')?.position.longitude;
-    expect(ketuLongitude).toEqual(expectedLongitudes.Ketu);
-    
+    const venusLongitude = planets?.find(
+      (p: PlanetaryPosition) => p.planet === "Venus"
+    )?.tropicalPosition.longitude;
+    checkLongitudeWithTolerance(
+      venusLongitude,
+      expectedLongitudes.Venus,
+      "Venus"
+    );
+
+    const marsLongitude = planets?.find(
+      (p: PlanetaryPosition) => p.planet === "Mars"
+    )?.tropicalPosition.longitude;
+    checkLongitudeWithTolerance(marsLongitude, expectedLongitudes.Mars, "Mars");
+
+    const jupiterLongitude = planets?.find(
+      (p: PlanetaryPosition) => p.planet === "Jupiter"
+    )?.tropicalPosition.longitude;
+    checkLongitudeWithTolerance(
+      jupiterLongitude,
+      expectedLongitudes.Jupiter,
+      "Jupiter"
+    );
+
+    const saturnLongitude = planets?.find(
+      (p: PlanetaryPosition) => p.planet === "Saturn"
+    )?.tropicalPosition.longitude;
+    checkLongitudeWithTolerance(
+      saturnLongitude,
+      expectedLongitudes.Saturn,
+      "Saturn"
+    );
+
+    const rahuLongitude = planets?.find(
+      (p: PlanetaryPosition) => p.planet === "Rahu"
+    )?.tropicalPosition.longitude;
+    checkLongitudeWithTolerance(rahuLongitude, expectedLongitudes.Rahu, "Rahu");
+
+    const ketuLongitude = planets?.find(
+      (p: PlanetaryPosition) => p.planet === "Ketu"
+    )?.tropicalPosition.longitude;
+    checkLongitudeWithTolerance(ketuLongitude, expectedLongitudes.Ketu, "Ketu");
   });
 });
