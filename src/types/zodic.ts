@@ -1,4 +1,4 @@
-export const ZODIAC_SIGNS = [
+export const RASHI = [
   'Mesha',
   'Vrishabha',
   'Mithuna',
@@ -13,6 +13,6 @@ export const ZODIAC_SIGNS = [
   'Meena',
 ] as const;
 
-export type ZodiacSign = (typeof ZODIAC_SIGNS)[number];
+export type Rashi = (typeof RASHI)[number];
 
-export default ZODIAC_SIGNS;
+export default RASHI;
