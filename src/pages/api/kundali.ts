@@ -1,90 +1,23 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import * as panchang from "@bidyashish/panchang";
 import type { AstronomicalCalculator } from "@bidyashish/panchang";
-import { zonedTimeToUtc } from "date-fns-tz";
 import type {
   BirthTimeInput,
   PlanetaryPosition,
-  SiderealPlanetPosition,
   AstronomicalCalculationResult,
   KundaliErrorResponse,
   PanchangaResult,
-  PlanetName,
-  Rashi
+  PlanetName
 } from "../../types/kundali-types";
-import { RASHI } from "../../types/kundali-types";
+import { convertToUtcDateTime } from "@internal/core/convert-to-utc";
+import { validateBirthTimeInput } from "@internal/core/validate-birth-time";
+import {
+  createSiderealPositions,
+  SUPPORTED_PLANETS,
+  type RawPlanetData
+} from "@internal/core/create-sidereal-positions";
 
-// Constants
-const SUPPORTED_PLANETS = [
-  "Sun",
-  "Moon",
-  "Mercury",
-  "Venus",
-  "Mars",
-  "Jupiter",
-  "Saturn",
-  "Rahu",
-  "Ketu"
-] as const satisfies readonly PlanetName[];
-
-/** Approximate Lahiri ayanamsa for basic calculations */
-const APPROXIMATE_AYANAMSA = 23.44;
-
-// Utility functions for astronomical calculations
-function validateBirthTimeInput(input: unknown): input is BirthTimeInput {
-  if (!input || typeof input !== "object") return false;
-  
-  const data = input as Record<string, unknown>;
-  
-  return (
-    typeof data.date === "string" &&
-    /^\d{4}-\d{2}-\d{2}$/.test(data.date) &&
-    typeof data.time === "string" &&
-    /^\d{2}:\d{2}(:\d{2})?$/.test(data.time) &&
-    typeof data.latitude === "number" &&
-    data.latitude >= -90 &&
-    data.latitude <= 90 &&
-    typeof data.longitude === "number" &&
-    data.longitude >= -180 &&
-    data.longitude <= 180 &&
-    typeof data.timezone === "string" &&
-    data.timezone.length > 0
-  );
-}
-
-function normalizeTimeFormat(time: string): string {
-  return time.length === 5 ? `${time}:00` : time;
-}
-
-function convertToUtcDateTime(date: string, time: string, timezone: string): Date {
-  const normalizedTime = normalizeTimeFormat(time);
-  const localIsoString = `${date}T${normalizedTime}`;
-  return zonedTimeToUtc(localIsoString, timezone);
-}
-
-function tropicalToSiderealLongitude(tropicalDegrees: number): number {
-  const siderealDegrees = tropicalDegrees - APPROXIMATE_AYANAMSA;
-  return siderealDegrees < 0 ? siderealDegrees + 360 : siderealDegrees;
-}
-
-function normalizeLongitude(degrees: number): number {
-  let normalized = degrees % 360;
-  if (normalized < 0) normalized += 360;
-  return normalized;
-}
-
-function calculateZodiacSignData(longitude: number): {
-  sign: number;
-  degreesInSign: number;
-  rashiName: Rashi;
-} {
-  const normalizedLongitude = normalizeLongitude(longitude);
-  const sign = Math.floor(normalizedLongitude / 30) + 1; // 1-12
-  const degreesInSign = normalizedLongitude - (sign - 1) * 30;
-  const rashiName = RASHI[sign - 1];
-  
-  return { sign, degreesInSign, rashiName };
-}
+// Helpers and constants moved to `src/core/create-sidereal-positions.ts`
 
 async function calculatePanchangaData(
   utcDateTime: Date,
@@ -95,13 +28,7 @@ async function calculatePanchangaData(
   return await panchang.getPanchanga(utcDateTime, latitude, longitude, timezone);
 }
 
-interface RawPlanetData {
-  longitude?: number;
-  latitude?: number;
-  distance?: number;
-  longitudeSpeed?: number;
-  siderealLongitude?: number;
-}
+// RawPlanetData type re-exported from core module
 
 async function calculatePlanetaryPositions(
   utcDateTime: Date
@@ -163,28 +90,7 @@ function createPlanetaryPositions(
     };
   });
 }
-
-function createSiderealPositions(
-  rawData: Record<PlanetName, RawPlanetData | undefined>
-): readonly SiderealPlanetPosition[] {
-  return SUPPORTED_PLANETS.map((planet): SiderealPlanetPosition => {
-    const raw = rawData[planet];
-    const tropicalLongitude = raw?.longitude ?? 0;
-    const siderealLongitude = normalizeLongitude(
-      tropicalToSiderealLongitude(tropicalLongitude)
-    );
-    
-    const { sign, degreesInSign, rashiName } = calculateZodiacSignData(siderealLongitude);
-    
-    return {
-      planet,
-      siderealLongitude,
-      zodiacSign: sign,
-      degreesInSign,
-      rashiName
-    };
-  });
-}
+// createSiderealPositions implemented in core module
 
 /**
  * Calculate Vedic astrological data (Kundali) for a given birth time and location.
