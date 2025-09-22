@@ -14,14 +14,7 @@ import {
   createPlanetaryPositions
 } from "@internal/core/create-sidereal-positions";
 
-// Planetary and panchanga helpers are implemented in the core module
 
-/**
- * Calculate Vedic astrological data (Kundali) for a given birth time and location.
- * 
- * @param birthTimeInput - Birth date, time, and location information
- * @returns Complete astrological calculation including panchanga and planetary positions
- */
 export default async function calculateKundaliData(
   req: NextApiRequest,
   res: NextApiResponse<AstronomicalCalculationResult | KundaliErrorResponse>

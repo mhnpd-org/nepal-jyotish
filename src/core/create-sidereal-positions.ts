@@ -1,5 +1,5 @@
-import type { Rashi, PlanetName, SiderealPlanetPosition, PanchangaResult } from "../types/kundali-types";
-import { RASHI } from "../types/kundali-types";
+import type { Rashi, PlanetName, SiderealPlanetPosition, PanchangaResult, Nakshatra } from "../types/kundali-types";
+import { RASHI, NAKSHATRA, HOUSE_LABELS } from "../types/kundali-types";
 import * as panchang from "@bidyashish/panchang";
 import type { AstronomicalCalculator } from "@bidyashish/panchang";
 
@@ -51,6 +51,27 @@ export function calculateZodiacSignData(longitude: number): {
   return { sign, degreesInSign, rashiName };
 }
 
+/**
+ * Calculate nakshatra related data for a sidereal longitude.
+ * Nakshatras are 27 equal divisions of the ecliptic (360/27 = 13.333... degrees)
+ */
+export function calculateNakshatraData(longitude: number): {
+  nakshatraIndex: number; // 0-26
+  degreeInNakshatra: number; // 0-13.3333
+  pada: number; // 1-4
+  nakshatraName: Nakshatra;
+} {
+  const normalized = normalizeLongitude(longitude);
+  const nakFraction = 360 / 27; // 13.333...
+  const nakshatraIndex = Math.floor(normalized / nakFraction); // 0-26
+  const startOfNak = nakshatraIndex * nakFraction;
+  const degreeInNakshatra = normalized - startOfNak;
+  const pada = Math.min(4, Math.floor((degreeInNakshatra / nakFraction) * 4) + 1);
+  const nakshatraName = (NAKSHATRA as readonly Nakshatra[])[nakshatraIndex];
+
+  return { nakshatraIndex, degreeInNakshatra, pada, nakshatraName };
+}
+
 export function createSiderealPositions(
   rawData: Record<PlanetName, RawPlanetData | undefined>
 ): readonly SiderealPlanetPosition[] {
@@ -62,13 +83,30 @@ export function createSiderealPositions(
     );
 
     const { sign, degreesInSign, rashiName } = calculateZodiacSignData(siderealLongitude);
+    const { nakshatraIndex, degreeInNakshatra, pada, nakshatraName } = calculateNakshatraData(siderealLongitude);
+
+    // In this implementation house is treated relative to Aries as 1.
+    // If ascendant/lagna is available later, this should be shifted accordingly.
+    const house = sign; // 1-12
+    const houseLabel = HOUSE_LABELS[house - 1];
 
     return {
       planet,
       siderealLongitude,
       zodiacSign: sign,
       degreesInSign,
-      rashiName
+      rashiName,
+      rashiLabel: rashiName,
+
+      house,
+      houseLabel,
+
+      nakshatra: nakshatraIndex,
+      nakshatraName: nakshatraName as any,
+
+      degreeInRashi: degreesInSign,
+      degreeInNakshatra,
+      pada
     };
   });
 }

@@ -1,6 +1,6 @@
 import type { PanchangaResult, AstronomicalCalculator } from "@bidyashish/panchang";
 import type { PlanetName } from "@internal/types/planets";
-import { RASHI, type Rashi } from "@internal/types/zodic";
+import { RASHI, NAKSHATRA, HOUSE_LABELS, type Rashi, type Nakshatra, type House } from "@internal/types/zodic";
 
 // Input validation schemas
 export interface BirthTimeInput {
@@ -46,6 +46,25 @@ export interface SiderealPlanetPosition {
   readonly degreesInSign: number;
   /** Sanskrit name of the zodiac sign */
   readonly rashiName: Rashi;
+  /** English or Nepali name from enum */
+  readonly rashiLabel?: Rashi;
+
+  /** House number (1-12) */
+  readonly house: number;
+  /** House label like "1st House" */
+  readonly houseLabel: House;
+
+  /** Nakshatra index (0-26) */
+  readonly nakshatra: number;
+  /** Nakshatra name from enum */
+  readonly nakshatraName: Nakshatra;
+
+  /** Degree within the Rashi (0-30) */
+  readonly degreeInRashi: number;
+  /** Degree within the Nakshatra (0-13.3333) */
+  readonly degreeInNakshatra: number;
+  /** Pada number (1-4) */
+  readonly pada: number;
 }
 
 export interface AstronomicalCalculationResult {
@@ -86,5 +105,5 @@ export interface MethodError {
 
 export type KundaliErrorResponse = ValidationError | CalculationError | MethodError;
 
-export { RASHI };
-export type { PanchangaResult, AstronomicalCalculator, PlanetName, Rashi };
+export { RASHI, NAKSHATRA, HOUSE_LABELS };
+export type { PanchangaResult, AstronomicalCalculator, PlanetName, Rashi, Nakshatra, House };
