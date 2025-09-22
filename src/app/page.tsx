@@ -1,4 +1,5 @@
 import Image from "next/image";
+import KundaliChartClient from "../components/kundali-chart-client";
 
 export default function Home() {
   return (
@@ -49,6 +50,10 @@ export default function Home() {
           >
             Read our docs
           </a>
+        </div>
+
+        <div className="w-full mt-8 flex justify-center">
+          <KundaliChartClient />
         </div>
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
