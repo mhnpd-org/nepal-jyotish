@@ -175,6 +175,20 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
               }
             </text>
             
+            {/* Debug info - show rashi in debug mode */}
+            {debug && houseData && (
+              <text 
+                x={x} 
+                y={y - 25} 
+                textAnchor="middle" 
+                fontSize={8} 
+                fill="#666"
+                className="debug-rashi"
+              >
+                {houseData.rashi}
+              </text>
+            )}
+            
             {/* House content (rashi and grahas) */}
             {houseData && (
               <>

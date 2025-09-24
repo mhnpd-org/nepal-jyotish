@@ -23,14 +23,14 @@ export default function Home() {
       <NorthDrekkanaChart
         lagna={258.72}
         houses={SAMPLE_HOUSES}
-        size={420}
+        size={520}
         title="Demo Lagna Chart (Normal Mode)"
       />
       
       <NorthDrekkanaChart
         lagna={258.72}
         houses={SAMPLE_HOUSES}
-        size={420}
+        size={520}
         title="Demo Lagna Chart (Debug Mode)"
         debug={true}
       />
