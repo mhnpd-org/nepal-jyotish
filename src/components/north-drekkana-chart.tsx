@@ -76,13 +76,25 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
 
   return (
     <svg width={size} height={size} className="north-drekkana-chart">
-      {/* Background */}
+      {/* Background with muted white gradient */}
+      <defs>
+        <radialGradient id="backgroundGradient" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#fefefe" />
+          <stop offset="100%" stopColor="#f5f5f4" />
+        </radialGradient>
+        
+        {/* Circular clipping path for Ganesh image */}
+        <clipPath id="circularClip">
+          <circle cx={centerX} cy={centerY} r="70" />
+        </clipPath>
+      </defs>
+      
       <rect
         x={margin}
         y={margin}
         width={chartSize}
         height={chartSize}
-        fill="#fdf5e6"
+        fill="url(#backgroundGradient)"
       />
       
       {/* Double border - outer */}
@@ -92,8 +104,8 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
         width={chartSize}
         height={chartSize}
         fill="none"
-        stroke="#000"
-        strokeWidth={3}
+        stroke="#dc2626"
+        strokeWidth={4}
       />
       
       {/* Double border - inner */}
@@ -103,8 +115,8 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
         width={chartSize - 8}
         height={chartSize - 8}
         fill="none"
-        stroke="#000"
-        strokeWidth={1}
+        stroke="#b91c1c"
+        strokeWidth={2}
       />
 
       {/* Diagonal lines creating triangular sections */}
@@ -113,32 +125,32 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
         y1={margin + 4} 
         x2={centerX} 
         y2={centerY} 
-        stroke="#000" 
-        strokeWidth={1} 
+        stroke="#dc2626" 
+        strokeWidth={2} 
       />
       <line 
         x1={margin + chartSize - 4} 
         y1={margin + 4} 
         x2={centerX} 
         y2={centerY} 
-        stroke="#000" 
-        strokeWidth={1} 
+        stroke="#dc2626" 
+        strokeWidth={2} 
       />
       <line 
         x1={margin + chartSize - 4} 
         y1={margin + chartSize - 4} 
         x2={centerX} 
         y2={centerY} 
-        stroke="#000" 
-        strokeWidth={1} 
+        stroke="#dc2626" 
+        strokeWidth={2} 
       />
       <line 
         x1={margin + 4} 
         y1={margin + chartSize - 4} 
         x2={centerX} 
         y2={centerY} 
-        stroke="#000" 
-        strokeWidth={1} 
+        stroke="#dc2626" 
+        strokeWidth={2} 
       />
 
       {/* Inner diamond shape */}
@@ -148,8 +160,41 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
             L ${centerX} ${margin + chartSize - 4}
             L ${margin + 4} ${centerY} Z`}
         fill="none"
-        stroke="#000"
-        strokeWidth={1}
+        stroke="#dc2626"
+        strokeWidth={3}
+      />
+
+      {/* Circular white background for Ganesh image */}
+      <circle
+        cx={centerX}
+        cy={centerY}
+        r="75"
+        fill="#ffffff"
+        // opacity={0.9}
+        className="ganesh-backdrop"
+      />
+      
+      {/* Ganesh background image in center - circular clipped */}
+      <image
+        x={centerX - 70}
+        y={centerY - 70}
+        width={140}
+        height={140}
+        href="/ganesh.png"
+        // opacity={0.70}
+        clipPath="url(#circularClip)"
+        className="ganesh-background"
+      />
+      
+      {/* Circular border around Ganesh image */}
+      <circle
+        cx={centerX}
+        cy={centerY}
+        r="75"
+        fill="none"
+        stroke="#dc2626"
+        strokeWidth={3}
+        className="ganesh-border"
       />
 
       {/* House content rendering */}
@@ -160,14 +205,16 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
 
         return (
           <g key={`house-${position.house}`} className="house-group">
-            {/* House number label */}
+            {/* House number label - Original House styling */}
             <text 
               x={x} 
-              y={y - 12} 
+              y={y - 15} 
               textAnchor="middle" 
-              fontSize={12} 
-              fontWeight="bold"
+              fontSize={14} 
+              fontWeight="600"
+              fill="#8b4513"
               className="house-number"
+              style={{ textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}
             >
               {debug 
                 ? `H${position.house}/${houseData?.originalHouse || '?'}` 
@@ -179,10 +226,10 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
             {debug && houseData && (
               <text 
                 x={x} 
-                y={y - 25} 
+                y={y - 28} 
                 textAnchor="middle" 
                 fontSize={8} 
-                fill="#666"
+                fill="#718096"
                 className="debug-rashi"
               >
                 {houseData.rashi}
@@ -192,23 +239,29 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
             {/* House content (rashi and grahas) */}
             {houseData && (
               <>
+                {/* Rashi styling - Muted red */}
                 <text 
                   x={x} 
                   y={y} 
                   textAnchor="middle" 
-                  fontSize={10} 
-                  fill="#555"
+                  fontSize={12} 
+                  fontWeight="500"
+                  fill="#cd5c5c"
                   className="rashi-text"
+                  style={{ textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}
                 >
                   {houseData.rashi}
                 </text>
+                {/* Planets styling - Darker muted red */}
                 <text 
                   x={x} 
-                  y={y + 12} 
+                  y={y + 16} 
                   textAnchor="middle" 
-                  fontSize={10} 
-                  fill="#0066cc"
+                  fontSize={11} 
+                  fontWeight="500"
+                  fill="#a0522d"
                   className="graha-text"
+                  style={{ textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}
                 >
                   {houseData.grahas.join(", ")}
                 </text>
@@ -218,14 +271,16 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
         );
       })}
 
-      {/* Chart title */}
+      {/* Chart title with elegant styling */}
       <text
         x={centerX}
-        y={20}
+        y={22}
         textAnchor="middle"
-        fontSize={14}
-        fontWeight="bold"
+        fontSize={16}
+        fontWeight="600"
+        fill="#8b4513"
         className="chart-title"
+        style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
       >
         {title}
       </text>
