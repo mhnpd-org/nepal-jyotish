@@ -33,3 +33,40 @@ body {
 .card-backdrop {
   background: rgba(255, 255, 250, 0.9);
 }
+
+/* --- Traditional Dasha Table Styles --- */
+.dasha-section-title {
+  @apply text-xl font-semibold text-blue-700 tracking-wide;
+}
+
+.dasha-classic-table {
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  line-height: 1.1rem;
+  min-width: 640px;
+  color: #000;
+}
+
+.dasha-classic-table th,
+.dasha-classic-table td {
+  border: 2px solid #0a8a14; /* rich green similar to sample */
+  padding: 4px 6px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.dasha-classic-table thead th {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.dasha-classic-table tbody tr:last-child td {
+  font-weight: 700;
+}
+
+@media print {
+  .dasha-classic-table th, .dasha-classic-table td { padding: 2px 4px; }
+  .dasha-classic-table { font-size: 0.75rem; }
+  .dasha-section-title { font-size: 1rem; }
+}
+

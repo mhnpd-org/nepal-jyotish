@@ -1,22 +1,21 @@
-'use client';
+"use client";
 import React from "react";
 import Image from "next/image";
 import { JanmaPatrikaText } from "@internal/components/janma-patrika-text";
-import { getJanmaPatrika, JanmaDetails } from "@mhnpd/panchang";
+import {
+  getJanmaPatrika,
+  JanmaDetails,
+  VimshottariDasha
+} from "@mhnpd/panchang";
 import { getJanmaDetails } from "@internal/utils/janmaStorage";
 import { GrahaTable } from "@internal/components/ghara-table";
 import { NorthDrekkanaChart } from "@internal/components/north-drekkana-chart";
+import { VimshottariDashaTable } from "@internal/components/vimshottari-dasha-table";
 
 export default function TraditionalPage() {
-  console.log(getJanmaDetails())
-  const {
-    grahaPositions,
-    rashiDetails,
-    vargaKundali,
-    bhavas,
-  } = getJanmaPatrika({...getJanmaDetails() as JanmaDetails})
-
-  console.log(vargaKundali.D4)
+  console.log(getJanmaDetails());
+  const { grahaPositions, rashiDetails, vargaKundali, bhavas, dashas } =
+    getJanmaPatrika({ ...(getJanmaDetails() as JanmaDetails) });
 
   const borderStyle: React.CSSProperties = {
     borderStyle: "solid",
@@ -73,24 +72,58 @@ export default function TraditionalPage() {
           janmaSthan="यत्राक्षांश २६:१४ उ. देशान्तः ८५:१४ पू."
         />
 
-       {/* decorative divider */}
+        {/* decorative divider */}
         <hr className="my-6 border-t-4 border-red-600 w-1/2 mx-auto" />
 
         {/* Ghara Position */}
         <GrahaTable data={grahaPositions} />
 
-        <div className="mt-6 text-center leading-relaxed whitespace-pre-line"/>
+        <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
+        <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
+        <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
 
         {/* Diamond chart */}
         <div className="flex justify-center mt-6">
           <NorthDrekkanaChart
             lagna={rashiDetails.ascendantLongitude}
             houses={bhavas}
-            title="Lagna"
+            title="Bhavs"
             size={510}
           />
         </div>
 
+        {/* Diamond chart */}
+        <div className="flex justify-center mt-6">
+          <NorthDrekkanaChart
+            lagna={rashiDetails.ascendantLongitude}
+            // @ts-expect-error TODO fix types in panchang
+            houses={vargaKundali[1]}
+            title="Rashi"
+            size={510}
+          />
+        </div>
+
+        {/* Diamond chart */}
+        <div className="flex justify-center mt-6">
+          <NorthDrekkanaChart
+            lagna={rashiDetails.ascendantLongitude}
+            // @ts-expect-error TODO fix types in panchang
+            houses={vargaKundali[9]}
+            title="Navāmśa chart"
+            size={510}
+          />
+        </div>
+
+        <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
+        <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
+        <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
+
+        {/* Vimshottari Dasha table */}
+        <VimshottariDashaTable
+          dasha={dashas?.vimshottari as unknown as VimshottariDasha}
+        />
+
+        
       </div>
     </div>
   );
