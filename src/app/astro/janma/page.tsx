@@ -5,6 +5,8 @@ import {useForm} from 'react-hook-form';
 import {formatInTimeZone} from 'date-fns-tz';
 import { useI18n } from '@internal/lib/i18n';
 import { listTimeZones } from 'timezone-support';
+import { saveJanmaForm, loadJanmaForm } from '@internal/utils/janmaStorage';
+
 
 type FormValues = {
   name?: string;
@@ -69,6 +71,22 @@ export default function JanmaPage() {
     // ensure local UI state shows the default tz
     setSelectedTz(kathmanduTz);
     setFilter(kathmanduTz);
+    // If no saved janma form exists, initialize storage with the defaults
+    try {
+      const existing = loadJanmaForm();
+      if (!existing) {
+        saveJanmaForm({
+          name: '',
+          datetime: formatInTimeZone(new Date(), kathmanduTz, "yyyy-MM-dd'T'HH:mm"),
+          latitude: defaultLatitude,
+          longitude: defaultLongitude,
+          place: 'Kathmandu, Nepal',
+          timezone: kathmanduTz,
+        });
+      }
+    } catch (e) {
+      console.warn('Could not initialize janma form in storage', e);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -76,6 +94,12 @@ export default function JanmaPage() {
     // For now just log the collected values. Future: call an API to compute charts.
     // Convert strings to numbers where appropriate when sending to an API.
     console.log('Janma form submitted', data);
+    // persist to localStorage (overwrites existing)
+    try {
+      saveJanmaForm(data);
+    } catch (e) {
+      console.warn('Failed to save janma form', e);
+    }
     alert('Submitted — check console for values');
   };
 
