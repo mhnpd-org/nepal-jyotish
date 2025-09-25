@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@bidyashish/panchang": "1.0.10",
+    "@mhnpd/panchang": "^1.0.2",
     "d3": "^7",
     "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.1",
@@ -20,9 +21,9 @@
     "react-dom": "19.1.0"
   },
   "devDependencies": {
-    "@types/d3": "^7",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/d3": "^7",
     "@types/jest": "^29",
     "@types/node": "^20",
     "@types/react": "^19",
