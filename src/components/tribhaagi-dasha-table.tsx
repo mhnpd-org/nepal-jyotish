@@ -18,7 +18,7 @@ function normalizeRuler(ruler: DashaPeriod['ruler']): string {
 const Row: React.FC<{ values: (string | number | null)[] }> = ({ values }) => (
   <tr>
     {values.map((v, i) => (
-      <td key={i} className="px-2 py-1 text-center text-sm border border-red-500">
+      <td key={i} className="border-2 border-red-700 px-2 py-1 text-center text-sm font-bold">
         {v === null ? '' : v}
       </td>
     ))}
@@ -81,15 +81,15 @@ export const TribhaagiDashaTable: React.FC<TribhaagiDashaTableProps> = ({ tribha
   const heading = `अथ ${astroTranslate('tribhagi')} ${astroTranslate('mahadasha')} चक्रम्`
   return (
     <div className="space-y-6">
-      <h2 className="text-center font-bold text-lg mb-2">{heading}</h2>
+      <h2 className="text-center font-bold text-lg text-red-700 mb-2">{heading}</h2>
       <div className="w-full overflow-x-auto">
-        <table className="w-full border-collapse">
-          <thead>
+        <table className="w-full border-2 border-red-700 border-collapse text-sm text-center">
+          <thead className="bg-red-100">
             <tr>
               {headers.map((h, i) => (
-                <th key={i} className="px-2 py-1 text-xs font-semibold text-center border border-red-500 bg-gray-100">{h}</th>
+                <th key={i} className="border-2 border-red-700 px-2 py-1 text-xs font-bold text-center">{h}</th>
               ))}
-              <th className="px-2 py-1 text-xs font-semibold text-center border border-red-500 bg-gray-100">इकाई</th>
+              <th className="border-2 border-red-700 px-2 py-1 text-xs font-bold text-center">इकाई</th>
             </tr>
           </thead>
           <tbody>
