@@ -141,7 +141,6 @@ export default function TraditionalPage() {
 
         <YoginiDashaTable
           yogini={dashas?.yogini as unknown as YoginiDasha}
-          english={false} // TODO: refactor Yogini table to drop english prop similar to Tribhaagi
         />
 
       </div>
