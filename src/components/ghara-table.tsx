@@ -17,7 +17,14 @@ export const GrahaTable: React.FC<Props> = ({ data }) => {
         <thead className="bg-red-100">
           <tr>
             <th className="border px-2 py-1">ग्रहः</th>
-            <th className="border px-2 py-1">रा. अं.क.शि</th>
+            <th className="border px-2 py-1">
+              <span>रा.</span>
+                &nbsp;
+                &nbsp;
+                &nbsp;
+                &nbsp;
+                &nbsp;
+                &nbsp; अं.क.शि</th>
             <th className="border px-2 py-1">नक्षत्र</th>
             <th className="border px-2 py-1">नक्षत्रेश</th>
             <th className="border px-2 py-1">बक्न / अरत</th>
@@ -28,10 +35,16 @@ export const GrahaTable: React.FC<Props> = ({ data }) => {
             <tr key={idx} className="hover:bg-gray-50">
               <td className="border px-2 py-1 font-medium">{astroTranslate(g.graha)}</td>
               <td className="border px-2 py-1">
-                {Math.floor(g.longitude / 30)}{" "}
-                {String(Math.floor(g.rashiDegrees)).padStart(2, "0")}:
-                {String(Math.floor((g.rashiDegrees % 1) * 60)).padStart(2, "0")}:
-                {String(Math.floor((((g.rashiDegrees % 1) * 60) % 1) * 60)).padStart(2, "0")}
+                {astroTranslate(Math.floor(g.longitude / 30))}
+                &nbsp;
+                &nbsp;
+                &nbsp;
+                &nbsp;
+                &nbsp;
+                &nbsp;
+                {String(astroTranslate(Math.floor(g.rashiDegrees)).padStart(2, "0"))}:
+                {String(astroTranslate(Math.floor((g.rashiDegrees % 1) * 60)).padStart(2, "0"))}:
+                {String(astroTranslate(Math.floor((((g.rashiDegrees % 1) * 60) % 1) * 60)).padStart(2, "0"))}
               </td>
               <td className="border px-2 py-1">
                 {astroTranslate(g.nakshatra)} ({astroTranslate(g.nakshatraPada)})

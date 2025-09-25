@@ -1,5 +1,6 @@
 'use client';
 import React from "react";
+import { astroTranslate } from '@internal/lib/astro-translator';
 
 /** House number type for astrological charts */
 export type HouseNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
@@ -202,6 +203,15 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
         const houseData = mappedHouses[position.house as HouseNumber];
         const x = margin + position.x * chartSize;
         const y = margin + position.y * chartSize;
+        // Translate house number (numeric translation will convert digits to Devanagari) and rashi/grahas
+        const originalHouseDisplay = houseData?.originalHouse
+          ? astroTranslate(houseData.originalHouse)
+          : astroTranslate(position.house);
+        const debugHouseDisplay = debug
+          ? `H${astroTranslate(position.house)} / ${originalHouseDisplay || '?'}`
+          : originalHouseDisplay;
+        const translatedRashi = houseData ? astroTranslate(houseData.rashi) : '';
+        const translatedGrahas = houseData ? houseData.grahas.map(g => astroTranslate(g)).join(", ") : '';
 
         return (
           <g key={`house-${position.house}`} className="house-group">
@@ -216,10 +226,7 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
               className="house-number"
               style={{ textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}
             >
-              {debug 
-                ? `H${position.house}/${houseData?.originalHouse || '?'}` 
-                : (houseData?.originalHouse || position.house)
-              }
+              {debugHouseDisplay}
             </text>
             
             {/* Debug info - show rashi in debug mode */}
@@ -232,7 +239,7 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
                 fill="#718096"
                 className="debug-rashi"
               >
-                {houseData.rashi}
+                {translatedRashi}
               </text>
             )}
             
@@ -250,7 +257,7 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
                   className="rashi-text"
                   style={{ textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}
                 >
-                  {houseData.rashi}
+                  {translatedRashi}
                 </text>
                 {/* Planets styling - Darker muted red */}
                 <text 
@@ -263,7 +270,7 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
                   className="graha-text"
                   style={{ textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}
                 >
-                  {houseData.grahas.join(", ")}
+                  {translatedGrahas}
                 </text>
               </>
             )}
@@ -282,7 +289,7 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
         className="chart-title"
         style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
       >
-        {title}
+        {astroTranslate(title.toLowerCase()) || title}
       </text>
     </svg>
   );
