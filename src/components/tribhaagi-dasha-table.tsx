@@ -1,31 +1,18 @@
 'use client'
 import React from 'react'
 import { TribhaagiDasha, DashaPeriod } from '@mhnpd/panchang'
+import { astroTranslate } from '@internal/lib/astro-translator'
 
 export interface TribhaagiDashaTableProps {
   tribhaagi?: TribhaagiDasha
-  english?: boolean
 }
 
-// Reuse planet display names consistent with Vimshottari component
-const PLANET_INFO: Record<string, { deva: string; en: string }> = {
-  ketu: { deva: 'केतु', en: 'Ketu' },
-  shukra: { deva: 'शुक्र', en: 'Venus' },
-  surya: { deva: 'सूर्य', en: 'Sun' },
-  chandra: { deva: 'चन्द्र', en: 'Moon' },
-  mangal: { deva: 'मंगल', en: 'Mars' },
-  rahu: { deva: 'राहु', en: 'Rahu' },
-  guru: { deva: 'बृहस्पति', en: 'Jupiter' },
-  shani: { deva: 'शनि', en: 'Saturn' },
-  budha: { deva: 'बुध', en: 'Mercury' },
-}
+// Canonical Tribhaagi / planetary order fallback if data absent
+const PLANET_KEYS = ['ketu','shukra','surya','chandra','mangal','rahu','guru','shani','budha'] as const
 
 // Attempt to normalize the ruler to one of the keys above
 function normalizeRuler(ruler: DashaPeriod['ruler']): string {
-  const raw = String(ruler).toLowerCase()
-  // Handle possible enum-like values (e.g., 'KETU')
-  const match = Object.keys(PLANET_INFO).find(k => raw.includes(k))
-  return match ?? raw
+  return String(ruler).trim().toLowerCase()
 }
 
 const Row: React.FC<{ values: (string | number | null)[] }> = ({ values }) => (
@@ -38,7 +25,7 @@ const Row: React.FC<{ values: (string | number | null)[] }> = ({ values }) => (
   </tr>
 )
 
-export const TribhaagiDashaTable: React.FC<TribhaagiDashaTableProps> = ({ tribhaagi, english }) => {
+export const TribhaagiDashaTable: React.FC<TribhaagiDashaTableProps> = ({ tribhaagi }) => {
   // Build a single cycle of unique rulers (avoid repetition showing multiple cycles)
   let periods: DashaPeriod[] = []
   if (tribhaagi?.mahadashas?.length) {
@@ -61,7 +48,7 @@ export const TribhaagiDashaTable: React.FC<TribhaagiDashaTableProps> = ({ tribha
     }
   } else {
     // Fallback placeholder order (planet info keys) if no data
-    periods = Object.keys(PLANET_INFO).map(key => ({
+    periods = PLANET_KEYS.map(key => ({
       ruler: key as unknown as DashaPeriod['ruler'],
       startDate: new Date(),
       endDate: new Date(),
@@ -72,7 +59,6 @@ export const TribhaagiDashaTable: React.FC<TribhaagiDashaTableProps> = ({ tribha
   }
 
   const toLocaleNum = (val: string | number) => {
-    if (english) return String(val)
     const map: Record<string, string> = { '0':'०','1':'१','2':'२','3':'३','4':'४','5':'५','6':'६','7':'७','8':'८','9':'९' }
     return String(val).split('').map(ch => map[ch] ?? ch).join('')
   }
@@ -80,8 +66,8 @@ export const TribhaagiDashaTable: React.FC<TribhaagiDashaTableProps> = ({ tribha
   // Build columns
   const headers = periods.map(p => {
     const key = normalizeRuler(p.ruler)
-    const info = PLANET_INFO[key] || { deva: key, en: key }
-    return english ? info.en : info.deva
+    const translated = astroTranslate(key)
+    return translated || key
   })
   const yearsRow = periods.map(p => toLocaleNum(p.durationYears ?? 0))
   const monthsRow = periods.map(p => toLocaleNum(p.durationMonths ?? 0))
@@ -92,11 +78,10 @@ export const TribhaagiDashaTable: React.FC<TribhaagiDashaTableProps> = ({ tribha
   periods.forEach(p => { running += p.durationYears ?? 0; cumulativeYears.push(running) })
   const yogRow = cumulativeYears.map(toLocaleNum)
 
+  const heading = `अथ ${astroTranslate('tribhagi')} ${astroTranslate('mahadasha')} चक्रम्`
   return (
     <div className="space-y-6">
-      <h2 className="text-center font-bold text-lg mb-2">
-        {english ? 'Tribhagi (Ashtottari) Mahadasha Chakra' : 'अथ त्रिभागी महादशा चक्रम्'}
-      </h2>
+      <h2 className="text-center font-bold text-lg mb-2">{heading}</h2>
       <div className="w-full overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
@@ -104,14 +89,14 @@ export const TribhaagiDashaTable: React.FC<TribhaagiDashaTableProps> = ({ tribha
               {headers.map((h, i) => (
                 <th key={i} className="px-2 py-1 text-xs font-semibold text-center border border-red-500 bg-gray-100">{h}</th>
               ))}
-              <th className="px-2 py-1 text-xs font-semibold text-center border border-red-500 bg-gray-100">{english ? 'Unit' : 'इकाई'}</th>
+              <th className="px-2 py-1 text-xs font-semibold text-center border border-red-500 bg-gray-100">इकाई</th>
             </tr>
           </thead>
           <tbody>
-            <Row values={[...yearsRow, english ? 'Varsh' : 'वर्ष']} />
-            <Row values={[...monthsRow, english ? 'Varsh' : 'महिना']} />
-            <Row values={[...daysRow, english ? 'Din' : 'दिन']} />
-            <Row values={[...yogRow, english ? 'Yog' : 'योग']} />
+            <Row values={[...yearsRow, astroTranslate('year') || 'वर्ष']} />
+            <Row values={[...monthsRow, astroTranslate('month') || 'मास']} />
+            <Row values={[...daysRow, astroTranslate('day') || 'दिन']} />
+            <Row values={[...yogRow, astroTranslate('yog') || 'योग']} />
           </tbody>
         </table>
       </div>

@@ -133,7 +133,6 @@ export default function TraditionalPage() {
         {/* Tribhaagi Dasha table */}
         <TribhaagiDashaTable
           tribhaagi={dashas?.tribhaagi as unknown as TribhaagiDasha}
-          english={false}
         />
 
         <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
@@ -142,7 +141,7 @@ export default function TraditionalPage() {
 
         <YoginiDashaTable
           yogini={dashas?.yogini as unknown as YoginiDasha}
-          english={false}
+          english={false} // TODO: refactor Yogini table to drop english prop similar to Tribhaagi
         />
 
       </div>
