@@ -4,6 +4,7 @@ import React from 'react';
 import {useForm} from 'react-hook-form';
 import {formatInTimeZone} from 'date-fns-tz';
 import { useI18n } from '@internal/lib/i18n';
+import { listTimeZones } from 'timezone-support';
 
 type FormValues = {
   name?: string;
@@ -35,9 +36,26 @@ export default function JanmaPage() {
     },
   });
 
+  // Use timezone-support to get a canonical list of IANA time zones and
+  // show a Tailwind-styled searchable dropdown. We'll integrate with
+  // react-hook-form by updating the hidden registered input when selection
+  // changes.
+  // local state for timezone list and filter
+  const [timezones, setTimezones] = React.useState<string[]>([]);
+  const [filter, setFilter] = React.useState('');
+  const [selectedTz, setSelectedTz] = React.useState<string>(kathmanduTz);
+
   // Keep the form's datetime in-sync with the current kathmandu time on mount
   // so it always prefills with the current time when the page is opened.
   React.useEffect(() => {
+    // populate timezones
+    try {
+      const tzs = listTimeZones();
+      setTimezones(tzs as string[]);
+    } catch {
+      setTimezones([kathmanduTz]);
+    }
+
     reset({
       datetime: formatInTimeZone(new Date(), kathmanduTz, "yyyy-MM-dd'T'HH:mm"),
       latitude: defaultLatitude,
@@ -81,7 +99,38 @@ export default function JanmaPage() {
 
           <div>
             <label className="block text-sm font-medium text-slate-700">{translate('janma.timezone')}</label>
-            <input {...register('timezone')} readOnly className="mt-1 block w-full rounded-md border-slate-200 shadow-sm p-2 bg-slate-50" />
+            <div className="mt-1">
+              <input
+                type="text"
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                placeholder="Filter timezones"
+                className="mb-2 block w-full rounded-md border-slate-200 shadow-sm p-2"
+              />
+              <div className="relative">
+                <select
+                  value={selectedTz}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setSelectedTz(v);
+                    // update the underlying registered field
+                    setTimeout(() => {
+                      const el = document.querySelector('[name="timezone"]') as HTMLInputElement | null;
+                      if (el) el.value = v;
+                    }, 0);
+                  }}
+                  className="block w-full rounded-md border-slate-200 shadow-sm p-2 bg-white"
+                >
+                  {timezones
+                    .filter(tz => tz.toLowerCase().includes(filter.toLowerCase()))
+                    .map(tz => (
+                      <option key={tz} value={tz}>{tz}</option>
+                    ))}
+                </select>
+                {/* Hidden input to keep react-hook-form registered value in sync */}
+                <input type="hidden" {...register('timezone')} />
+              </div>
+            </div>
           </div>
 
           <div>
