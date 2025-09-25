@@ -39,22 +39,30 @@ const Row: React.FC<{ values: (string | number | null)[] }> = ({ values }) => (
 )
 
 export const TribhaagiDashaTable: React.FC<TribhaagiDashaTableProps> = ({ tribhaagi, english }) => {
-  // If tribhaagi data is provided, rotate sequence starting from currentMahadasha ruler
+  // Build a single cycle of unique rulers (avoid repetition showing multiple cycles)
   let periods: DashaPeriod[] = []
   if (tribhaagi?.mahadashas?.length) {
-    // Find index of current Mahadasha ruler within full list and rotate so it appears first
-    const currentKey = normalizeRuler(tribhaagi.currentMahadasha.ruler)
-    const idx = tribhaagi.mahadashas.findIndex(p => normalizeRuler(p.ruler) === currentKey)
-    if (idx >= 0) {
-      periods = [...tribhaagi.mahadashas.slice(idx), ...tribhaagi.mahadashas.slice(0, idx)]
-    } else {
-      periods = tribhaagi.mahadashas
+    const seen = new Set<string>()
+    for (const p of tribhaagi.mahadashas) {
+      const key = normalizeRuler(p.ruler)
+      if (!seen.has(key)) {
+        seen.add(key)
+        periods.push(p)
+      }
+      if (seen.size === 9) break // only first complete set of 9 planets
+    }
+    // Ensure current mahadasha is first (rotate after dedupe)
+    if (periods.length) {
+      const currentKey = normalizeRuler(tribhaagi.currentMahadasha.ruler)
+      const idx = periods.findIndex(p => normalizeRuler(p.ruler) === currentKey)
+      if (idx > 0) {
+        periods = [...periods.slice(idx), ...periods.slice(0, idx)]
+      }
     }
   } else {
-    // Fallback placeholder order (canonical Vimshottari order) if no data
+    // Fallback placeholder order (planet info keys) if no data
     periods = Object.keys(PLANET_INFO).map(key => ({
-      // Fallback placeholder ruler typed loosely as Planet | string
-      ruler: key as unknown as TribhaagiDasha['nakshatraLord'],
+      ruler: key as unknown as DashaPeriod['ruler'],
       startDate: new Date(),
       endDate: new Date(),
       durationYears: 0,
