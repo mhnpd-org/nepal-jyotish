@@ -25,7 +25,7 @@ export default function JanmaPage() {
   const defaultLatitude = '27.7172';
   const defaultLongitude = '85.3240';
 
-  const {register, handleSubmit, formState: {errors}, reset} = useForm<FormValues>({
+  const {register, handleSubmit, formState: {errors}, reset, setValue} = useForm<FormValues>({
     defaultValues: {
       name: '',
       datetime: defaultDatetime,
@@ -44,6 +44,7 @@ export default function JanmaPage() {
   const [timezones, setTimezones] = React.useState<string[]>([]);
   const [filter, setFilter] = React.useState('');
   const [selectedTz, setSelectedTz] = React.useState<string>(kathmanduTz);
+  const [open, setOpen] = React.useState(false);
 
   // Keep the form's datetime in-sync with the current kathmandu time on mount
   // so it always prefills with the current time when the page is opened.
@@ -63,6 +64,8 @@ export default function JanmaPage() {
       place: 'Kathmandu, Nepal',
       timezone: kathmanduTz,
     });
+    // ensure react-hook-form value is in sync
+    setValue('timezone', kathmanduTz);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -100,35 +103,63 @@ export default function JanmaPage() {
           <div>
             <label className="block text-sm font-medium text-slate-700">{translate('janma.timezone')}</label>
             <div className="mt-1">
-              <input
-                type="text"
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-                placeholder="Filter timezones"
-                className="mb-2 block w-full rounded-md border-slate-200 shadow-sm p-2"
-              />
               <div className="relative">
-                <select
-                  value={selectedTz}
+                <input
+                  type="text"
+                  value={filter}
                   onChange={(e) => {
-                    const v = e.target.value;
-                    setSelectedTz(v);
-                    // update the underlying registered field
-                    setTimeout(() => {
-                      const el = document.querySelector('[name="timezone"]') as HTMLInputElement | null;
-                      if (el) el.value = v;
-                    }, 0);
+                    setFilter(e.target.value);
+                    setOpen(true);
                   }}
-                  className="block w-full rounded-md border-slate-200 shadow-sm p-2 bg-white"
-                >
-                  {timezones
-                    .filter(tz => tz.toLowerCase().includes(filter.toLowerCase()))
-                    .map(tz => (
-                      <option key={tz} value={tz}>{tz}</option>
-                    ))}
-                </select>
+                  onFocus={() => setOpen(true)}
+                  onBlur={() => {
+                    // small timeout so option click can register before we close
+                    setTimeout(() => setOpen(false), 150);
+                  }}
+                  placeholder="Search or pick a timezone"
+                  className="mb-2 block w-full rounded-md border-slate-200 shadow-sm p-2"
+                  aria-label="Timezone"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      const matches = timezones.filter(tz => tz.toLowerCase().includes((filter || selectedTz).toLowerCase()));
+                      if (matches.length > 0) {
+                        const v = matches[0];
+                        setSelectedTz(v);
+                        setFilter(v);
+                        setValue('timezone', v);
+                        setOpen(false);
+                      }
+                    }
+                  }}
+                />
+
+                {open && (
+                  <ul className="absolute z-20 left-0 right-0 max-h-60 overflow-auto bg-white border rounded-md shadow mt-1 text-sm">
+                    {timezones
+                      .filter(tz => tz.toLowerCase().includes((filter || '').toLowerCase()))
+                      .slice(0, 200)
+                      .map(tz => (
+                        <li
+                          key={tz}
+                          onMouseDown={(ev) => {
+                            // use onMouseDown so it fires before blur
+                            ev.preventDefault();
+                            setSelectedTz(tz);
+                            setFilter(tz);
+                            setValue('timezone', tz);
+                            setOpen(false);
+                          }}
+                          className="px-3 py-2 hover:bg-slate-100 cursor-pointer"
+                        >
+                          {tz}
+                        </li>
+                      ))}
+                  </ul>
+                )}
+
                 {/* Hidden input to keep react-hook-form registered value in sync */}
-                <input type="hidden" {...register('timezone')} />
+                <input type="hidden" value={selectedTz} {...register('timezone')} />
               </div>
             </div>
           </div>
@@ -170,4 +201,4 @@ export default function JanmaPage() {
       </div>
     </div>
   );
-}
+} 
