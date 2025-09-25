@@ -19,7 +19,7 @@ export default function TraditionalPage() {
     <div className="w-full">
       <div
         style={borderStyle}
-        className="bg-white rounded-2xl shadow p-6 min-h-screen mx-auto w-4/5 max-w-4xl"
+        className="bg-white rounded-2xl shadow p-6 min-h-screen mx-auto w-3/5 max-w-4xl"
       >
         {/* Ganesh image centered near the top with slight spacing */}
         <div className="flex justify-center mt-6">
