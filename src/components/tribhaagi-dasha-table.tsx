@@ -109,7 +109,7 @@ export const TribhaagiDashaTable: React.FC<TribhaagiDashaTableProps> = ({ tribha
           </thead>
           <tbody>
             <Row values={[...yearsRow, english ? 'Varsh' : 'वर्ष']} />
-            <Row values={[...monthsRow, english ? 'Mahina' : 'महिना']} />
+            <Row values={[...monthsRow, english ? 'Varsh' : 'महिना']} />
             <Row values={[...daysRow, english ? 'Din' : 'दिन']} />
             <Row values={[...yogRow, english ? 'Yog' : 'योग']} />
           </tbody>

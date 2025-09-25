@@ -6,16 +6,18 @@ import {
   getJanmaPatrika,
   JanmaDetails,
   TribhaagiDasha,
-  VimshottariDasha
+  VimshottariDasha,
+  YoginiDasha
 } from "@mhnpd/panchang";
-import { getJanmaDetails } from "@internal/utils/janmaStorage";
+import { getJanmaDetails, loadJanmaForm } from "@internal/utils/janmaStorage";
 import { GrahaTable } from "@internal/components/ghara-table";
 import { NorthDrekkanaChart } from "@internal/components/north-drekkana-chart";
 import { VimshottariDashaTable } from "@internal/components/vimshottari-dasha-table";
 import TribhaagiDashaTable from "@internal/components/tribhaagi-dasha-table";
+import YoginiDashaTable from "@internal/components/yogini-dasha-table";
 
 export default function TraditionalPage() {
-  console.log(getJanmaDetails());
+  const dob = loadJanmaForm()
   const { grahaPositions, rashiDetails, vargaKundali, bhavas, dashas } =
     getJanmaPatrika({ ...(getJanmaDetails() as JanmaDetails) });
 
@@ -65,13 +67,13 @@ export default function TraditionalPage() {
 
         {/* Janma Patrika Text */}
         <JanmaPatrikaText
-          shalivahaniShaka={1947}
-          veerVikramadityaSamvat={2082}
-          adYear={2025}
-          janmaTime="१२:४२:३६"
-          lagna="तुला"
-          chandraRashi="मिथुन"
-          janmaSthan="यत्राक्षांश २६:१४ उ. देशान्तः ८५:१४ पू."
+          shalivahaniShaka={'1947'}
+          veerVikramadityaSamvat={'2082'}
+          adYear={'2025'}
+          janmaTime={dob?.datetime}
+          lagna={rashiDetails.lagna}
+          chandraRashi={rashiDetails.chandraRashi}
+          janmaSthan={dob?.place}
         />
 
         {/* decorative divider */}
@@ -134,6 +136,14 @@ export default function TraditionalPage() {
           english={false}
         />
 
+        <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
+        <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
+        <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
+
+        <YoginiDashaTable
+          yogini={dashas?.yogini as unknown as YoginiDasha}
+          english={false}
+        />
 
       </div>
     </div>
