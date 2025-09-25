@@ -86,7 +86,15 @@ export const JanmaPatrikaText: React.FC<JanmaPatrikaTextProps> = ({
   rashi = "वृष",
 }) => {
   return (
-    <div style={{ fontFamily: "Noto Sans Devanagari, serif", lineHeight: 1.6 }}>
+    <div
+      style={{
+        fontFamily: "Noto Sans Devanagari, serif",
+        lineHeight: 1.6,
+        fontWeight: 700,
+        fontSize: "1.25rem",
+        textAlign: "center",
+      }}
+    >
       <p>
         श्रीशालिवाहनीय शक <span style={{ color: "#ff0000" }}>{shalivahaniShaka}</span>, 
         श्रीवीरविक्रमादित्य संवत् <span style={{ color: "#ff0000" }}>{veerVikramadityaSamvat}</span>, 
