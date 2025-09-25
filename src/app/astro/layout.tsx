@@ -1,16 +1,20 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { I18nProvider } from '@internal/lib/i18n';
+import LanguageSelector from '@internal/components/language-selector';
 
 export default function AstroLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen flex flex-col bg-[linear-gradient(90deg,#FF910B_0%,#EA5753_87%)]">
-      <header className="h-16 flex items-center px-6 bg-transparent">
-        <div className="flex items-center gap-3">
-          <Image src="/logo.svg" alt="Vedanga Logo" width={36} height={36} className="rounded-sm" />
-          <h1 className="text-white text-lg font-semibold">Vedanga Jyotish</h1>
-        </div>
-      </header>
+    <I18nProvider>
+      <div className="min-h-screen flex flex-col bg-[linear-gradient(90deg,#FF910B_0%,#EA5753_87%)]">
+        <header className="h-16 flex items-center px-6 bg-transparent">
+          <div className="flex items-center gap-3">
+            <Image src="/logo.svg" alt="Vedanga Logo" width={36} height={36} className="rounded-sm" />
+            <h1 className="text-white text-lg font-semibold">Vedanga Jyotish</h1>
+          </div>
+          <LanguageSelector />
+        </header>
 
       <div className="flex flex-1">
         {/* Responsive sidebar: icon-only on small screens, full on md+ */}
@@ -55,5 +59,6 @@ export default function AstroLayout({ children }: { children: React.ReactNode })
         </main>
       </div>
     </div>
+    </I18nProvider>
   );
 }

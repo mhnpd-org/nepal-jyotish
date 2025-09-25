@@ -1,0 +1,17 @@
+{
+  "janma": {
+    "title": "Janma Details",
+    "description": "Enter birth details below. Fields are prefilled with current Kathmandu/Nepal date, time and coordinates.",
+    "name": "Full name (optional)",
+    "datetime": "Date & time (Kathmandu)",
+    "timezone": "Timezone",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "place": "Place name",
+    "reset": "Reset",
+    "compute": "Compute",
+    "datetime_required": "Date & time is required",
+    "lat_required": "Latitude is required",
+    "lon_required": "Longitude is required"
+  }
+}
