@@ -1,5 +1,19 @@
 import mapping from '@internal/i18n/astro-sanskrit.json';
 
+// Mapping of ASCII digits to Devanagari digits
+const DEVANAGARI_DIGITS: Record<string, string> = {
+  '0': '०',
+  '1': '१',
+  '2': '२',
+  '3': '३',
+  '4': '४',
+  '5': '५',
+  '6': '६',
+  '7': '७',
+  '8': '८',
+  '9': '९'
+};
+
 /**
  * AstroTranslator maps any known astronomical / astrological term (planet, rashi, nakshatra, etc.)
  * from any supported input spelling to a normalized Sanskrit (IAST-ish lowercase) form.
@@ -14,9 +28,13 @@ export class AstroTranslator {
   }
 
   /** Translate a single term to Sanskrit; returns lowercased input if missing */
-  translate(term: string | null | undefined): string {
+  translate(term: string | number | null | undefined): string {
     if (!term) return '';
     const key = term.toString().trim().toLowerCase();
+    // If the term is purely numeric (e.g. "108"), convert digits to Devanagari and return
+    if (/^[0-9]+$/.test(key)) {
+      return key.replace(/\d/g, d => DEVANAGARI_DIGITS[d as keyof typeof DEVANAGARI_DIGITS]);
+    }
     return this.dict[key] || key;
   }
 
@@ -36,7 +54,7 @@ export class AstroTranslator {
 // Singleton default instance
 const defaultTranslator = new AstroTranslator();
 
-export function astroTranslate(term: string | null | undefined) {
+export function astroTranslate(term: string | number | null | undefined) {
   return defaultTranslator.translate(term);
 }
 
