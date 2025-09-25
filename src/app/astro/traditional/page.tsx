@@ -5,12 +5,14 @@ import { JanmaPatrikaText } from "@internal/components/janma-patrika-text";
 import {
   getJanmaPatrika,
   JanmaDetails,
+  TribhaagiDasha,
   VimshottariDasha
 } from "@mhnpd/panchang";
 import { getJanmaDetails } from "@internal/utils/janmaStorage";
 import { GrahaTable } from "@internal/components/ghara-table";
 import { NorthDrekkanaChart } from "@internal/components/north-drekkana-chart";
 import { VimshottariDashaTable } from "@internal/components/vimshottari-dasha-table";
+import TribhaagiDashaTable from "@internal/components/tribhaagi-dasha-table";
 
 export default function TraditionalPage() {
   console.log(getJanmaDetails());
@@ -123,7 +125,16 @@ export default function TraditionalPage() {
           dasha={dashas?.vimshottari as unknown as VimshottariDasha}
         />
 
-        
+        <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
+        <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
+
+        {/* Tribhaagi Dasha table */}
+        <TribhaagiDashaTable
+          tribhaagi={dashas?.tribhaagi as unknown as TribhaagiDasha}
+          english={false}
+        />
+
+
       </div>
     </div>
   );
