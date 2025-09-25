@@ -1,8 +1,23 @@
+'use client';
 import React from "react";
 import Image from "next/image";
 import { JanmaPatrikaText } from "@internal/components/janma-patrika-text";
+import { getJanmaPatrika, JanmaDetails } from "@mhnpd/panchang";
+import { getJanmaDetails } from "@internal/utils/janmaStorage";
+import { GrahaTable } from "@internal/components/ghara-table";
+import { NorthDrekkanaChart } from "@internal/components/north-drekkana-chart";
 
 export default function TraditionalPage() {
+  console.log(getJanmaDetails())
+  const {
+    grahaPositions,
+    rashiDetails,
+    vargaKundali,
+    bhavas,
+  } = getJanmaPatrika({...getJanmaDetails() as JanmaDetails})
+
+  console.log(vargaKundali.D4)
+
   const borderStyle: React.CSSProperties = {
     borderStyle: "solid",
     // border width controls how much of the image is shown — tweaked to be slimmer
@@ -57,6 +72,25 @@ export default function TraditionalPage() {
           chandraRashi="मिथुन"
           janmaSthan="यत्राक्षांश २६:१४ उ. देशान्तः ८५:१४ पू."
         />
+
+       {/* decorative divider */}
+        <hr className="my-6 border-t-4 border-red-600 w-1/2 mx-auto" />
+
+        {/* Ghara Position */}
+        <GrahaTable data={grahaPositions} />
+
+        <div className="mt-6 text-center leading-relaxed whitespace-pre-line"/>
+
+        {/* Diamond chart */}
+        <div className="flex justify-center mt-6">
+          <NorthDrekkanaChart
+            lagna={rashiDetails.ascendantLongitude}
+            houses={bhavas}
+            title="Lagna"
+            size={510}
+          />
+        </div>
+
       </div>
     </div>
   );

@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@bidyashish/panchang": "1.0.10",
-    "@mhnpd/panchang": "^1.0.2",
+    "@mhnpd/panchang": "^1.0.3",
     "d3": "^7",
     "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.1",

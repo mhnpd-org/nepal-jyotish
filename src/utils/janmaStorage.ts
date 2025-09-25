@@ -67,15 +67,22 @@ export function getJanmaDetails(override?: JanmaForm): JanmaDetails | null {
   const form = override ?? loadJanmaForm();
   if (!form) return null;
   // form.datetime is expected in HTML datetime-local format: YYYY-MM-DDTHH:mm
-  const dt = form.datetime || '';
+  const dtRaw = form.datetime;
+  if (!dtRaw) {
+    console.warn('getJanmaDetails: missing datetime in stored form');
+    return null;
+  }
+
   let dateStr = '';
   let timeStr = '';
 
-  const parts = dt.split('T');
+  // accept either 'T' or space as separator (some inputs may use a space)
+  const parts = dtRaw.split(/T|\s/);
   if (parts.length >= 1) {
-    dateStr = parts[0];
+    dateStr = (parts[0] || '').trim();
   }
-  if (parts.length >= 2) {
+
+  if (parts.length >= 2 && parts[1]) {
     // parts[1] may be HH:mm or HH:mm:ss or include fractions. Normalize to HH:mm:ss
     const rawTime = parts[1].split('.')[0]; // drop fraction if present
     const timeParts = rawTime.split(':');
@@ -87,21 +94,40 @@ export function getJanmaDetails(override?: JanmaForm): JanmaDetails | null {
     }
   }
 
-  // Fallback sensible defaults if parsing failed
-  if (!dateStr) {
-    // leave empty string if missing — caller should validate
-    dateStr = '';
+  // Validate dateStr format YYYY-MM-DD; try to coerce if possible
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  if (!dateRegex.test(dateStr)) {
+    // attempt to parse with Date as a last resort
+    const parsed = new Date(dtRaw);
+    if (!isNaN(parsed.getTime())) {
+      // toISOString gives UTC date; use local date portion to be safe
+      const iso = parsed.toISOString();
+      dateStr = iso.slice(0, 10);
+    } else {
+      console.warn(`getJanmaDetails: Invalid dateStr format (expected YYYY-MM-DD): ${dateStr}`);
+      return null;
+    }
   }
+
+  // Fallback sensible defaults if time parsing failed
   if (!timeStr) {
     timeStr = '00:00:00';
+  }
+
+  // Validate numeric coordinates
+  const lon = Number(form.longitude);
+  const lat = Number(form.latitude);
+  if (!isFinite(lon) || !isFinite(lat)) {
+    console.warn('getJanmaDetails: invalid numeric coordinates', { longitude: form.longitude, latitude: form.latitude });
+    return null;
   }
 
   const node: JanmaDetails = {
     dateStr,
     timeStr,
     timeZone: form.timezone,
-    longitude: Number(form.longitude),
-    latitude: Number(form.latitude),
+    longitude: lon,
+    latitude: lat,
   };
 
   return node;
