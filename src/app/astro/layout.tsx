@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function AstroLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -11,17 +12,13 @@ export default function AstroLayout({ children }: { children: React.ReactNode })
       <div className="flex flex-1">
         <aside className="w-64 bg-white/95 shadow-inner p-4">
           <nav className="space-y-2">
-            <Link href="#" className="flex items-center gap-3 px-3 py-2 rounded hover:bg-amber-50">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m2 0a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v3a2 2 0 002 2h10z" />
-              </svg>
+            <Link href="/astro/janma" className="flex items-center gap-3 px-3 py-2 rounded hover:bg-amber-50">
+              <Image src="/file.svg" alt="Janma" width={20} height={20} className="h-5 w-5" />
               <span className="text-amber-800 font-medium">Janma Details</span>
             </Link>
 
-            <Link href="#" className="flex items-center gap-3 px-3 py-2 rounded hover:bg-amber-50">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
+            <Link href="/astro/traditional" className="flex items-center gap-3 px-3 py-2 rounded hover:bg-amber-50">
+              <Image src="/globe.svg" alt="Traditional" width={20} height={20} className="h-5 w-5" />
               <span className="text-amber-800 font-medium">Traditional</span>
             </Link>
           </nav>
