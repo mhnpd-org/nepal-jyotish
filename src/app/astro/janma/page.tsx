@@ -66,6 +66,9 @@ export default function JanmaPage() {
     });
     // ensure react-hook-form value is in sync
     setValue('timezone', kathmanduTz);
+    // ensure local UI state shows the default tz
+    setSelectedTz(kathmanduTz);
+    setFilter(kathmanduTz);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -106,7 +109,7 @@ export default function JanmaPage() {
               <div className="relative">
                 <input
                   type="text"
-                  value={filter}
+                  value={filter || selectedTz}
                   onChange={(e) => {
                     setFilter(e.target.value);
                     setOpen(true);
@@ -190,7 +193,13 @@ export default function JanmaPage() {
           <div className="col-span-1 md:col-span-2 flex justify-end gap-2">
             <button
               type="button"
-              onClick={() => reset()}
+              onClick={() => {
+                reset();
+                // restore default UI tz state and form value
+                setSelectedTz(kathmanduTz);
+                setFilter(kathmanduTz);
+                setValue('timezone', kathmanduTz);
+              }}
               className="px-4 py-2 rounded-md border bg-white text-slate-700 hover:bg-slate-50"
             >
               {translate('janma.reset')}
