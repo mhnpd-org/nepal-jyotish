@@ -92,6 +92,7 @@ export default function TraditionalPage() {
             lagna={rashiDetails.ascendantLongitude}
             houses={bhavas}
             title="Bhavs"
+            isBhavs={true}
             size={510}
           />
         </div>

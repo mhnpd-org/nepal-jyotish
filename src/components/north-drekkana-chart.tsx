@@ -1,6 +1,8 @@
 'use client';
 import React from "react";
 import { astroTranslate } from '@internal/lib/astro-translator';
+import { RashiHouseMap } from "@internal/utils/rashi-house-map";
+
 
 /** House number type for astrological charts */
 export type HouseNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
@@ -17,6 +19,8 @@ export interface NorthDrekkanaChartProps {
   houses: Record<HouseNumber, HousePosition>;
   size?: number; // Chart size in pixels
   title?: string; // Chart title
+  hideRashi?: boolean; // Option to hide rashi names
+  isBhavs?: boolean; // If true, houses are treated as bhavas (no lagna adjustment)
   debug?: boolean; // Show both chart position and original house numbers
 }
 
@@ -58,6 +62,8 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
   houses,
   size = 400,
   title = "North Indian Drekkana Chart",
+  hideRashi = true,
+  isBhavs = false,
   debug = false,
 }) => {
   const margin = 30;
@@ -65,10 +71,12 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
   const centerX = size / 2;
   const centerY = size / 2;
 
+  console.log(title, houses);
+
   // Map houses to their chart positions based on lagna
   const mappedHouses: Record<number, HousePosition & { originalHouse: number }> = {};
   (Object.keys(houses) as unknown as HouseNumber[]).forEach(houseNum => {
-    const chartPosition = getChartHouse(houseNum, lagna);
+    const chartPosition = isBhavs ? houseNum : getChartHouse(houseNum, lagna);
     mappedHouses[chartPosition] = {
       ...houses[houseNum],
       originalHouse: houseNum
@@ -257,7 +265,8 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
                   className="rashi-text"
                   style={{ textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}
                 >
-                  {translatedRashi}
+                  {!hideRashi && <>{translatedRashi}</>}
+
                 </text>
                 {/* Planets styling - Darker muted red */}
                 <text 
