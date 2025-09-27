@@ -1,8 +1,6 @@
 'use client';
 import React from "react";
 import { astroTranslate } from '@internal/lib/astro-translator';
-import { RashiHouseMap } from "@internal/utils/rashi-house-map";
-
 
 /** House number type for astrological charts */
 export type HouseNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
@@ -179,7 +177,6 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
         cy={centerY}
         r="75"
         fill="#ffffff"
-        // opacity={0.9}
         className="ganesh-backdrop"
       />
       
@@ -190,7 +187,6 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
         width={140}
         height={140}
         href="/ganesh.png"
-        // opacity={0.70}
         clipPath="url(#circularClip)"
         className="ganesh-background"
       />
@@ -254,7 +250,7 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
             {/* House content (rashi and grahas) */}
             {houseData && (
               <>
-                {/* Rashi styling - Muted red */}
+                {/* Rashi styling */}
                 <text 
                   x={x} 
                   y={y} 
@@ -266,9 +262,8 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
                   style={{ textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}
                 >
                   {!hideRashi && <>{translatedRashi}</>}
-
                 </text>
-                {/* Planets styling - Darker muted red */}
+                {/* Planets styling */}
                 <text 
                   x={x} 
                   y={y + 16} 
@@ -287,7 +282,7 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
         );
       })}
 
-      {/* Chart title with elegant styling */}
+      {/* Chart title */}
       <text
         x={centerX}
         y={22}
