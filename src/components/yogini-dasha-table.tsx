@@ -7,9 +7,7 @@ export interface YoginiDashaTableProps {
   yogini?: YoginiDasha
 }
 
-// Canonical Yogini Dasha order (36-year cycle)
-// Durations (years): Mangala 1, Pingala 2, Dhanya 3, Bhramari 4, Bhadrika 5, Ulka 6, Siddha 7, Sankata 8
-// Names mapping (simple transliteration)
+// Yogini Dasha order (36-year cycle)
 const YOGINI_ORDER: { key: string; years: number }[] = [
   { key: 'mangala', years: 1 },
   { key: 'pingala', years: 2 },
@@ -36,13 +34,13 @@ const Row: React.FC<{ values: (string | number)[] }> = ({ values }) => (
 )
 
 export const YoginiDashaTable: React.FC<YoginiDashaTableProps> = ({ yogini }) => {
-
   let periods: DashaPeriod[] = []
+
   if (yogini?.dashas?.length) {
-    // Rotate so current dasha appears first
+    // Use provided dashas (ordered & rotated to start with current)
     const currentKey = String(yogini.currentDasha.ruler).toLowerCase()
-    const ordered: DashaPeriod[] = []
     const uniq = new Set<string>()
+    const ordered: DashaPeriod[] = []
     for (const p of yogini.dashas) {
       const key = String(p.ruler).toLowerCase()
       if (!uniq.has(key)) { uniq.add(key); ordered.push(p) }
@@ -52,7 +50,7 @@ export const YoginiDashaTable: React.FC<YoginiDashaTableProps> = ({ yogini }) =>
     if (idx < 0) idx = 0
     periods = [...ordered.slice(idx), ...ordered.slice(0, idx)]
   } else {
-    // Fallback static definitions if no data provided
+    // Fallback to static durations
     periods = YOGINI_ORDER.map(y => ({
       ruler: y.key as unknown as DashaPeriod['ruler'],
       startDate: new Date(),
@@ -66,9 +64,10 @@ export const YoginiDashaTable: React.FC<YoginiDashaTableProps> = ({ yogini }) =>
   // Build headers
   const headers = periods.map(p => astroTranslate(String(p.ruler).toLowerCase()) || String(p.ruler))
 
-  // Years row (Varsh)
+  // Years row
   const yearsRow = periods.map(p => toLocaleNum(p.durationYears ?? 0))
-  // Yog row cumulative years
+
+  // Cumulative योग row
   const cumulative: number[] = []
   let run = 0
   periods.forEach(p => { run += p.durationYears ?? 0; cumulative.push(run) })
@@ -76,7 +75,9 @@ export const YoginiDashaTable: React.FC<YoginiDashaTableProps> = ({ yogini }) =>
 
   return (
     <div className="space-y-6">
-      <h2 className="text-center font-bold text-lg text-red-700 mb-2">{`अथ ${astroTranslate('yogini')} ${astroTranslate('mahadasha')} चक्रम्`}</h2>
+      <h2 className="text-center font-bold text-lg text-red-700 mb-2">
+        {`अथ ${astroTranslate('yogini')} ${astroTranslate('mahadasha')} चक्रम्`}
+      </h2>
       <div className="w-full overflow-x-auto">
         <table className="w-full border-2 border-red-700 border-collapse text-sm text-center">
           <thead className="bg-red-100">
