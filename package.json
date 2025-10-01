@@ -1,5 +1,5 @@
 {
-  "name": "nep-astro",
+  "name": "vedanga-jotish",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit",
     "type-check": "tsc --noEmit",
     "pages:build": "next build --turbopack",
-    "pages:deploy": "wrangler pages deploy out --project-name=nep-astro",
+    "pages:deploy": "wrangler pages deploy out --project-name=vedanga-jotish",
     "pages:dev": "npx @cloudflare/next-on-pages --experimental-minify",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-// @ts-expect-error: Missing type declarations for side-effect import of './globals.css'
 import "./globals.css";
 
 const geistSans = Geist({
