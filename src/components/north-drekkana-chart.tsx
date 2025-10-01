@@ -60,6 +60,12 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
   const chartSize = size - 2 * margin;
   const centerX = size / 2;
   const centerY = size / 2;
+  // Dynamically scale emblem (Ganesh) sizing relative to overall chart size
+  // Previous hard-coded values: clip 70, circle 75, image 140 (for size=400)
+  // New sizing reduces footprint ~25% while keeping proportions
+  const emblemRadius = size * 0.14; // Outer visible circular border radius
+  const clipRadius = emblemRadius - 5; // Slightly smaller for inner clip & image crop
+  const imageSize = clipRadius * 2; // Image fits exactly inside clip circle
 
   return (
     <svg width={size} height={size} className="north-drekkana-chart">
@@ -72,7 +78,7 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
 
         {/* Circular clipping path for Ganesh image */}
         <clipPath id="circularClip">
-          <circle cx={centerX} cy={centerY} r="70" />
+          <circle cx={centerX} cy={centerY} r={clipRadius} />
         </clipPath>
       </defs>
 
@@ -155,17 +161,17 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
       <circle
         cx={centerX}
         cy={centerY}
-        r="75"
+        r={emblemRadius}
         fill="#ffffff"
         className="ganesh-backdrop"
       />
 
       {/* Ganesh background image in center - circular clipped */}
       <image
-        x={centerX - 70}
-        y={centerY - 70}
-        width={140}
-        height={140}
+        x={centerX - imageSize / 2}
+        y={centerY - imageSize / 2}
+        width={imageSize}
+        height={imageSize}
         href="/ganesh.png"
         clipPath="url(#circularClip)"
         className="ganesh-background"
@@ -175,7 +181,7 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
       <circle
         cx={centerX}
         cy={centerY}
-        r="75"
+        r={emblemRadius}
         fill="none"
         stroke="#dc2626"
         strokeWidth={3}
