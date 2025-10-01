@@ -9,12 +9,16 @@ export interface DatePickerProps extends Omit<React.InputHTMLAttributes<HTMLInpu
 	label?: string;
 	/** Initial date (overrides today's date). Format: YYYY-MM-DD */
 	initialDate?: string;
+	/** Initial calendar system (AD or BS) */
+	initialCalendar?: 'AD' | 'BS';
 	/** Minimum allowed year (default 1800) */
 	minYear?: number;
 	/** Maximum allowed year (default 2199) */
 	maxYear?: number;
 	/** Callback receiving the assembled date string (YYYY-MM-DD) whenever any segment changes */
 	onValueChange?: (value: string) => void;
+	/** Callback when calendar system changes */
+	onCalendarChange?: (cal: 'AD' | 'BS') => void;
 }
 
 function isValidDateString(str: string | undefined, minYear: number, maxYear: number) {
@@ -37,9 +41,11 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(function
 		name,
 		label,
 		initialDate,
+		initialCalendar = 'AD',
 		minYear = 1800,
 		maxYear = 2199,
 		onValueChange,
+		onCalendarChange,
 		id: providedId,
 		className = "",
 		required = true, // Always required as per spec
@@ -72,9 +78,31 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(function
 		initialDay = defaultDay; // Already 1-31, acceptable within 1-32 range
 	}
 
+	// Calendar system (AD or BS)
+	const [calendar, setCalendar] = useState<'AD' | 'BS'>(initialCalendar);
 	const [year, setYear] = useState<string>(String(initialYear));
 	const [month, setMonth] = useState<string>(pad2(initialMonth));
 	const [day, setDay] = useState<string>(pad2(initialDay));
+
+	// --- Calendar conversion helpers (NOTE: Simplified approximate conversion) ---
+	// Bikram Sambat is roughly 56 years and 8 months ahead of Gregorian. Accurate conversion
+	// requires a detailed lookup table; this approximation is provided for UI toggle only and
+	// should be replaced with a precise algorithm if exact Nepali dates are critical.
+	const BS_YEAR_OFFSET = 56;
+	const BS_MONTH_OFFSET = 8; // Approximate (BS New Year mid-April)
+
+	function adToBs(y: number, m: number, d: number): { y: number; m: number; d: number } {
+		let yy = y + BS_YEAR_OFFSET;
+		let mm = m + BS_MONTH_OFFSET;
+		if (mm > 12) { mm -= 12; yy += 1; }
+		return { y: yy, m: mm, d };
+	}
+	function bsToAd(y: number, m: number, d: number): { y: number; m: number; d: number } {
+		let yy = y - BS_YEAR_OFFSET;
+		let mm = m - BS_MONTH_OFFSET;
+		if (mm < 1) { mm += 12; yy -= 1; }
+		return { y: yy, m: mm, d };
+	}
 
 	// Hidden input ref (exposed via forwardRef)
 	const hiddenRef = useRef<HTMLInputElement | null>(null);
@@ -98,7 +126,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(function
 	);
 
 	const updateValue = useCallback(
-		(y: string, m: string, d: string) => {
+		(y: string, m: string, d: string, cal: 'AD' | 'BS' = calendar) => {
 			// Clamp numeric boundaries
 			let yi = parseInt(y || "0", 10);
 			if (!Number.isFinite(yi)) yi = minYear;
@@ -110,7 +138,13 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(function
 			if (!Number.isFinite(di)) di = 1;
 			di = Math.min(Math.max(di, 1), 32); // allow 32
 
-			const val = assemble(String(yi), String(mi), String(di));
+			// Always emit value in AD (Gregorian) for form submission for consistency.
+			let submitY = yi; let submitM = mi; let submitD = di;
+			if (cal === 'BS') {
+				const back = bsToAd(yi, mi, di);
+				submitY = back.y; submitM = back.m; submitD = back.d;
+			}
+			const val = assemble(String(submitY), String(submitM), String(submitD));
 			if (hiddenRef.current) {
 				hiddenRef.current.value = val;
 				// Fire synthetic input/change events so RHF (or native forms) pick this up
@@ -126,7 +160,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(function
 				onChange(synthetic);
 			}
 		},
-		[assemble, maxYear, minYear, name, onChange, onValueChange]
+		[assemble, maxYear, minYear, name, onChange, onValueChange, calendar]
 	);
 
 	// Initialize hidden input value after mount
@@ -149,6 +183,25 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(function
 		const raw = e.target.value.replace(/[^0-9]/g, "").slice(0, 4);
 		setYear(raw);
 		updateValue(raw, month, day);
+	};
+
+	// Toggle calendar system and convert displayed triple accordingly
+	const toggleCalendar = () => {
+		setCalendar(prev => {
+			const next = prev === 'AD' ? 'BS' : 'AD';
+			// Convert current displayed values to the target calendar for UI continuity
+			let yi = parseInt(year || '0', 10); let mi = parseInt(month || '1', 10); let di = parseInt(day || '1', 10);
+			if (prev === 'AD' && next === 'BS') {
+				const { y, m, d } = adToBs(yi, mi, di); yi = y; mi = m; di = d;
+			} else if (prev === 'BS' && next === 'AD') {
+				const { y, m, d } = bsToAd(yi, mi, di); yi = y; mi = m; di = d;
+			}
+			setYear(String(yi)); setMonth(pad2(mi)); setDay(pad2(di));
+			// Update hidden input with submission value (always AD)
+			updateValue(String(yi), String(mi), String(di), next);
+			onCalendarChange?.(next);
+			return next;
+		});
 	};
 
 	// Auto-advance focus when segment filled
@@ -181,44 +234,58 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(function
 					<span className="text-red-500 ml-0.5">*</span>
 				</label>
 			)}
-			<div className="flex items-center gap-2" aria-describedby={`${id}-segments-desc`}>
-				<div className="flex items-center gap-1">
+			<div className="flex items-center gap-3" aria-describedby={`${id}-segments-desc`}>
+				{/* Unified grouped box with internal calendar toggle */}
+				<div className="inline-flex h-10 items-stretch rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-blue-400/40 divide-x divide-gray-300 dark:divide-gray-700">
+					{/* Toggle segment */}
+					<button
+						type="button"
+						onClick={toggleCalendar}
+						className="relative flex flex-col justify-center px-3 text-xs md:text-sm font-semibold tracking-wide focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/50 group h-full"
+						aria-label="Toggle Calendar System"
+					>
+						<span className="flex items-center gap-1">
+							<span className={`px-2 py-1 rounded text-[11px] md:text-xs lg:text-sm transition-colors ${calendar === 'AD' ? 'bg-blue-600 text-white shadow' : 'text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200'}`}>AD</span>
+							<span className={`px-2 py-1 rounded text-[11px] md:text-xs lg:text-sm transition-colors ${calendar === 'BS' ? 'bg-blue-600 text-white shadow' : 'text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200'}`}>BS</span>
+						</span>
+					</button>
+					{/* Year */}
 					<input
-						ref={dayRef}
-						id={dayId}
+						ref={yearRef}
+						id={yearId}
 						inputMode="numeric"
-						placeholder="DD"
-						className="w-14 rounded border border-gray-300 bg-white px-2 py-1 text-center text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400/40 dark:bg-gray-800 dark:border-gray-600"
-						value={day}
-						onChange={handleDayChange}
+						placeholder={calendar === 'AD' ? 'YYYY' : 'BS YYYY'}
+						className="w-24 bg-transparent px-3 py-0 text-center text-sm focus:outline-none h-full"
+						value={year}
+						onChange={handleYearChange}
 						onKeyDown={handleKeyNav}
-						aria-label="Day"
+						aria-label="Year"
 						required
 					/>
-					<span className="select-none text-gray-500">/</span>
+					{/* Month */}
 					<input
 						ref={monthRef}
 						id={monthId}
 						inputMode="numeric"
 						placeholder="MM"
-						className="w-14 rounded border border-gray-300 bg-white px-2 py-1 text-center text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400/40 dark:bg-gray-800 dark:border-gray-600"
+						className="w-14 bg-transparent px-3 py-0 text-center text-sm focus:outline-none h-full"
 						value={month}
 						onChange={handleMonthChange}
 						onKeyDown={handleKeyNav}
 						aria-label="Month"
 						required
 					/>
-					<span className="select-none text-gray-500">/</span>
+					{/* Day */}
 					<input
-						ref={yearRef}
-						id={yearId}
+						ref={dayRef}
+						id={dayId}
 						inputMode="numeric"
-						placeholder="YYYY"
-						className="w-20 rounded border border-gray-300 bg-white px-2 py-1 text-center text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400/40 dark:bg-gray-800 dark:border-gray-600"
-						value={year}
-						onChange={handleYearChange}
+						placeholder="DD"
+						className="w-14 bg-transparent px-3 py-0 text-center text-sm focus:outline-none h-full"
+						value={day}
+						onChange={handleDayChange}
 						onKeyDown={handleKeyNav}
-						aria-label="Year"
+						aria-label="Day"
 						required
 					/>
 				</div>
