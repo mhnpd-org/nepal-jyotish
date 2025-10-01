@@ -1,5 +1,4 @@
 import { PlanetCombinedInfo, PlanetsInTimeFrameResult } from "@mhnpd/panchang";
-import { tr } from "date-fns/locale";
 import React from "react";
 
 interface Props {
@@ -15,7 +14,8 @@ export const GrahaTable: React.FC<Props> = ({
   planets,
   translator = (key) => String(key)
 }) => {
-  const data = Object.values(planets) as PlanetCombinedInfo[];
+  // Extract an ordered list if needed later (currently rows iterate keys directly)
+  // const ordered = Object.values(planets) as PlanetCombinedInfo[];
   return (
     <div className="overflow-x-auto">
       <h2 className="text-center text-xl font-bold text-red-700 mb-2">
