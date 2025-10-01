@@ -64,6 +64,40 @@ export default function AstroLayout({ children }: { children: React.ReactNode })
                 Planet Positions
               </span>
             </Link>
+
+            <Link href="/astro/vimshottari-dasha" title="Vimshottari Dasha" className="relative group flex items-center gap-3 md:gap-3 px-2 md:px-3 py-2 rounded hover:bg-amber-50 w-full justify-center md:justify-start">
+              {/* Timeline icon */}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5 text-amber-700">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 3v18M12 3v18M18 3v18" />
+              </svg>
+              <span className="hidden md:inline text-amber-800 font-medium">Vimshottari</span>
+              <span className="md:hidden absolute left-full top-1/2 -translate-y-1/2 ml-3 px-2 py-1 text-xs bg-amber-700 text-white rounded shadow-sm opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+                Vimshottari
+              </span>
+            </Link>
+
+            <Link href="/astro/tribhagi-dasha" title="Tribhagi Dasha" className="relative group flex items-center gap-3 md:gap-3 px-2 md:px-3 py-2 rounded hover:bg-amber-50 w-full justify-center md:justify-start">
+              {/* Three-part icon */}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5 text-amber-700">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h10M4 18h7" />
+              </svg>
+              <span className="hidden md:inline text-amber-800 font-medium">Tribhagi</span>
+              <span className="md:hidden absolute left-full top-1/2 -translate-y-1/2 ml-3 px-2 py-1 text-xs bg-amber-700 text-white rounded shadow-sm opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+                Tribhagi
+              </span>
+            </Link>
+
+            <Link href="/astro/yogini-dasha" title="Yogini Dasha" className="relative group flex items-center gap-3 md:gap-3 px-2 md:px-3 py-2 rounded hover:bg-amber-50 w-full justify-center md:justify-start">
+              {/* Eight petal / wheel icon */}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5 text-amber-700">
+                <circle cx="12" cy="12" r="2.5" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v3M12 17v3M4 12h3M17 12h3M6.8 6.8l2.1 2.1M15.1 15.1l2.1 2.1M17.2 6.8l-2.1 2.1M8.9 15.1l-2.1 2.1" />
+              </svg>
+              <span className="hidden md:inline text-amber-800 font-medium">Yogini</span>
+              <span className="md:hidden absolute left-full top-1/2 -translate-y-1/2 ml-3 px-2 py-1 text-xs bg-amber-700 text-white rounded shadow-sm opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+                Yogini
+              </span>
+            </Link>
           </nav>
         </aside>
 
