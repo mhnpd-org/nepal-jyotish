@@ -17,12 +17,15 @@ import {
   districtOfNepal,
   type DistrictOfNepal
 } from "@internal/form-elements/district";
-import { getFormDetails, setFormDetails } from "@internal/utils/get-form-details";
+import {
+  getFormDetails,
+  setFormDetails
+} from "@internal/utils/get-form-details";
 
 interface JanmaFormValues {
   name?: string;
   dateOfBirth: string; // Always stored in AD (YYYY-MM-DD)
-  calendarType: 'AD' | 'BS';
+  calendarType: "AD" | "BS";
   timeOfBirth?: string;
   placeOfBirth: DistrictOfNepal;
 }
@@ -30,8 +33,11 @@ interface JanmaFormValues {
 export default function JanmaPage() {
   // Do NOT access localStorage during initial render; hydration handled in useEffect.
   const isJanma = (v: unknown): v is JanmaFormValues => {
-    if (!v || typeof v !== 'object') return false;
-    return Object.prototype.hasOwnProperty.call(v as Record<string, unknown>, 'dateOfBirth');
+    if (!v || typeof v !== "object") return false;
+    return Object.prototype.hasOwnProperty.call(
+      v as Record<string, unknown>,
+      "dateOfBirth"
+    );
   };
   const {
     register,
@@ -45,7 +51,7 @@ export default function JanmaPage() {
     defaultValues: {
       name: "",
       dateOfBirth: format(new Date(), "yyyy-MM-dd"),
-      calendarType: 'AD',
+      calendarType: "AD",
       timeOfBirth: format(new Date(), "HH:mm:ss"),
       placeOfBirth: districtOfNepal.find((d) => d.district_en === "Kathmandu")
     }
@@ -61,7 +67,7 @@ export default function JanmaPage() {
       reset(stored);
     }
     setHydrated(true);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onSubmit = (data: JanmaFormValues) => {
@@ -79,8 +85,8 @@ export default function JanmaPage() {
     return () => clearTimeout(handle);
   }, [watchedAll, hydrated]);
 
-  const dateValue = watch('dateOfBirth');
-  const calendarValue = watch('calendarType');
+  const dateValue = watch("dateOfBirth");
+  const calendarValue = watch("calendarType");
 
   return (
     <main className="w-full mx-auto px-2 sm:px-4 py-10 space-y-10">
@@ -122,8 +128,8 @@ export default function JanmaPage() {
               </div>
 
               {/* Date of Birth (required) */}
-                <div className="flex flex-col gap-1 w-full">
-                  {hydrated && (
+              <div className="flex flex-col gap-1 w-full">
+                {hydrated && (
                   <DatePicker
                     label="Date of Birth"
                     required
@@ -131,24 +137,25 @@ export default function JanmaPage() {
                     calendarValue={calendarValue}
                     initialCalendar={calendarValue}
                     onCalendarChange={(cal) => {
-            setValue('calendarType', cal, { shouldDirty: true });
-          }}
+                      setValue("calendarType", cal, { shouldDirty: true });
+                    }}
                     {...register("dateOfBirth", {
                       required: "Date of Birth is required"
                     })}
                     className=""
-                  />)}
-                  {!hydrated && (
-          <div className="h-10 w-full rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse" />
-          )}
-                  {errors.dateOfBirth && (
-                    <p className="mt-1 text-xs text-red-600">
-                      {errors.dateOfBirth.message}
-                    </p>
-                  )}
-                </div>
-        {/* Hidden calendar type field for persistence */}
-        <input type="hidden" {...register('calendarType')} />
+                  />
+                )}
+                {!hydrated && (
+                  <div className="h-10 w-full rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                )}
+                {errors.dateOfBirth && (
+                  <p className="mt-1 text-xs text-red-600">
+                    {errors.dateOfBirth.message}
+                  </p>
+                )}
+              </div>
+              {/* Hidden calendar type field for persistence */}
+              <input type="hidden" {...register("calendarType")} />
 
               {/* Time of Birth (optional) */}
               <div className="flex flex-col gap-1 w-full">
@@ -163,7 +170,7 @@ export default function JanmaPage() {
               </div>
 
               {/* Place of Birth (required) */}
-                <div className="flex flex-col w-full">
+              <div className="flex flex-col w-full">
                 {hydrated ? (
                   <PickDistrict
                     control={control}
@@ -173,9 +180,9 @@ export default function JanmaPage() {
                     className=""
                   />
                 ) : (
-          <div className="h-10 w-full rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse" />
-          )}
-                </div>
+                  <div className="h-10 w-full rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                )}
+              </div>
             </div>
           </CardContent>
           <CardFooter>

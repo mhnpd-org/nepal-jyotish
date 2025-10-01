@@ -9,7 +9,6 @@ import {
   VimshottariDasha,
   YoginiDasha
 } from "@mhnpd/panchang";
-import { getJanmaDetails, loadJanmaForm } from "@internal/utils/janmaStorage";
 import { GrahaTable } from "@internal/components/ghara-table";
 import { NorthDrekkanaChart } from "@internal/components/north-drekkana-chart";
 import { VimshottariDashaTable } from "@internal/components/vimshottari-dasha-table";
@@ -17,6 +16,7 @@ import TribhaagiDashaTable from "@internal/components/tribhaagi-dasha-table";
 import YoginiDashaTable from "@internal/components/yogini-dasha-table";
 
 export default function TraditionalPage() {
+  return null
   const dob = loadJanmaForm()
   const { grahaPositions, rashiDetails, vargaKundali, bhavas, dashas } =
     getJanmaPatrika({ ...(getJanmaDetails() as JanmaDetails) });
