@@ -10,6 +10,7 @@ import { GrahaTable } from "@internal/components/ghara-table";
 import { VimshottariDashaTable } from "@internal/components/vimshottari-dasha-table";
 import { TribhagiDashaTable } from "@internal/components/tribhaagi-dasha-table";
 import { YoginiDashaTable } from "@internal/components/yogini-dasha-table";
+import { ChhinaFrame } from "@internal/components/chhina-frame";
 
 export default function TraditionalPage() {
   const [kundali, setKundali] = React.useState<KundaliResult | null>(null);
@@ -49,10 +50,7 @@ export default function TraditionalPage() {
   /* Traditional Kundali rendering logic goes here */
   return (
     <div className="w-full">
-      <div
-        style={borderStyle}
-        className="bg-white rounded-2xl shadow p-6 min-h-screen mx-auto w-3/5 max-w-4xl"
-      >
+      <ChhinaFrame className="bg-white min-h-screen mx-auto w-11/12 md:w-4/5 xl:w-3/5 max-w-5xl">
         {/* Ganesh image centered near the top with slight spacing */}
         <div className="flex justify-center mt-6">
           <Image
@@ -152,19 +150,8 @@ export default function TraditionalPage() {
 
       <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
         <YoginiDashaTable dasha={kundali.yoginiDasa} />
-      </div>
+      </ChhinaFrame>
     </div>
   );
 }
-
-const borderStyle: React.CSSProperties = {
-  borderStyle: "solid",
-  // border width controls how much of the image is shown — tweaked to be slimmer
-  borderWidth: "20px",
-  // Use explicit properties for better control
-  borderImageSource: 'url("/border.png")',
-  // slice value tuned for a slimmer border
-  borderImageSlice: 30,
-  borderImageRepeat: "round",
-  borderColor: "transparent"
-};
+ 

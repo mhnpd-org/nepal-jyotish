@@ -70,3 +70,42 @@ body {
   .dasha-section-title { font-size: 1rem; }
 }
 
+/* --- Chhina Frame Styling --- */
+.chhina-frame {
+  position: relative;
+  border: 10px double transparent; /* base border space */
+  border-radius: 1.9rem; /* softer shape */
+  padding: 2.25rem 2.5rem; /* generous reading space */
+  /* Simplified for higher contrast + readability: near-solid white with a faint vertical shift */
+  background:
+    linear-gradient(to bottom, #ffffff 0%, #fffdfb 70%, #ffffff 100%) padding-box,
+    linear-gradient(135deg, #b71c1c, #d32f2f 55%, #b71c1c) border-box;
+  box-shadow:
+    inset 0 0 0 2px rgba(255,255,255,0.55),
+    0 3px 10px -2px rgba(0,0,0,0.18),
+    0 2px 4px -1px rgba(0,0,0,0.12);
+}
+
+.chhina-frame:before,
+.chhina-frame:after {
+  content: "";
+  position: absolute;
+  inset: 4px; /* second frame */
+  border: 2px solid #b71c1c;
+  border-radius: 1.55rem;
+  pointer-events: none;
+}
+
+.chhina-frame:after {
+  inset: 14px; /* inner ornamental guide */
+  border: 1px dashed #d32f2f;
+  opacity: 0.75;
+  border-radius: 1.35rem;
+}
+
+@media (max-width: 640px) {
+  .chhina-frame { padding: 1.75rem 1.25rem; border-width: 8px; }
+  .chhina-frame:after { inset: 12px; }
+}
+
+
