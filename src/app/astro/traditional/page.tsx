@@ -4,6 +4,7 @@ import { getJanmaDetails } from "@internal/utils/get-form-details";
 import { getKundali, KundaliResult } from "@mhnpd/panchang";
 import React from "react";
 import { JanmaPatrikaText } from "@internal/components/janma-patrika-text";
+import NorthDrekkanaChart from "@internal/components/north-drekkana-chart";
 
 export default function TraditionalPage() {
   const [kundali, setKundali] = React.useState<KundaliResult | null>(null);
@@ -75,33 +76,41 @@ export default function TraditionalPage() {
         <hr className="my-6 border-t-4 border-red-600 w-1/2 mx-auto" />
 
         {/* Janma Patrika Text */}
-         <JanmaPatrikaText
+        <JanmaPatrikaText
           shalivahaniShaka={`${kundali.sakaSamvat}`}
           veerVikramadityaSamvat={`${kundali.vikaramSamvat}`}
-          adYear={new Date(janmaDetails?.dateStr || '').getFullYear().toString()}
+          adYear={new Date(janmaDetails?.dateStr || "")
+            .getFullYear()
+            .toString()}
           janmaTime={`${kundali.zonedDate.toLocaleDateString()}`}
           lagna={`${kundali.lagna.lagna}`}
           chandraRashi={`${kundali.lagna.chandraRashi}`}
-          janmaSthan={'janma sthan to be added'}
+          janmaSthan={"janma sthan to be added"}
           rashi={kundali.lagna.lagna}
           suryaAyana={kundali.suryaDetails.ayana}
           ritu={kundali.suryaDetails.ritu}
-          chandraMasa={'to be calculated'}
+          chandraMasa={"to be calculated"}
           chandraPaksha={kundali.tithi.paksha}
           weekday={kundali.vaar}
           tithi={kundali.tithi.name}
-          tithiStartGhatyadi={ 'to be calculated'}
+          tithiStartGhatyadi={"to be calculated"}
           nakshatra={kundali.nakshatra.nakshatra}
           yoga={kundali.yoga.name}
           karana={kundali.karana.name}
         />
 
-
         <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
         <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
         <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
 
-
+        {/* Diamond chart */}
+        <div className="flex justify-center mt-6">
+          <NorthDrekkanaChart
+            title='Bhavas'
+            hideRashi={false}
+            houses={kundali.bhavas}
+          />
+        </div>
       </div>
     </div>
   );

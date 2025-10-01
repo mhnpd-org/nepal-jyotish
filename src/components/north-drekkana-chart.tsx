@@ -1,24 +1,15 @@
-'use client';
+"use client";
 import React from "react";
-import { astroTranslate } from '@internal/lib/astro-translator';
-
-/** House number type for astrological charts */
-export type HouseNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
-
-/** Position data for each house */
-export interface HousePosition {
-  rashi: string;
-  grahas: string[];
-}
+import { astroTranslate } from "@internal/lib/astro-translator";
+import { BhavaChart, VargasChart } from "@mhnpd/panchang";
+import { translateSanskritSafe } from "@internal/lib/devanagari";
 
 /** Props for the North Indian Drekkana Chart component */
 export interface NorthDrekkanaChartProps {
-  lagna: number; // Ascendant degrees (0-360)
-  houses: Record<HouseNumber, HousePosition>;
+  houses: BhavaChart[] | VargasChart[];
   size?: number; // Chart size in pixels
   title?: string; // Chart title
   hideRashi?: boolean; // Option to hide rashi names
-  isBhavs?: boolean; // If true, houses are treated as bhavas (no lagna adjustment)
   debug?: boolean; // Show both chart position and original house numbers
 }
 
@@ -35,7 +26,7 @@ const HOUSE_POSITIONS = [
   { x: 0.88, y: 0.75, house: 9 }, // Right-bottom
   { x: 0.75, y: 0.5, house: 10 }, // Right center
   { x: 0.88, y: 0.25, house: 11 }, // Right-top
-  { x: 0.75, y: 0.12, house: 12 }, // Top-right
+  { x: 0.75, y: 0.12, house: 12 } // Top-right
 ];
 
 /**
@@ -44,42 +35,31 @@ const HOUSE_POSITIONS = [
  * @param lagnaDegrees - The ascendant degrees (0-360)
  * @returns The chart position for the house
  */
-export function getChartHouse(originalHouse: number, lagnaDegrees: number): number {
+export function getChartHouse(
+  originalHouse: number,
+  lagnaDegrees: number
+): number {
   const lagnaHouse = Math.floor(lagnaDegrees / 30) + 1; // Convert degrees to house (1-12)
   return ((originalHouse - lagnaHouse + 12) % 12) + 1;
 }
 
 /**
  * North Indian Drekkana Chart Component
- * 
+ *
  * Renders a traditional North Indian style astrological chart with diamond layout.
  * Features double borders, proper house positioning, and customizable styling.
  */
 export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
-  lagna,
   houses,
   size = 400,
   title = "North Indian Drekkana Chart",
   hideRashi = true,
-  isBhavs = false,
-  debug = false,
+  debug = false
 }) => {
   const margin = 30;
   const chartSize = size - 2 * margin;
   const centerX = size / 2;
   const centerY = size / 2;
-
-  console.log(title, houses);
-
-  // Map houses to their chart positions based on lagna
-  const mappedHouses: Record<number, HousePosition & { originalHouse: number }> = {};
-  (Object.keys(houses) as unknown as HouseNumber[]).forEach(houseNum => {
-    const chartPosition = isBhavs ? houseNum : getChartHouse(houseNum, lagna);
-    mappedHouses[chartPosition] = {
-      ...houses[houseNum],
-      originalHouse: houseNum
-    };
-  });
 
   return (
     <svg width={size} height={size} className="north-drekkana-chart">
@@ -89,13 +69,13 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
           <stop offset="0%" stopColor="#fefefe" />
           <stop offset="100%" stopColor="#f5f5f4" />
         </radialGradient>
-        
+
         {/* Circular clipping path for Ganesh image */}
         <clipPath id="circularClip">
           <circle cx={centerX} cy={centerY} r="70" />
         </clipPath>
       </defs>
-      
+
       <rect
         x={margin}
         y={margin}
@@ -103,7 +83,7 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
         height={chartSize}
         fill="url(#backgroundGradient)"
       />
-      
+
       {/* Double border - outer */}
       <rect
         x={margin}
@@ -114,7 +94,7 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
         stroke="#dc2626"
         strokeWidth={4}
       />
-      
+
       {/* Double border - inner */}
       <rect
         x={margin + 4}
@@ -127,37 +107,37 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
       />
 
       {/* Diagonal lines creating triangular sections */}
-      <line 
-        x1={margin + 4} 
-        y1={margin + 4} 
-        x2={centerX} 
-        y2={centerY} 
-        stroke="#dc2626" 
-        strokeWidth={2} 
+      <line
+        x1={margin + 4}
+        y1={margin + 4}
+        x2={centerX}
+        y2={centerY}
+        stroke="#dc2626"
+        strokeWidth={2}
       />
-      <line 
-        x1={margin + chartSize - 4} 
-        y1={margin + 4} 
-        x2={centerX} 
-        y2={centerY} 
-        stroke="#dc2626" 
-        strokeWidth={2} 
+      <line
+        x1={margin + chartSize - 4}
+        y1={margin + 4}
+        x2={centerX}
+        y2={centerY}
+        stroke="#dc2626"
+        strokeWidth={2}
       />
-      <line 
-        x1={margin + chartSize - 4} 
-        y1={margin + chartSize - 4} 
-        x2={centerX} 
-        y2={centerY} 
-        stroke="#dc2626" 
-        strokeWidth={2} 
+      <line
+        x1={margin + chartSize - 4}
+        y1={margin + chartSize - 4}
+        x2={centerX}
+        y2={centerY}
+        stroke="#dc2626"
+        strokeWidth={2}
       />
-      <line 
-        x1={margin + 4} 
-        y1={margin + chartSize - 4} 
-        x2={centerX} 
-        y2={centerY} 
-        stroke="#dc2626" 
-        strokeWidth={2} 
+      <line
+        x1={margin + 4}
+        y1={margin + chartSize - 4}
+        x2={centerX}
+        y2={centerY}
+        stroke="#dc2626"
+        strokeWidth={2}
       />
 
       {/* Inner diamond shape */}
@@ -179,7 +159,7 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
         fill="#ffffff"
         className="ganesh-backdrop"
       />
-      
+
       {/* Ganesh background image in center - circular clipped */}
       <image
         x={centerX - 70}
@@ -190,7 +170,7 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
         clipPath="url(#circularClip)"
         className="ganesh-background"
       />
-      
+
       {/* Circular border around Ganesh image */}
       <circle
         cx={centerX}
@@ -204,80 +184,74 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
 
       {/* House content rendering */}
       {HOUSE_POSITIONS.map((position) => {
-        const houseData = mappedHouses[position.house as HouseNumber];
+        const { house } = position;
         const x = margin + position.x * chartSize;
         const y = margin + position.y * chartSize;
-        // Translate house number (numeric translation will convert digits to Devanagari) and rashi/grahas
-        const originalHouseDisplay = houseData?.originalHouse
-          ? astroTranslate(houseData.originalHouse)
-          : astroTranslate(position.house);
-        const debugHouseDisplay = debug
-          ? `H${astroTranslate(position.house)} / ${originalHouseDisplay || '?'}`
-          : originalHouseDisplay;
-        const translatedRashi = houseData ? astroTranslate(houseData.rashi) : '';
-        const translatedGrahas = houseData ? houseData.grahas.map(g => astroTranslate(g)).join(", ") : '';
+        const houseData = houses.find((h) => h.northChartHouseNumber === house);
+        if (!houseData) return null;
+        const rashi = translateSanskritSafe(houseData.rashi!);
+        const rashiNumber = translateSanskritSafe(`${houseData.rashiNumber!}`);
+        const grahas = houseData?.planets || [];
 
         return (
-          <g key={`house-${position.house}`} className="house-group">
+          <g key={`house-${house}`} className="house-group">
             {/* House number label - Original House styling */}
-            <text 
-              x={x} 
-              y={y - 15} 
-              textAnchor="middle" 
-              fontSize={14} 
+            <text
+              x={x}
+              y={y - 15}
+              textAnchor="middle"
+              fontSize={14}
               fontWeight="600"
               fill="#8b4513"
               className="house-number"
-              style={{ textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}
+              style={{ textShadow: "0 1px 2px rgba(0,0,0,0.1)" }}
             >
-              {debugHouseDisplay}
+              {rashiNumber}
             </text>
-            
+
             {/* Debug info - show rashi in debug mode */}
             {debug && houseData && (
-              <text 
-                x={x} 
-                y={y - 28} 
-                textAnchor="middle" 
-                fontSize={8} 
+              <text
+                x={x}
+                y={y - 28}
+                textAnchor="middle"
+                fontSize={8}
                 fill="#718096"
                 className="debug-rashi"
               >
-                {translatedRashi}
+                {rashi}
               </text>
             )}
-            
+
             {/* House content (rashi and grahas) */}
-            {houseData && (
               <>
                 {/* Rashi styling */}
-                <text 
-                  x={x} 
-                  y={y} 
-                  textAnchor="middle" 
-                  fontSize={12} 
+                <text
+                  x={x}
+                  y={y}
+                  textAnchor="middle"
+                  fontSize={12}
                   fontWeight="500"
                   fill="#cd5c5c"
                   className="rashi-text"
-                  style={{ textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}
+                  style={{ textShadow: "0 1px 2px rgba(0,0,0,0.1)" }}
                 >
-                  {!hideRashi && <>{translatedRashi}</>}
+                  {!hideRashi && <>{rashi}</>}
                 </text>
                 {/* Planets styling */}
-                <text 
-                  x={x} 
-                  y={y + 16} 
-                  textAnchor="middle" 
-                  fontSize={11} 
+                <text
+                  x={x}
+                  y={y + 16}
+                  textAnchor="middle"
+                  fontSize={11}
                   fontWeight="500"
                   fill="#a0522d"
                   className="graha-text"
-                  style={{ textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}
+                  style={{ textShadow: "0 1px 2px rgba(0,0,0,0.1)" }}
                 >
-                  {translatedGrahas}
+                  {grahas.map(g => translateSanskritSafe(g)).join(", ")}
                 </text>
               </>
-            )}
           </g>
         );
       })}
@@ -291,7 +265,7 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
         fontWeight="600"
         fill="#8b4513"
         className="chart-title"
-        style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
+        style={{ textShadow: "0 2px 4px rgba(0,0,0,0.1)" }}
       >
         {astroTranslate(title.toLowerCase()) || title}
       </text>
