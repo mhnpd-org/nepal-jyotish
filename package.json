@@ -13,10 +13,7 @@
     "typecheck": "tsc --noEmit",
     "type-check": "tsc --noEmit",
     "pages:build": "next build --turbopack",
-    "pages:deploy": "wrangler pages deploy out --project-name=vedanga-jotish",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "format:fix": "prettier --write . && npm run lint:fix"
+    "pages:deploy": "wrangler pages deploy out --project-name=vedanga-jotish"
   },
   "dependencies": {
     "@mhnpd/panchang": "^1.0.6",
