@@ -1,0 +1,21 @@
+{
+  "name": "Vedanga Jotish",
+  "short_name": "Vedanga",
+  "description": "Traditional Nepali Vedic astrology tools, charts and dashas.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#b71c1c",
+  "icons": [
+    {
+      "src": "/favicon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/favicon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

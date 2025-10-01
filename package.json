@@ -38,6 +38,8 @@
     "tailwindcss": "^4",
     "ts-jest": "^29",
     "typescript": "^5",
-    "@types/react-select": "^5.0.0"
+    "@types/react-select": "^5.0.0",
+    "@cloudflare/next-on-pages": "^1",
+    "wrangler": "^3"
   }
 }
