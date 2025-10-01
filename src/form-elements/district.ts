@@ -1,4 +1,11 @@
-export const districtOfNepal = [
+export interface DistrictOfNepal {
+  district_en: string;
+  district_np: string;
+  zone: string;
+  lat: number;
+  long: number;
+}
+export const districtOfNepal:DistrictOfNepal[] = [
   {
     district_en: "Taplejung",
     district_np: "ताप्लेजुङ",

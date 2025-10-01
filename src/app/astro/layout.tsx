@@ -7,7 +7,8 @@ import LanguageSelector from '@internal/components/language-selector';
 export default function AstroLayout({ children }: { children: React.ReactNode }) {
   return (
     <I18nProvider>
-      <div className="min-h-screen flex flex-col bg-[linear-gradient(90deg,#FF910B_0%,#EA5753_87%)]">
+  {/* Use shared global gradient token for consistency */}
+  <div className="min-h-screen flex flex-col bg-vedanga-gradient">
         <header className="h-16 flex items-center px-6 bg-transparent">
           <div className="flex items-center gap-3">
             <Image src="/logo.svg" alt="Vedanga Logo" width={36} height={36} className="rounded-sm" />

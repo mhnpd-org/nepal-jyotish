@@ -80,7 +80,7 @@ export default function TraditionalPage() {
         <hr className="my-6 border-t-4 border-red-600 w-1/2 mx-auto" />
 
         {/* Ghara Position */}
-        <GrahaTable data={grahaPositions} />
+        {/* <GrahaTable data={grahaPositions} /> */}
 
         <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
         <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
