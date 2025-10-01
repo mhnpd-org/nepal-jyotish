@@ -1,4 +1,12 @@
 {
+  "nav": {
+    "janma": "Janma Details",
+    "traditional": "Traditional",
+    "planet_positions": "Planet Positions",
+    "vimshottari": "Vimshottari",
+    "tribhagi": "Tribhagi",
+    "yogini": "Yogini"
+  },
   "janma": {
     "title": "Janma Details",
     "description": "Enter birth details below. Fields are prefilled with current Kathmandu/Nepal date, time and coordinates.",
