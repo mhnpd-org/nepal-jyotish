@@ -78,28 +78,70 @@ export default function TraditionalPage() {
         {/* decorative divider */}
         <hr className="my-6 border-t-4 border-red-600 w-1/2 mx-auto" />
 
-        {/* Janma Patrika Text */}
+        {/* Janma Patrika Text (grouped props) */}
         <JanmaPatrikaText
-          shalivahaniShaka={`${kundali.sakaSamvat}`}
-          veerVikramadityaSamvat={`${kundali.vikaramSamvat}`}
-          adYear={new Date(janmaDetails?.dateStr || "")
-            .getFullYear()
-            .toString()}
-          janmaTime={`${kundali.zonedDate.toLocaleDateString()}`}
-          lagna={`${kundali.lagna.lagna}`}
-          chandraRashi={`${kundali.lagna.chandraRashi}`}
-          janmaSthan={"janma sthan to be added"}
-          rashi={kundali.lagna.lagna}
-          suryaAyana={kundali.suryaDetails.ayana}
-          ritu={kundali.suryaDetails.ritu}
-          chandraMasa={"to be calculated"}
-          chandraPaksha={kundali.tithi.paksha}
-          weekday={kundali.vaar}
-          tithi={kundali.tithi.name}
-          tithiStartGhatyadi={"to be calculated"}
-          nakshatra={kundali.nakshatra.nakshatra}
-          yoga={kundali.yoga.name}
-          karana={kundali.karana.name}
+          era={{
+            shaka: String(kundali.sakaSamvat),
+            vikram: String(kundali.vikaramSamvat),
+            ad: new Date(janmaDetails?.dateStr || "").getFullYear().toString(),
+            samvatsara: "________", // samvatsara not available in current kundali structure
+            weekday: kundali.vaar
+          }}
+          solar={{
+            suryaAyana: kundali.suryaDetails.ayana,
+            ritu: kundali.suryaDetails.ritu,
+            solarMonth: kundali.suryaDetails.masa || "",
+            solarMonthDays: "________" // days in solar month not provided
+          }}
+          lunar={{
+            chandraMasa: "________", // placeholder until implemented
+            chandraPaksha: kundali.tithi.paksha,
+            nakshatra: kundali.nakshatra.nakshatra,
+            nakshatraPada: kundali.nakshatra.pada?.toString() || "",
+            nakshatraGhatyadi: "________" // not yet provided
+          }}
+          tithiBlock={{
+            tithi: kundali.tithi.name,
+            tithiStartGhatyadi: "________",
+            bhuktGhatyadi: "________",
+            bhogyaGhatyadi: "________",
+            tithiRefDetails: "________" // can synthesize reference string later
+          }}
+          lagnaBlock={{
+            lagna: kundali.lagna.lagna,
+            navamshaLagna: "", // detailed navamsha lagna value not present directly
+            chandraRashi: kundali.lagna.chandraRashi,
+            rashi: kundali.lagna.lagna
+          }}
+          birth={{
+            janmaTime: kundali.zonedDate.toLocaleString(),
+            janmaSthan: "___________",
+            standardTimeOffset: "+05:45",
+            localBirthTime: kundali.zonedDate.toLocaleTimeString(),
+            pramanikTime:
+              kundali.zonedDate.toISOString().split("T")[1]?.slice(0, 8) || "",
+            sunriseGhatyadi: "", // need sunrise calculation
+            gregorianMonth: kundali.zonedDate.toLocaleString(undefined, {
+              month: "long"
+            }),
+            gregorianDate: kundali.zonedDate.getDate().toString()
+          }}
+          yogaKarana={{
+            yoga: kundali.yoga.name,
+            karana: kundali.karana.name
+          }}
+          personal={{
+            gotra: "_____",
+            kula: "____",
+            spouseName: "____",
+            childName: "_____",
+            syllableAkshara: "_____",
+            yoni: "_____",
+            nadi: "____",
+            gana: "____",
+            varna: "____",
+            additionalNotes: "____"
+          }}
         />
 
         <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
@@ -148,10 +190,9 @@ export default function TraditionalPage() {
         <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
         <TribhagiDashaTable dasha={kundali.tribhagiDasa} />
 
-      <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
+        <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
         <YoginiDashaTable dasha={kundali.yoginiDasa} />
       </ChhinaFrame>
     </div>
   );
 }
- 

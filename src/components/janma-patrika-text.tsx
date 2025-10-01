@@ -1,104 +1,99 @@
 import React from "react";
-import {
-  translateSanskritSafe,
-  placeholder,
-  toDevanagariDigits
-} from "@internal/lib/devanagari";
-/** Interface for Janma Patrika dynamic variables */
+import { translateSanskritSafe, placeholder, toDevanagariDigits } from "@internal/lib/devanagari";
+
+/* ===================== Grouped Domain Interfaces ===================== */
+export interface EraInfo { shaka?: string; vikram?: string; ad?: string; samvatsara?: string; weekday?: string }
+export interface SolarInfo { suryaAyana?: string; ritu?: string; solarMonth?: string; solarMonthDays?: string }
+export interface LunarInfo { chandraMasa?: string; chandraPaksha?: string; nakshatra?: string; nakshatraPada?: string; nakshatraGhatyadi?: string }
+export interface TithiInfo { tithi?: string; tithiStartGhatyadi?: string; bhuktGhatyadi?: string; bhogyaGhatyadi?: string; tithiRefDetails?: string }
+export interface LagnaInfo { lagna?: string; navamshaLagna?: string; chandraRashi?: string; rashi?: string }
+export interface BirthInfo { janmaTime?: string; janmaSthan?: string; standardTimeOffset?: string; localBirthTime?: string; pramanikTime?: string; sunriseGhatyadi?: string; gregorianMonth?: string; gregorianDate?: string }
+export interface PersonalInfo { gotra?: string; kula?: string; spouseName?: string; childName?: string; syllableAkshara?: string; yoni?: string; nadi?: string; gana?: string; varna?: string; additionalNotes?: string }
+export interface YogaKaranaInfo { yoga?: string; karana?: string }
+
+/** New grouped props interface (legacy top-level fallbacks supported). */
 export interface JanmaPatrikaTextProps {
-  shalivahaniShaka?: string; // वर्ष संख्या (e.g., १९९२)
-  veerVikramadityaSamvat?: string; // संवत् (e.g., २०१७)
-  adYear?: string; // ईसवीय सन
-  samvatsaraName?: string; // संवत्सर नाम (e.g., शुभानु)
-  suryaAyana?: string; // उत्तरायण / दक्षिणायन
-  ritu?: string; // ऋतु (ग्रीष्म, वर्षा ...)
-  chandraMasa?: string; // चान्द्रमास (श्रावण ...)
-  chandraPaksha?: string; // पक्ष (शुक्ल / कृष्ण)
-  weekday?: string; // वासरः (e.g., शुक्र, सोम)
-  tithi?: string; // तिथि (अष्टमी ...)
-  tithiStartGhatyadi?: string; // घट्यादिः (प्रथम) e.g., ४०:२४
-  nakshatra?: string; // नक्षत्र (रेवती)
-  nakshatraGhatyadi?: string; // नक्षत्र घट्यादिः (२०:३५)
-  bhuktGhatyadi?: string; // भुक्त घट्यादिः (५२:३०)
-  bhogyaGhatyadi?: string; // भोग्य घट्यादिः (५७:००)
-  yoga?: string; // योग (सुकर्मा)
-  karana?: string; // करण (कौलव इत्यादि)
-  solarMonth?: string; // सौर मास (e.g., श्रावण / आषाढ़)
-  solarMonthDays?: string; // सूर्यसंक्रमादिनेषु दिन संख्या (३१)
-  gregorianMonth?: string; // Gregorian month (जुलाइ)
-  gregorianDate?: string; // Gregorian date (१५)
-  pramanikTime?: string; // प्रमाणिक समय (१४:३०:००)
-  sunriseGhatyadi?: string; // सूर्योदय घट्यादिः (२३:०५:००)
-  janmaTime?: string; // जन्म समय (display)
-  lagna?: string; // लग्न
-  navamshaLagna?: string; // नवमांश लग्न / नवमांशे (मिथुन)
-  chandraRashi?: string; // चन्द्र राशि (मीन)
-  janmaSthan?: string; // जन्म स्थान निर्देशांक
-  standardTimeOffset?: string; // मानक समय +०५:४५
-  localBirthTime?: string; // स्थानीय जन्म समय १४:३९:१६
-  gotra?: string; // गोत्र
-  kula?: string; // कुल
-  spouseName?: string; // विवाहिता / भार्या नाम
-  childName?: string; // जातक नाम / शुभ नाम
-  nakshatraPada?: string; // नक्षत्र चरण (चतुर्थ)
-  syllableAkshara?: string; // काराक्षर (ची / क / इत्यादि)
-  yoni?: string; // योनि (गज)
-  nadi?: string; // नाडी (अन्त्य / आदि / मध्य)
-  gana?: string; // गण (देव / मानव / राक्षस)
-  varna?: string; // वर्ण (विप्र / क्षत्रिय ...)
-  rashi?: string; // राशि (कुम्भ / मीन ...)
-  additionalNotes?: string; // अन्य टीका / प्रसंगादय
-  tithiRefDetails?: string; // तिथेयः संदर्भ (e.g., शुक्र वासरः ...)
+  era?: EraInfo;
+  solar?: SolarInfo;
+  lunar?: LunarInfo;
+  tithiBlock?: TithiInfo;
+  lagnaBlock?: LagnaInfo;
+  birth?: BirthInfo;
+  personal?: PersonalInfo;
+  yogaKarana?: YogaKaranaInfo;
+  /* ---- Legacy flat props (will be merged if provided) ---- */
+  shalivahaniShaka?: string;
+  veerVikramadityaSamvat?: string;
+  adYear?: string;
+  samvatsaraName?: string;
+  suryaAyana?: string; ritu?: string;
+  chandraMasa?: string; chandraPaksha?: string; nakshatra?: string; nakshatraPada?: string; nakshatraGhatyadi?: string;
+  weekday?: string; tithi?: string; tithiStartGhatyadi?: string; bhuktGhatyadi?: string; bhogyaGhatyadi?: string; tithiRefDetails?: string;
+  yoga?: string; karana?: string;
+  solarMonth?: string; solarMonthDays?: string;
+  gregorianMonth?: string; gregorianDate?: string;
+  pramanikTime?: string; sunriseGhatyadi?: string; janmaTime?: string;
+  lagna?: string; navamshaLagna?: string; chandraRashi?: string; rashi?: string;
+  janmaSthan?: string; standardTimeOffset?: string; localBirthTime?: string;
+  gotra?: string; kula?: string; spouseName?: string; childName?: string; syllableAkshara?: string; yoni?: string; nadi?: string; gana?: string; varna?: string; additionalNotes?: string;
 }
 
 /** Janma Patrika React component */
 export const JanmaPatrikaText: React.FC<JanmaPatrikaTextProps> = (props) => {
   const ph = placeholder();
-  // Destructure with placeholders
+
+  // Merge grouped + legacy flat fields into a unified flat structure expected by template.
   const data = {
-    shalivahaniShaka: props.shalivahaniShaka ?? ph,
-    veerVikramadityaSamvat: props.veerVikramadityaSamvat ?? ph,
-    adYear: props.adYear ?? ph,
-    samvatsaraName: props.samvatsaraName ?? ph,
-    suryaAyana: props.suryaAyana ?? ph,
-    ritu: props.ritu ?? ph,
-    chandraMasa: props.chandraMasa ?? ph,
-    chandraPaksha: props.chandraPaksha ?? ph,
-    weekday: props.weekday ?? ph,
-    tithi: props.tithi ?? ph,
-    tithiStartGhatyadi: props.tithiStartGhatyadi ?? ph,
-    nakshatra: props.nakshatra ?? ph,
-    nakshatraGhatyadi: props.nakshatraGhatyadi ?? ph,
-    bhuktGhatyadi: props.bhuktGhatyadi ?? ph,
-    bhogyaGhatyadi: props.bhogyaGhatyadi ?? ph,
-    yoga: props.yoga ?? ph,
-    karana: props.karana ?? ph,
-    solarMonth: props.solarMonth ?? ph,
-    solarMonthDays: props.solarMonthDays ?? ph,
-    gregorianMonth: props.gregorianMonth ?? ph,
-    gregorianDate: props.gregorianDate ?? ph,
-    pramanikTime: props.pramanikTime ?? ph,
-    sunriseGhatyadi: props.sunriseGhatyadi ?? ph,
-    janmaTime: props.janmaTime ?? ph,
-    lagna: props.lagna ?? ph,
-    navamshaLagna: props.navamshaLagna ?? ph,
-    chandraRashi: props.chandraRashi ?? ph,
-    janmaSthan: props.janmaSthan ?? ph,
-    standardTimeOffset: props.standardTimeOffset ?? ph,
-    localBirthTime: props.localBirthTime ?? ph,
-    gotra: props.gotra ?? ph,
-    kula: props.kula ?? ph,
-    spouseName: props.spouseName ?? ph,
-    childName: props.childName ?? ph,
-    nakshatraPada: props.nakshatraPada ?? ph,
-    syllableAkshara: props.syllableAkshara ?? ph,
-    yoni: props.yoni ?? ph,
-    nadi: props.nadi ?? ph,
-    gana: props.gana ?? ph,
-    varna: props.varna ?? ph,
-    rashi: props.rashi ?? ph,
-    additionalNotes: props.additionalNotes ?? ph,
-    tithiRefDetails: props.tithiRefDetails ?? ph
+    shalivahaniShaka: props.era?.shaka ?? props.shalivahaniShaka ?? ph,
+    veerVikramadityaSamvat: props.era?.vikram ?? props.veerVikramadityaSamvat ?? ph,
+    adYear: props.era?.ad ?? props.adYear ?? ph,
+    samvatsaraName: props.era?.samvatsara ?? props.samvatsaraName ?? ph,
+    weekday: props.era?.weekday ?? props.weekday ?? ph,
+
+    suryaAyana: props.solar?.suryaAyana ?? props.suryaAyana ?? ph,
+    ritu: props.solar?.ritu ?? props.ritu ?? ph,
+    solarMonth: props.solar?.solarMonth ?? props.solarMonth ?? ph,
+    solarMonthDays: props.solar?.solarMonthDays ?? props.solarMonthDays ?? ph,
+
+    chandraMasa: props.lunar?.chandraMasa ?? props.chandraMasa ?? ph,
+    chandraPaksha: props.lunar?.chandraPaksha ?? props.chandraPaksha ?? ph,
+    nakshatra: props.lunar?.nakshatra ?? props.nakshatra ?? ph,
+    nakshatraPada: props.lunar?.nakshatraPada ?? props.nakshatraPada ?? ph,
+    nakshatraGhatyadi: props.lunar?.nakshatraGhatyadi ?? props.nakshatraGhatyadi ?? ph,
+
+    tithi: props.tithiBlock?.tithi ?? props.tithi ?? ph,
+    tithiStartGhatyadi: props.tithiBlock?.tithiStartGhatyadi ?? props.tithiStartGhatyadi ?? ph,
+    bhuktGhatyadi: props.tithiBlock?.bhuktGhatyadi ?? props.bhuktGhatyadi ?? ph,
+    bhogyaGhatyadi: props.tithiBlock?.bhogyaGhatyadi ?? props.bhogyaGhatyadi ?? ph,
+    tithiRefDetails: props.tithiBlock?.tithiRefDetails ?? ph,
+
+    lagna: props.lagnaBlock?.lagna ?? props.lagna ?? ph,
+    navamshaLagna: props.lagnaBlock?.navamshaLagna ?? props.navamshaLagna ?? ph,
+    chandraRashi: props.lagnaBlock?.chandraRashi ?? props.chandraRashi ?? ph,
+    rashi: props.lagnaBlock?.rashi ?? props.rashi ?? ph,
+
+    janmaTime: props.birth?.janmaTime ?? props.janmaTime ?? ph,
+    janmaSthan: props.birth?.janmaSthan ?? props.janmaSthan ?? ph,
+    standardTimeOffset: props.birth?.standardTimeOffset ?? props.standardTimeOffset ?? ph,
+    localBirthTime: props.birth?.localBirthTime ?? props.localBirthTime ?? ph,
+    pramanikTime: props.birth?.pramanikTime ?? props.pramanikTime ?? ph,
+    sunriseGhatyadi: props.birth?.sunriseGhatyadi ?? props.sunriseGhatyadi ?? ph,
+    gregorianMonth: props.birth?.gregorianMonth ?? props.gregorianMonth ?? ph,
+    gregorianDate: props.birth?.gregorianDate ?? props.gregorianDate ?? ph,
+
+    yoga: props.yogaKarana?.yoga ?? props.yoga ?? ph,
+    karana: props.yogaKarana?.karana ?? props.karana ?? ph,
+
+    gotra: props.personal?.gotra ?? props.gotra ?? ph,
+    kula: props.personal?.kula ?? props.kula ?? ph,
+    spouseName: props.personal?.spouseName ?? props.spouseName ?? ph,
+    childName: props.personal?.childName ?? props.childName ?? ph,
+    syllableAkshara: props.personal?.syllableAkshara ?? props.syllableAkshara ?? ph,
+    yoni: props.personal?.yoni ?? props.yoni ?? ph,
+    nadi: props.personal?.nadi ?? props.nadi ?? ph,
+    gana: props.personal?.gana ?? props.gana ?? ph,
+    varna: props.personal?.varna ?? props.varna ?? ph,
+    additionalNotes: props.personal?.additionalNotes ?? props.additionalNotes ?? ph,
   };
 
   // Translate & digit-normalize once (avoid recomputation in JSX)
