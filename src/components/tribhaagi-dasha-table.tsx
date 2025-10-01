@@ -1,107 +1,78 @@
-'use client'
-import React from 'react'
-import { TribhaagiDasha, DashaPeriod } from '@mhnpd/panchang'
-import { astroTranslate } from '@internal/lib/astro-translator'
+"use client";
+import React from "react";
+import { TribhagiDasha } from "@mhnpd/panchang";
+import { astroTranslate } from "@internal/lib/astro-translator";
+import { translateSanskritSafe } from "@internal/lib/devanagari";
 
-export interface TribhaagiDashaTableProps {
-  tribhaagi?: TribhaagiDasha
+export interface TribhagiDashaTableProps {
+  dasha: TribhagiDasha[];
 }
 
-// Canonical Tribhaagi / planetary order fallback if data absent
-const PLANET_KEYS = ['ketu','shukra','surya','chandra','mangal','rahu','guru','shani','budha'] as const
-
-// Attempt to normalize the ruler to one of the keys above
-function normalizeRuler(ruler: DashaPeriod['ruler']): string {
-  return String(ruler).trim().toLowerCase()
-}
-
-const Row: React.FC<{ values: (string | number | null)[] }> = ({ values }) => (
-  <tr>
-    {values.map((v, i) => (
-      <td key={i} className="border-2 border-red-700 px-2 py-1 text-center text-sm font-bold">
-        {v === null ? '' : v}
-      </td>
-    ))}
-  </tr>
-)
-
-export const TribhaagiDashaTable: React.FC<TribhaagiDashaTableProps> = ({ tribhaagi }) => {
-  // Build a single cycle of unique rulers (avoid repetition showing multiple cycles)
-  let periods: DashaPeriod[] = []
-  if (tribhaagi?.mahadashas?.length) {
-    const seen = new Set<string>()
-    for (const p of tribhaagi.mahadashas) {
-      const key = normalizeRuler(p.ruler)
-      if (!seen.has(key)) {
-        seen.add(key)
-        periods.push(p)
-      }
-      if (seen.size === 9) break // only first complete set of 9 planets
-    }
-    // Ensure current mahadasha is first (rotate after dedupe)
-    if (periods.length) {
-      const currentKey = normalizeRuler(tribhaagi.currentMahadasha.ruler)
-      const idx = periods.findIndex(p => normalizeRuler(p.ruler) === currentKey)
-      if (idx > 0) {
-        periods = [...periods.slice(idx), ...periods.slice(0, idx)]
-      }
-    }
-  } else {
-    // Fallback placeholder order (planet info keys) if no data
-    periods = PLANET_KEYS.map(key => ({
-      ruler: key as unknown as DashaPeriod['ruler'],
-      startDate: new Date(),
-      endDate: new Date(),
-      durationYears: 0,
-      durationMonths: 0,
-      durationDays: 0,
-    }))
-  }
-
-  const toLocaleNum = (val: string | number) => {
-    const map: Record<string, string> = { '0':'०','1':'१','2':'२','3':'३','4':'४','5':'५','6':'६','7':'७','8':'८','9':'९' }
-    return String(val).split('').map(ch => map[ch] ?? ch).join('')
-  }
-
-  // Build columns
-  const headers = periods.map(p => {
-    const key = normalizeRuler(p.ruler)
-    const translated = astroTranslate(key)
-    return translated || key
-  })
-  const yearsRow = periods.map(p => toLocaleNum(p.durationYears ?? 0))
-  const monthsRow = periods.map(p => toLocaleNum(p.durationMonths ?? 0))
-  const daysRow = periods.map(p => toLocaleNum(p.durationDays ?? 0))
-  // Yog row: cumulative years across sequence
-  const cumulativeYears: number[] = []
-  let running = 0
-  periods.forEach(p => { running += p.durationYears ?? 0; cumulativeYears.push(running) })
-  const yogRow = cumulativeYears.map(toLocaleNum)
-
-  const heading = `अथ ${astroTranslate('tribhagi')} ${astroTranslate('mahadasha')} चक्रम्`
+export const TribhagiDashaTable: React.FC<TribhagiDashaTableProps> = ({
+  dasha
+}) => {
   return (
     <div className="space-y-6">
-      <h2 className="text-center font-bold text-lg text-red-700 mb-2">{heading}</h2>
+      <h2 className="text-center font-bold text-lg text-red-700 mb-2">
+        {`अथ ${astroTranslate("Tribhagi")} ${astroTranslate(
+          "mahadasha"
+        )} चक्रम्`}
+      </h2>
+
       <div className="w-full overflow-x-auto">
         <table className="w-full border-2 border-red-700 border-collapse text-sm text-center">
           <thead className="bg-red-100">
             <tr>
-              {headers.map((h, i) => (
-                <th key={i} className="border-2 border-red-700 px-2 py-1 text-xs font-bold text-center">{h}</th>
+              {dasha.map((k) => (
+                <th
+                  key={k.dashaLord}
+                  className="border-2 border-red-700 px-2 py-1 text-xs font-bold text-center"
+                >
+                  {translateSanskritSafe(k.dashaLord)}
+                </th>
               ))}
-              <th className="border-2 border-red-700 px-2 py-1 text-xs font-bold text-center">इकाई</th>
+              <th className="border-2 border-red-700 px-2 py-1 text-xs font-bold text-center">
+                इकाई
+              </th>
             </tr>
           </thead>
           <tbody>
-            <Row values={[...yearsRow, astroTranslate('year') || 'वर्ष']} />
-            <Row values={[...monthsRow, astroTranslate('month') || 'मास']} />
-            <Row values={[...daysRow, astroTranslate('day') || 'दिन']} />
-            <Row values={[...yogRow, astroTranslate('yog') || 'योग']} />
+            <tr>
+              {dasha.map((cell, i) => (
+                <td
+                  key={i}
+                  className="border-2 border-red-700 px-2 py-1 text-sm font-bold"
+                >
+                  <p>{translateSanskritSafe(`${cell.remainingYears}`)}</p>
+                  <p>{translateSanskritSafe(`${cell.remainingMonths}`)}</p>
+                  <p>{translateSanskritSafe(`${cell.remainingDays}`)}</p>
+                </td>
+              ))}
+              <td className="border-2 border-red-700 px-2 py-1 text-sm font-bold">
+                <div className="flex flex-col leading-tight">
+                  <span>{astroTranslate("वर्ष")}</span>
+                  <span>{astroTranslate("मास")}</span>
+                  <span>{astroTranslate("दिन")}</span>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              {dasha.map((v, i) => (
+                <td
+                  key={i}
+                  className="border-2 border-red-700 px-2 py-1 text-sm font-bold"
+                >
+                  {translateSanskritSafe(`${v.cumulativeYears.toFixed(2)}`)}
+                </td>
+              ))}
+              <td className="border-2 border-red-700 px-2 py-1 text-sm font-bold">
+                {astroTranslate("योग")}
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
     </div>
-  )
-}
-
-export default TribhaagiDashaTable
+  );
+};

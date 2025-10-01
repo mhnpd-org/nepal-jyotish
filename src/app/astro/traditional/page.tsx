@@ -7,6 +7,9 @@ import { JanmaPatrikaText } from "@internal/components/janma-patrika-text";
 import NorthDrekkanaChart from "@internal/components/north-drekkana-chart";
 import { translateSanskritSafe } from "@internal/lib/devanagari";
 import { GrahaTable } from "@internal/components/ghara-table";
+import { VimshottariDashaTable } from "@internal/components/vimshottari-dasha-table";
+import { TribhagiDashaTable } from "@internal/components/tribhaagi-dasha-table";
+import { YoginiDashaTable } from "@internal/components/yogini-dasha-table";
 
 export default function TraditionalPage() {
   const [kundali, setKundali] = React.useState<KundaliResult | null>(null);
@@ -105,7 +108,10 @@ export default function TraditionalPage() {
         <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
         <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
 
-        <GrahaTable planets={kundali.planets} translator={translateSanskritSafe} />
+        <GrahaTable
+          planets={kundali.planets}
+          translator={translateSanskritSafe}
+        />
 
         {/* Diamond chart */}
         <div className="flex justify-center mt-6">
@@ -137,6 +143,15 @@ export default function TraditionalPage() {
             houses={kundali.bhavas}
           />
         </div>
+
+        <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
+        <VimshottariDashaTable dasha={kundali.vimshottariDasa} />
+
+        <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
+        <TribhagiDashaTable dasha={kundali.tribhagiDasa} />
+
+      <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
+        <YoginiDashaTable dasha={kundali.yoginiDasa} />
       </div>
     </div>
   );
