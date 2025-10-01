@@ -52,6 +52,18 @@ export default function AstroLayout({ children }: { children: React.ReactNode })
             </Link>
 
             <div className="w-full hidden md:block h-px bg-amber-50 my-1" />
+
+            <Link href="/astro/planet-position" title="Planet Positions" className="relative group flex items-center gap-3 md:gap-3 px-2 md:px-3 py-2 rounded hover:bg-amber-50 w-full justify-center md:justify-start">
+              {/* Planet (solar system) icon */}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5 text-amber-700">
+                <circle cx="12" cy="12" r="3" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 12c0 1.53 4.03 5 9 5s9-3.47 9-5-4.03-5-9-5-9 3.47-9 5z" />
+              </svg>
+              <span className="hidden md:inline text-amber-800 font-medium">Planet Positions</span>
+              <span className="md:hidden absolute left-full top-1/2 -translate-y-1/2 ml-3 px-2 py-1 text-xs bg-amber-700 text-white rounded shadow-sm opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+                Planet Positions
+              </span>
+            </Link>
           </nav>
         </aside>
 
