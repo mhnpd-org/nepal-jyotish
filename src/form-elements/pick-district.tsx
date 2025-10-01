@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { Controller, Control, FieldValues, Path } from "react-hook-form";
+import Select, { SingleValue, StylesConfig, GroupBase, CSSObjectWithLabel } from "react-select";
+import type { ControlProps, OptionProps } from "react-select";
 import { districtOfNepal, type DistrictOfNepal } from "./district";
 
 export interface PickDistrictProps<TFieldValues extends FieldValues> {
@@ -15,7 +17,7 @@ export interface PickDistrictProps<TFieldValues extends FieldValues> {
 	required?: boolean;
 	/** Tailwind class overrides */
 	className?: string;
-	/** Placeholder for search input */
+	/** Placeholder for the select input */
 	searchPlaceholder?: string;
 	/** Disable the widget */
 	disabled?: boolean;
@@ -42,19 +44,41 @@ export function PickDistrict<TFieldValues extends FieldValues>(props: PickDistri
 		selected
 	} = props;
 
-	const [search, setSearch] = useState("");
-
 	const kathmandu = useMemo(() => districtOfNepal.find(d => d.district_en === "Kathmandu"), []);
 
-	const filtered = useMemo(() => {
-		if (!search.trim()) return districtOfNepal;
-		const q = search.toLowerCase();
-		return districtOfNepal.filter(d =>
-			d.zone.toLowerCase().includes(q) ||
-			d.district_en.toLowerCase().includes(q) ||
-			d.district_np.includes(search)
-		);
-	}, [search]);
+	// Map districts to react-select options
+	const options = useMemo(() => districtOfNepal.map(d => ({
+		value: d.district_en,
+		label: `${d.zone} / ${d.district_en}`,
+		data: d
+	})), []);
+
+	type OptionType = { value: string; label: string; data: DistrictOfNepal };
+
+	const customStyles: StylesConfig<OptionType, false, GroupBase<OptionType>> = {
+		control: (base: CSSObjectWithLabel, state: ControlProps<OptionType, false>) => ({
+			...base,
+			borderColor: state.isFocused ? '#3b82f6' : '#d1d5db',
+			boxShadow: state.isFocused ? '0 0 0 2px rgba(59,130,246,0.35)' : 'none',
+			'&:hover': { borderColor: '#3b82f6' },
+			fontSize: '0.875rem',
+			minHeight: '38px'
+		}),
+		menu: (base: CSSObjectWithLabel) => ({
+			...base,
+			zIndex: 60,
+			fontSize: '0.875rem'
+		}),
+		option: (base: CSSObjectWithLabel, state: OptionProps<OptionType, false>) => ({
+			...base,
+			backgroundColor: state.isSelected ? '#2563eb' : state.isFocused ? '#eff6ff' : 'white',
+			color: state.isSelected ? 'white' : '#111827',
+			cursor: 'pointer'
+		}),
+		input: (base: CSSObjectWithLabel) => ({ ...base, fontSize: '0.875rem' }),
+		singleValue: (base: CSSObjectWithLabel) => ({ ...base, fontSize: '0.875rem' }),
+		placeholder: (base: CSSObjectWithLabel) => ({ ...base, fontSize: '0.875rem', color: '#6b7280' })
+	};
 
 		return (
 			<Controller
@@ -69,46 +93,33 @@ export function PickDistrict<TFieldValues extends FieldValues>(props: PickDistri
 					}
 
 					const current: DistrictOfNepal | undefined = field.value as DistrictOfNepal | undefined;
-					const selectedDistrictName = current?.district_en || kathmandu?.district_en || "";
+					// current selection resolved from form state; no separate string needed
 
-					const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-						const district = districtOfNepal.find(d => d.district_en === e.target.value);
-						if (district) field.onChange(district);
-					};
 
 					return (
 						<div className={`w-full ${className}`}>
 							<label className="block text-sm font-medium text-gray-700 mb-1">
 								{label}{required && <span className="text-red-500">*</span>}
 							</label>
-							<div className="flex flex-col gap-2 rounded-md border border-gray-300 p-3 bg-white shadow-sm">
-								<input
-									type="text"
-									value={search}
-									onChange={e => setSearch(e.target.value)}
-									placeholder={searchPlaceholder}
-									className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-									disabled={disabled}
-								/>
-								<select
-									value={selectedDistrictName}
-									onChange={handleSelectChange}
-									disabled={disabled}
-									className="w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-								>
-									{filtered.length === 0 && (
-										<option disabled value="">No matches</option>
-									)}
-									{filtered.map(d => (
-										<option key={d.district_en} value={d.district_en}>
-											{d.zone} / {d.district_en}
-										</option>
-									))}
-								</select>
-								{fieldState.error && (
-									<p className="text-xs text-red-600 mt-1">{fieldState.error.message}</p>
-								)}
-							</div>
+							<Select
+								instanceId={`${name}-district-select`}
+								isDisabled={disabled}
+								options={options}
+								menuPortalTarget={typeof window !== 'undefined' ? document.body : undefined}
+								menuPosition="absolute"
+								placeholder={searchPlaceholder}
+								defaultValue={options.find(o => o.value === (kathmandu?.district_en))}
+								value={current ? options.find(o => o.value === current.district_en) : undefined}
+								styles={customStyles}
+								onChange={(val: SingleValue<{ value: string; label: string; data: DistrictOfNepal }>) => {
+									if (val) field.onChange(val.data);
+								}}
+								classNamePrefix="district-select"
+								noOptionsMessage={() => "No matches"}
+							/>
+							{fieldState.error && (
+								<p className="text-xs text-red-600 mt-2">{fieldState.error.message}</p>
+							)}
 						</div>
 					);
 				}}
