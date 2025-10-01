@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -31,8 +31,13 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
   keywords: ["Jyotish", "Vedic Astrology", "Nepali", "Kundali", "Dasha"],
   authors: [{ name: "Vedanga Jotish" }],
-  viewport: { width: "device-width", initialScale: 1, maximumScale: 1 },
-  themeColor: "#b71c1c",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: "#b71c1c"
 };
 
 export default function RootLayout({
