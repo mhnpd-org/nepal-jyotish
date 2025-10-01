@@ -45,9 +45,9 @@ export default function JanmaPage() {
 						</div>
 					</CardHeader>
 					<CardContent>
-						<div className="grid gap-6 md:grid-cols-2">
+						<div className="flex flex-col gap-6">
 							{/* Name (optional) */}
-							<div className="flex flex-col gap-1">
+							<div className="flex flex-col gap-1 w-full">
 								<label htmlFor="name" className="text-sm font-medium text-gray-800 dark:text-gray-200">Name</label>
 								<input
 									id="name"
@@ -59,7 +59,7 @@ export default function JanmaPage() {
 							</div>
 
 							{/* Date of Birth (required) */}
-							<div className="flex flex-col gap-1">
+							<div className="flex flex-col gap-1 w-full">
 								<DatePicker
 									label="Date of Birth"
 									required
@@ -72,7 +72,7 @@ export default function JanmaPage() {
 							</div>
 
 							{/* Time of Birth (optional) */}
-							<div className="flex flex-col gap-1">
+							<div className="flex flex-col gap-1 w-full">
 								<TimePicker
 									control={control}
 									name="timeOfBirth"
@@ -84,7 +84,7 @@ export default function JanmaPage() {
 							</div>
 
 							{/* Place of Birth (required) */}
-							<div className="md:col-span-2 flex flex-col">
+							<div className="flex flex-col w-full">
 								<PickDistrict
 									control={control}
 									name="placeOfBirth"
