@@ -193,15 +193,6 @@ export default function JanmaPage() {
             >
               {isSubmitting ? "Submitting..." : "Submit"}
             </button>
-            <button
-              type="reset"
-              onClick={() => {
-                setSubmitted(null);
-              }}
-              className="text-sm px-5 py-2 rounded-md border border-gray-300/70 dark:border-gray-600 bg-white/70 dark:bg-gray-900/60 hover:bg-gray-50 dark:hover:bg-gray-800 transition shadow-sm"
-            >
-              Reset
-            </button>
           </CardFooter>
         </form>
       </Card>

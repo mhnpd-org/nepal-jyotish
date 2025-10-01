@@ -149,14 +149,6 @@ export function TimePicker<TFieldValues extends FieldValues>(props: TimePickerPr
                 onKeyDown={handleKeyDown}
                 className={`flex-1 rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${hasTempInvalid ? "border-red-400 ring-red-200" : "border-gray-300"}`}
               />
-              {field.value && (
-                <button
-                  type="button"
-                  onClick={() => { field.onChange(""); setDraft(""); }}
-                  className="text-xs px-2 py-1 rounded border border-gray-300 hover:bg-gray-50"
-                  disabled={disabled}
-                >Clear</button>
-              )}
             </div>
             {hasTempInvalid && (
               <p className="mt-1 text-xs text-orange-600">Invalid format. Use HH:MM{showSeconds ? ":SS" : ""} (24h).</p>
