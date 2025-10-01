@@ -5,6 +5,8 @@ import { getKundali, KundaliResult } from "@mhnpd/panchang";
 import React from "react";
 import { JanmaPatrikaText } from "@internal/components/janma-patrika-text";
 import NorthDrekkanaChart from "@internal/components/north-drekkana-chart";
+import { translateSanskritSafe } from "@internal/lib/devanagari";
+import { GrahaTable } from "@internal/components/ghara-table";
 
 export default function TraditionalPage() {
   const [kundali, setKundali] = React.useState<KundaliResult | null>(null);
@@ -103,10 +105,34 @@ export default function TraditionalPage() {
         <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
         <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
 
+        <GrahaTable planets={kundali.planets} translator={translateSanskritSafe} />
+
         {/* Diamond chart */}
         <div className="flex justify-center mt-6">
           <NorthDrekkanaChart
-            title='Bhavas'
+            title="राशि"
+            hideRashi={false}
+            houses={kundali.vargas.D1}
+          />
+        </div>
+
+        <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
+
+        {/* Diamond chart */}
+        <div className="flex justify-center mt-6">
+          <NorthDrekkanaChart
+            title={"नवांश (D9)"}
+            hideRashi={false}
+            houses={kundali.vargas.D9}
+          />
+        </div>
+
+        <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
+
+        {/* Diamond chart */}
+        <div className="flex justify-center mt-6">
+          <NorthDrekkanaChart
+            title="भाव"
             hideRashi={false}
             houses={kundali.bhavas}
           />
