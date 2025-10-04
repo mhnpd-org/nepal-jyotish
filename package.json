@@ -16,7 +16,7 @@
     "pages:deploy": "wrangler pages deploy out --project-name=vedanga-jotish"
   },
   "dependencies": {
-    "@mhnpd/panchang": "^1.0.12",
+    "@mhnpd/panchang": "^1.0.13",
     "d3": "^7",
     "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.1",
