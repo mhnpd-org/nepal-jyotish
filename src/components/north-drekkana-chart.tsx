@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
 import { astroTranslate } from "@internal/lib/astro-translator";
-import { BhavaChart, VargasChart } from "@mhnpd/panchang";
+import { BhavaChart, LagnaChart, VargasChart } from "@mhnpd/panchang";
 import { translateSanskritSafe } from "@internal/lib/devanagari";
 
 /** Props for the North Indian Drekkana Chart component */
 export interface NorthDrekkanaChartProps {
-  houses: BhavaChart[] | VargasChart[];
+  houses: BhavaChart[] | VargasChart[] | LagnaChart[];
   size?: number; // Chart size in pixels
   title?: string; // Chart title
   hideRashi?: boolean; // Option to hide rashi names

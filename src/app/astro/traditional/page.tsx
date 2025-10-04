@@ -166,18 +166,23 @@ export default function TraditionalPage() {
         {/* Diamond charts grid: 1 per row on small screens, 2 per row on large screens */}
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-10 place-items-center">
           <NorthDrekkanaChart
+            title="लग्न"
+            hideRashi={true}
+            houses={kundali.lagnaChart || []}
+          />
+          <NorthDrekkanaChart
             title="राशि"
-            hideRashi={false}
+            hideRashi={true}
             houses={kundali.vargas.D1}
           />
           <NorthDrekkanaChart
             title={"नवांश (D9)"}
-            hideRashi={false}
+            hideRashi={true}
             houses={kundali.vargas.D9}
           />
           <NorthDrekkanaChart
             title="भाव"
-            hideRashi={false}
+            hideRashi={true}
             houses={kundali.bhavas}
           />
         </div>
