@@ -81,35 +81,35 @@ export default function TraditionalPage() {
         {/* Janma Patrika Text (grouped props) */}
         <JanmaPatrikaText
           era={{
-            shaka: String(kundali.sakaSamvat),
-            vikram: String(kundali.vikaramSamvat),
+            shaka: kundali.sakaSamvat.year.toString(),
+            vikram: kundali.vikaramSamvat.year.toString(),
             ad: new Date(janmaDetails?.dateStr || "").getFullYear().toString(),
-            samvatsara: "________", // samvatsara not available in current kundali structure
+            samvatsara: `${kundali.samvatsara.name}`,
             weekday: kundali.vaar
           }}
           solar={{
-            suryaAyana: kundali.suryaDetails.ayana,
+            suryaAyana: kundali.suryaDetails.surayAyan,
             ritu: kundali.suryaDetails.ritu,
-            solarMonth: kundali.suryaDetails.masa || "",
-            solarMonthDays: "________" // days in solar month not provided
+            solarMonth: kundali.suryaDetails.surayMasa,
+            solarMonthDays: `${kundali.suryaDetails.solarMonthDays.toFixed(0) || ""}`,
           }}
           lunar={{
             chandraMasa: "________", // placeholder until implemented
             chandraPaksha: kundali.tithi.paksha,
             nakshatra: kundali.nakshatra.nakshatra,
             nakshatraPada: kundali.nakshatra.pada?.toString() || "",
-            nakshatraGhatyadi: "________" // not yet provided
+            nakshatraGhatyadi: ''
           }}
           tithiBlock={{
             tithi: kundali.tithi.name,
-            tithiStartGhatyadi: "________",
-            bhuktGhatyadi: "________",
-            bhogyaGhatyadi: "________",
-            tithiRefDetails: "________" // can synthesize reference string later
+            tithiStartGhatyadi: `${kundali.tithi.tithiStartGhatyadi.toFixed(0)}`,
+            bhuktGhatyadi: `${kundali.tithi.bhuktGhatyadi.toFixed(0)}`,
+            bhogyaGhatyadi: `${kundali.tithi.bhogyaGhatyadi.toFixed(0)}`,
+            tithiRefDetails:""
           }}
           lagnaBlock={{
             lagna: kundali.lagna.lagna,
-            navamshaLagna: "", // detailed navamsha lagna value not present directly
+            navamshaLagna: kundali.lagna.navamshaLagna,
             chandraRashi: kundali.lagna.chandraRashi,
             rashi: kundali.lagna.lagna
           }}
@@ -153,30 +153,18 @@ export default function TraditionalPage() {
           translator={translateSanskritSafe}
         />
 
-        {/* Diamond chart */}
-        <div className="flex justify-center mt-6">
+        {/* Diamond charts grid: 1 per row on small screens, 2 per row on large screens */}
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-10 place-items-center">
           <NorthDrekkanaChart
             title="राशि"
             hideRashi={false}
             houses={kundali.vargas.D1}
           />
-        </div>
-
-        <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
-
-        {/* Diamond chart */}
-        <div className="flex justify-center mt-6">
           <NorthDrekkanaChart
             title={"नवांश (D9)"}
             hideRashi={false}
             houses={kundali.vargas.D9}
           />
-        </div>
-
-        <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
-
-        {/* Diamond chart */}
-        <div className="flex justify-center mt-6">
           <NorthDrekkanaChart
             title="भाव"
             hideRashi={false}
