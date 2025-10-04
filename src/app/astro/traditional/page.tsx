@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { getJanmaDetails } from "@internal/utils/get-form-details";
-import { getKundali, KundaliResult } from "@mhnpd/panchang";
+import { getKundali, KundaliResult, type JanmaDetails } from "@mhnpd/panchang";
 import React from "react";
 import { JanmaPatrikaText } from "@internal/components/janma-patrika-text";
 import NorthDrekkanaChart from "@internal/components/north-drekkana-chart";
@@ -14,21 +14,28 @@ import { ChhinaFrame } from "@internal/components/chhina-frame";
 
 export default function TraditionalPage() {
   const [kundali, setKundali] = React.useState<KundaliResult | null>(null);
-  const [janmaDetails] = React.useState(getJanmaDetails());
+  const [janmaDetails, setJanmaDetails] = React.useState<JanmaDetails | null>(null);
 
   React.useEffect(() => {
     let mounted = true;
 
     const loadKundali = async () => {
-      const janmaDetails = getJanmaDetails();
-      if (!janmaDetails) {
-        console.warn("Janma details are missing. Redirecting to form page.");
+      let details: JanmaDetails | undefined;
+      try {
+        details = getJanmaDetails();
+      } catch (e) {
+        // Validation failed (likely empty or malformed date/time)
+        console.warn("Invalid or missing janma details; redirecting.", e);
+      }
+
+      if (!details) {
         if (mounted) window.location.replace("/astro/janma");
         return;
       }
+      if (mounted) setJanmaDetails(details);
 
       try {
-        const result = await getKundali(janmaDetails);
+        const result = await getKundali(details);
         if (mounted) setKundali(result);
       } catch (error) {
         console.error("Failed to fetch kundali:", error);
@@ -83,7 +90,7 @@ export default function TraditionalPage() {
           era={{
             shaka: kundali.sakaSamvat.year.toString(),
             vikram: kundali.vikaramSamvat.year.toString(),
-            ad: new Date(janmaDetails?.dateStr || "").getFullYear().toString(),
+            ad: janmaDetails ? new Date(janmaDetails.dateStr).getFullYear().toString() : "____",
             samvatsara: `${kundali.samvatsara.name}`,
             weekday: kundali.vaar
           }}

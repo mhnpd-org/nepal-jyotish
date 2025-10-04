@@ -7,7 +7,53 @@ import { translateSanskritSafe } from "@internal/lib/devanagari";
 import { astroTranslate } from "@internal/lib/astro-translator";
 
 interface DashaItemProps { item: YoginiDasha; index: number; }
+
+const YoginiAntardashaTable: React.FC<{ data: NonNullable<YoginiDasha['antardashas']> }> = ({ data }) => {
+  if (!data.length) return null;
+  return (
+    <div className="mt-4 border border-fuchsia-200 rounded-md overflow-hidden bg-white/70 shadow-sm">
+      <div className="overflow-x-auto">
+        <table className="w-full text-xs sm:text-sm border-collapse">
+            <thead className="bg-gradient-to-r from-pink-50 via-fuchsia-50 to-pink-50">
+              <tr className="text-fuchsia-700">
+                <th className="border border-fuchsia-200 px-2 py-1 font-semibold">#</th>
+                <th className="border border-fuchsia-200 px-2 py-1 font-semibold">{astroTranslate("antardasha") || "अन्तर्दशा"}</th>
+                <th className="border border-fuchsia-200 px-2 py-1 font-semibold whitespace-nowrap">{astroTranslate("अवधि (BS)")}</th>
+                <th className="border border-fuchsia-200 px-2 py-1 font-semibold">{astroTranslate("वर्ष")}</th>
+                <th className="border border-fuchsia-200 px-2 py-1 font-semibold">{astroTranslate("मास")}</th>
+                <th className="border border-fuchsia-200 px-2 py-1 font-semibold">{astroTranslate("दिन")}</th>
+                <th className="border border-fuchsia-200 px-2 py-1 font-semibold">{astroTranslate("योग")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((ad, i) => {
+                const rowHighlight = ad.isCurrent ? "bg-fuchsia-100/70" : i % 2 === 0 ? "bg-white" : "bg-pink-50/40";
+                return (
+                  <tr key={ad.antardashaIndex + '-' + i} className={`${rowHighlight} transition-colors`}>
+                    <td className="border border-fuchsia-200 px-2 py-1 font-medium text-fuchsia-600">{translateSanskritSafe((i + 1) + "")}</td>
+                    <td className="border border-fuchsia-200 px-2 py-1 font-semibold text-fuchsia-700">{translateSanskritSafe(ad.parentYogini)}-{translateSanskritSafe(ad.antardashaIndex.toString())}</td>
+                    <td className="border border-fuchsia-200 px-2 py-1 font-medium text-gray-700 whitespace-nowrap">{translateSanskritSafe(ad.startDateInBs)} – {translateSanskritSafe(ad.endDateInBs)}</td>
+                    <td className="border border-fuchsia-200 px-2 py-1">{translateSanskritSafe(ad.durationYears.toFixed(2))}</td>
+                    <td className="border border-fuchsia-200 px-2 py-1">{translateSanskritSafe(ad.durationMonths.toString())}</td>
+                    <td className="border border-fuchsia-200 px-2 py-1">{translateSanskritSafe(ad.durationDays.toString())}</td>
+                    <td className="border border-fuchsia-200 px-2 py-1 font-medium">{translateSanskritSafe(ad.cumulativeYearsInParent.toFixed(2))}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+        </table>
+      </div>
+      <div className="px-3 py-1 text-[10px] sm:text-[11px] text-gray-500 border-t border-fuchsia-200 bg-fuchsia-50/60 flex items-center gap-2">
+        <span className="inline-block h-2 w-2 rounded-full bg-fuchsia-300" /> {astroTranslate("Current")} {astroTranslate("antardasha") || "अन्तर्दशा"}
+      </div>
+    </div>
+  );
+};
+
 const DashaItem: React.FC<DashaItemProps> = ({ item, index }) => {
+  const [open, setOpen] = React.useState<boolean>(Boolean(item.isCurrent));
+  const hasAntar = !!(item.antardashas && item.antardashas.length);
+  React.useEffect(() => { if (item.isCurrent) setOpen(true); }, [item.isCurrent]);
   return (
     <li className="relative pl-8 py-5 group">
       <span className="absolute left-3 top-0 bottom-0 w-px bg-gradient-to-b from-pink-400 via-fuchsia-400 to-pink-500" />
@@ -25,6 +71,17 @@ const DashaItem: React.FC<DashaItemProps> = ({ item, index }) => {
           {item.isCurrent && (
             <span className="text-[11px] uppercase tracking-wide bg-green-100 text-green-700 px-1.5 py-0.5 rounded border border-green-300">{translateSanskritSafe("Current")}</span>
           )}
+          {hasAntar && (
+            <button
+              type="button"
+              onClick={() => setOpen(o => !o)}
+              className="ml-auto inline-flex items-center gap-1 text-xs sm:text-sm font-medium text-fuchsia-700 bg-fuchsia-100/70 hover:bg-fuchsia-200/70 px-2 py-1 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-fuchsia-400/50"
+              aria-expanded={open}
+            >
+              <span className={`transform transition-transform ${open ? 'rotate-90' : ''}`} aria-hidden="true">▶</span>
+              {astroTranslate("antardasha") || "अन्तर्दशा"}
+            </button>
+          )}
         </div>
         <div className="text-sm text-gray-700 flex flex-wrap gap-x-6 gap-y-1">
           <span><b>{astroTranslate("वर्ष")}</b>: {translateSanskritSafe(item.remainingYears.toFixed(2))}</span>
@@ -36,6 +93,9 @@ const DashaItem: React.FC<DashaItemProps> = ({ item, index }) => {
         <div className="text-xs sm:text-sm italic text-gray-500">
           AD: {item.startDateInAd.toDateString()} – {item.endDateInAd.toDateString()}
         </div>
+        {hasAntar && open && item.antardashas && (
+          <YoginiAntardashaTable data={item.antardashas} />
+        )}
       </div>
     </li>
   );

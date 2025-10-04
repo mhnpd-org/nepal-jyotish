@@ -1,5 +1,4 @@
 import { JanmaDetails, validateJanmaDetails } from "@mhnpd/panchang";
-import NepaliDate from "nepali-date-converter";
 import { getEncodedItem, setEncodedItem, type JsonValue } from "./storage";
 import { JanmaFormValues } from "@internal/app/astro/janma/page";
 
@@ -49,18 +48,24 @@ export const formatToDDMMYYYY = (date: Date | string): string => {
   return `${day}-${month}-${year}`;
 };
 
-export function getJanmaDetails(): JanmaDetails {
+export function getJanmaDetails(): JanmaDetails | undefined {
   const form = getFormDetails() as JanmaFormValues | undefined;
+  if (!form || !form.dateOfBirth || !/^\d{4}-\d{2}-\d{2}$/.test(form.dateOfBirth)) {
+    return undefined; // insufficient data
+  }
 
   const janmaDetails = {
-    dateStr: form?.dateOfBirth || "",
-    timeStr: form?.timeOfBirth || "",
-    latitude: form?.placeOfBirth.lat,
-    longitude: form?.placeOfBirth.long,
-    timeZone: "Asia/Kathmandu" // Fixed timezone for Nepal
+    dateStr: form.dateOfBirth,
+    timeStr: form.timeOfBirth || "00:00:00",
+    latitude: form.placeOfBirth?.lat,
+    longitude: form.placeOfBirth?.long,
+    timeZone: "Asia/Kathmandu"
   } as JanmaDetails;
 
-  validateJanmaDetails(janmaDetails);
-
+  try {
+    validateJanmaDetails(janmaDetails);
+  } catch {
+    return undefined; // validation failed
+  }
   return janmaDetails;
 }
