@@ -47,9 +47,9 @@ export default function AstroSidebar() {
   const pathname = usePathname();
   const { t } = useI18n();
   return (
-    <aside className="group/sidebar relative w-18 md:w-64 bg-white/90 backdrop-blur-sm border-r border-amber-100/60 shadow-[0_0_0_1px_rgba(255,255,255,0.2)]">
+  <aside className="group/sidebar relative w-14 md:w-64 shrink-0 bg-white/90 backdrop-blur-sm border-r border-amber-100/60 shadow-[0_0_0_1px_rgba(255,255,255,0.2)]">
       <div className="pointer-events-none absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-amber-200 to-transparent" />
-      <nav className="flex flex-col py-4 px-2 md:px-3 gap-1">
+  <nav className="flex flex-col py-4 px-1 md:px-3 gap-1">
         {NAV_ITEMS.map(item => {
           const active = pathname?.startsWith(item.href);
           return (
@@ -58,7 +58,7 @@ export default function AstroSidebar() {
               href={item.href}
               className={[
                 'group relative flex items-center rounded-md transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/60 focus-visible:ring-offset-2 focus-visible:ring-offset-amber-50',
-                'px-2 md:px-3 py-2 gap-3',
+                'px-2 md:px-3 py-2 gap-0 md:gap-3 justify-center md:justify-start',
                 active
                   ? 'bg-amber-100/90 text-amber-900 shadow-sm ring-1 ring-amber-300/60'
                   : 'text-amber-700 hover:text-amber-900 hover:bg-amber-50'
