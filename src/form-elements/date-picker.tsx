@@ -308,7 +308,10 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
     };
 
     return (
-      <div className={`flex flex-col gap-1 ${className}`}>
+      <div
+        className={`flex flex-col gap-1 px-1 sm:px-0 ${className}`}
+        /* Added small horizontal padding on very small screens so control doesn't touch the edge */
+      >
         {label && (
           <label
             htmlFor={id}
@@ -319,16 +322,16 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
           </label>
         )}
         <div
-          className="flex items-center gap-3"
+          className="flex items-center gap-3 w-full"
           aria-describedby={`${id}-segments-desc`}
         >
           {/* Unified grouped box with internal calendar toggle */}
-          <div className="inline-flex h-10 items-stretch rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-blue-400/40 divide-x divide-gray-300 dark:divide-gray-700">
+          <div className="inline-flex h-10 items-stretch rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-blue-400/40 divide-x divide-gray-300 dark:divide-gray-700 max-w-full">
             {/* Toggle segment */}
             <button
               type="button"
               onClick={toggleCalendar}
-              className="relative flex flex-col justify-center px-3 text-xs md:text-sm font-semibold tracking-wide focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/50 group h-full"
+              className="relative flex flex-col justify-center px-2 sm:px-3 text-[11px] md:text-sm font-semibold tracking-wide focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/50 group h-full"
               aria-label="Toggle Calendar System"
             >
               <span className="flex items-center gap-1">
@@ -358,7 +361,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
               id={yearId}
               inputMode="numeric"
               placeholder={calendar === "AD" ? "YYYY" : "BS YYYY"}
-              className="w-24 bg-transparent px-3 py-0 text-center text-sm focus:outline-none h-full"
+              className="w-20 sm:w-24 bg-transparent px-2 sm:px-3 py-0 text-center text-sm focus:outline-none h-full"
               value={year}
               onChange={handleYearChange}
               onKeyDown={handleKeyNav}
@@ -371,7 +374,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
               id={monthId}
               inputMode="numeric"
               placeholder="MM"
-              className="w-14 bg-transparent px-3 py-0 text-center text-sm focus:outline-none h-full"
+              className="w-12 sm:w-14 bg-transparent px-2 sm:px-3 py-0 text-center text-sm focus:outline-none h-full"
               value={month}
               onChange={handleMonthChange}
               onKeyDown={handleKeyNav}
@@ -384,7 +387,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
               id={dayId}
               inputMode="numeric"
               placeholder="DD"
-              className="w-14 bg-transparent px-3 py-0 text-center text-sm focus:outline-none h-full"
+              className="w-12 sm:w-14 bg-transparent px-2 sm:px-3 py-0 text-center text-sm focus:outline-none h-full"
               value={day}
               onChange={handleDayChange}
               onKeyDown={handleKeyNav}
