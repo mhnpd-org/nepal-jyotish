@@ -2,7 +2,6 @@
 import React from "react";
 import { getJanmaDetails } from "@internal/utils/get-form-details";
 import { getKundali, KundaliResult, VimshottariDasha } from "@mhnpd/panchang";
-import { Card, CardHeader, CardTitle, CardContent } from "@internal/components/card";
 import { translateSanskritSafe } from "@internal/lib/devanagari";
 import { astroTranslate } from "@internal/lib/astro-translator";
 
@@ -128,17 +127,23 @@ export default function VimshottariDashaVerticalPage() {
   const list: VimshottariDasha[] = kundali.vimshottariDasa;
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>{translateSanskritSafe("विंशोत्तरी महादशा क्रम")}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ol className="relative">
-            {list.map((d, i) => <DashaItem key={d.dashaLord + i} item={d} index={i} />)}
-          </ol>
-        </CardContent>
-      </Card>
+    <div className="space-y-4">
+      <header className="space-y-1">
+        <h1 className="text-xl sm:text-2xl font-bold tracking-wide text-red-700">
+          {translateSanskritSafe("विंशोत्तरी महादशा क्रम")}
+        </h1>
+        <p className="text-sm text-gray-600 leading-relaxed">
+          {astroTranslate("Vimshottari")} {astroTranslate("mahadasha")} {astroTranslate("overview") || "क्रम र यसको अन्तर्दशा विवरण"}
+        </p>
+      </header>
+      <ol className="relative divide-y divide-red-100/60 border border-red-200/40 rounded-lg bg-red-50/20 p-2 sm:p-3">
+        {list.map((d, i) => (
+          <DashaItem key={d.dashaLord + i} item={d} index={i} />
+        ))}
+      </ol>
+      <p className="text-[11px] sm:text-xs text-gray-500 italic pt-1">
+        {astroTranslate("Current")} {astroTranslate("antardasha") || "अन्तर्दशा"} {astroTranslate("highlighted") || "हल्का रङ्गमा"}.
+      </p>
     </div>
   );
 }

@@ -2,7 +2,6 @@
 import React from "react";
 import { getJanmaDetails } from "@internal/utils/get-form-details";
 import { getKundali, KundaliResult, TribhagiDasha } from "@mhnpd/panchang";
-import { Card, CardHeader, CardTitle, CardContent } from "@internal/components/card";
 import { translateSanskritSafe } from "@internal/lib/devanagari";
 import { astroTranslate } from "@internal/lib/astro-translator";
 
@@ -130,17 +129,23 @@ export default function TribhagiDashaVerticalPage() {
   const list: TribhagiDasha[] = kundali.tribhagiDasa;
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>{translateSanskritSafe("त्रिभागि महादशा क्रम")}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ol className="relative">
-            {list.map((d, i) => <DashaItem key={d.dashaLord + i} item={d} index={i} />)}
-          </ol>
-        </CardContent>
-      </Card>
+  <div className="space-y-4">
+      <header className="space-y-1">
+        <h1 className="text-xl sm:text-2xl font-bold tracking-wide text-rose-700">
+          {translateSanskritSafe("त्रिभागि महादशा क्रम")}
+        </h1>
+        <p className="text-sm text-gray-600 leading-relaxed">
+          {astroTranslate("Tribhagi")} {astroTranslate("mahadasha")} {astroTranslate("overview") || "क्रम र यसको अन्तर्दशा विवरण"}
+        </p>
+      </header>
+      <ol className="relative divide-y divide-rose-100/60 border border-rose-200/40 rounded-lg bg-rose-50/20 dark:bg-rose-50/10 p-2 sm:p-3">
+        {list.map((d, i) => (
+          <DashaItem key={d.dashaLord + i} item={d} index={i} />
+        ))}
+      </ol>
+      <p className="text-[11px] sm:text-xs text-gray-500 italic pt-1">
+        {astroTranslate("Current")} {astroTranslate("antardasha") || "अन्तर्दशा"} {astroTranslate("highlighted") || "हल्का रङ्गमा देखाइएको छ"}.
+      </p>
     </div>
   );
 }

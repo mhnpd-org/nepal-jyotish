@@ -2,7 +2,6 @@
 import React from "react";
 import { getJanmaDetails } from "@internal/utils/get-form-details";
 import { getKundali, KundaliResult, PlanetCombinedInfo, PlanetsInTimeFrameResult } from "@mhnpd/panchang";
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@internal/components/card";
 import { translateSanskritSafe } from "@internal/lib/devanagari";
 
 // Helper to render a vedic styled cell (sanskrit focus)
@@ -44,51 +43,50 @@ export default function PlanetPositionsPage() {
   const rows = Object.keys(planets) as (keyof PlanetsInTimeFrameResult)[];
 
   return (
-    <div className="space-y-6 max-w-6xl mx-auto">
-      <Card>
-        <CardHeader>
-          <CardTitle>ग्रह स्थितिः (Planetary Positions)</CardTitle>
-          <CardDescription>
-            जन्मकाले ग्रहाणां निरयन (sidereal) राशिस्थानं तथा नक्षत्रादि विवरणम्।
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm border border-red-700/60 rounded-md overflow-hidden">
-              <thead>
-                <tr className="bg-red-50 text-red-800">
-                  <th className="px-2 py-1 border border-red-700/40">{TS("ग्रहः")}</th>
-                  <th className="px-2 py-1 border border-red-700/40">{TS("राशि (D°M′S″)")}</th>
-                  <th className="px-2 py-1 border border-red-700/40">{TS("नक्षत्र")}</th>
-                  <th className="px-2 py-1 border border-red-700/40">{TS("पादः")}</th>
-                  <th className="px-2 py-1 border border-red-700/40">{TS("नक्षत्रेशः")}</th>
-                  <th className="px-2 py-1 border border-red-700/40">{TS("दीर्घा (360°)")}</th>
+    <div className="space-y-4">
+      <header className="space-y-1">
+        <h1 className="text-xl sm:text-2xl font-bold tracking-wide text-red-700">
+          {TS("ग्रह स्थितिः")}
+        </h1>
+        <p className="text-sm text-gray-600 leading-relaxed">
+          जन्मकाले ग्रहाणां निरयन राशिस्थानं तथा नक्षत्र-पाद विवरणम्।
+        </p>
+      </header>
+      <div className="overflow-x-auto rounded-lg border border-red-200/50 bg-red-50/20 p-2 sm:p-3">
+        <table className="w-full text-xs sm:text-sm border-collapse">
+          <thead>
+            <tr className="bg-gradient-to-r from-red-50 via-amber-50 to-red-50 text-red-700">
+              <th className="px-2 py-1 border border-red-200 font-semibold text-left">{TS("ग्रहः")}</th>
+              <th className="px-2 py-1 border border-red-200 font-semibold text-left whitespace-nowrap">{TS("राशि")} <span className="font-normal text-[10px] text-red-500">(D°M′S″)</span></th>
+              <th className="px-2 py-1 border border-red-200 font-semibold text-left">{TS("नक्षत्र")}</th>
+              <th className="px-2 py-1 border border-red-200 font-semibold text-left">{TS("पादः")}</th>
+              <th className="px-2 py-1 border border-red-200 font-semibold text-left">{TS("नक्षत्रेशः")}</th>
+              <th className="px-2 py-1 border border-red-200 font-semibold text-left whitespace-nowrap">{TS("दीर्घा 360°")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map(key => {
+              const g = planets[key] as PlanetCombinedInfo | undefined;
+              if (!g) return null;
+              const rowHighlight = rows.indexOf(key) % 2 === 0 ? 'bg-white/70' : 'bg-red-50/40';
+              return (
+                <tr key={String(key)} className={`${rowHighlight} hover:bg-amber-100/60 transition-colors`}> 
+                  <td className="px-2 py-1 border border-red-200 font-semibold text-red-700"><SanskritCell value={key} /></td>
+                  <td className="px-2 py-1 border border-red-200 whitespace-nowrap">
+                    <SanskritCell value={g.rashi} />&nbsp;
+                    <SanskritCell value={g.siderealLonDMS30} />
+                  </td>
+                  <td className="px-2 py-1 border border-red-200"><SanskritCell value={g.nakshatra} /></td>
+                  <td className="px-2 py-1 border border-red-200"><SanskritCell value={g.pada} /></td>
+                  <td className="px-2 py-1 border border-red-200"><SanskritCell value={g.nakshatraLord} /></td>
+                  <td className="px-2 py-1 border border-red-200"><SanskritCell value={g.siderealLonDMS360} /></td>
                 </tr>
-              </thead>
-              <tbody>
-                {rows.map(key => {
-                  const g = planets[key] as PlanetCombinedInfo | undefined;
-                  if (!g) return null;
-                  return (
-                    <tr key={String(key)} className="even:bg-white odd:bg-amber-50/40 hover:bg-amber-100/60 transition-colors">
-                      <td className="px-2 py-1 border border-red-700/20 font-semibold text-red-800"><SanskritCell value={key} /></td>
-                      <td className="px-2 py-1 border border-red-700/20 whitespace-nowrap">
-                        <SanskritCell value={g.rashi} />&nbsp;
-                        <SanskritCell value={g.siderealLonDMS30} />
-                      </td>
-                      <td className="px-2 py-1 border border-red-700/20"><SanskritCell value={g.nakshatra} /></td>
-                      <td className="px-2 py-1 border border-red-700/20"><SanskritCell value={g.pada} /></td>
-                      <td className="px-2 py-1 border border-red-700/20"><SanskritCell value={g.nakshatraLord} /></td>
-                      <td className="px-2 py-1 border border-red-700/20"><SanskritCell value={g.siderealLonDMS360} /></td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-            <p className="text-[11px] text-gray-500 mt-2">टीप्: निरयन (sidereal) दिगंशाः दर्शिताः।</p>
-          </div>
-        </CardContent>
-      </Card>
+              );
+            })}
+          </tbody>
+        </table>
+        <p className="text-[11px] text-gray-500 mt-2">टीप्: निरयन (sidereal) दिगंशाः दर्शिताः।</p>
+      </div>
     </div>
   );
 }
