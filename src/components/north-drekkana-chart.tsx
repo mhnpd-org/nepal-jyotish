@@ -56,6 +56,11 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
   hideRashi = true,
   debug = false
 }) => {
+  // We keep the internal coordinate system based on `size` but display the SVG a bit smaller
+  // so that the chart appears slightly reduced without changing any relative positions.
+  // Using viewBox preserves exact layout & text placement.
+  const displayScale = 0.85; // "little small" ~15% reduction
+  const displaySize = size * displayScale;
   const margin = 30;
   const chartSize = size - 2 * margin;
   const centerX = size / 2;
@@ -68,7 +73,14 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
   const imageSize = clipRadius * 2; // Image fits exactly inside clip circle
 
   return (
-    <svg width={size} height={size} className="north-drekkana-chart">
+    <svg
+      width={displaySize}
+      height={displaySize}
+      viewBox={`0 0 ${size} ${size}`}
+      preserveAspectRatio="xMidYMid meet"
+      className="north-drekkana-chart"
+      style={{ maxWidth: displaySize, height: "auto" }}
+    >
       {/* Background with muted white gradient */}
       <defs>
         <radialGradient id="backgroundGradient" cx="50%" cy="50%" r="50%">
