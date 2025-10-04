@@ -13,6 +13,11 @@ const NAV_ITEMS = [
       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 20.5a7.5 7.5 0 0115 0" />
     </svg>
   )},
+  { href: '/astro/overview', key: 'nav.overview', icon: (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3 4h7v7H3zM14 4h7v7h-7zM14 15h7v7h-7zM3 15h7v7H3z" />
+    </svg>
+  )},
   { href: '/astro/traditional', key: 'nav.traditional', icon: (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
       <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
