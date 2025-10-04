@@ -331,12 +331,12 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
             <button
               type="button"
               onClick={toggleCalendar}
-              className="relative flex flex-col justify-center px-2 sm:px-3 text-[11px] md:text-sm font-semibold tracking-wide focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/50 group h-full"
+              className="relative flex flex-col justify-center px-1.5 sm:px-2 md:px-3 text-[10px] sm:text-[11px] md:text-sm font-semibold tracking-wide focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/50 group h-full whitespace-nowrap"
               aria-label="Toggle Calendar System"
             >
               <span className="flex items-center gap-1">
                 <span
-                  className={`px-2 py-1 rounded text-[11px] md:text-xs lg:text-sm transition-colors ${
+                  className={`px-1.5 sm:px-2 py-1 rounded text-[10px] sm:text-[11px] md:text-xs lg:text-sm transition-colors ${
                     calendar === "AD"
                       ? "bg-blue-600 text-white shadow"
                       : "text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200"
@@ -345,7 +345,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                   AD
                 </span>
                 <span
-                  className={`px-2 py-1 rounded text-[11px] md:text-xs lg:text-sm transition-colors ${
+                  className={`px-1.5 sm:px-2 py-1 rounded text-[10px] sm:text-[11px] md:text-xs lg:text-sm transition-colors ${
                     calendar === "BS"
                       ? "bg-blue-600 text-white shadow"
                       : "text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200"
@@ -361,7 +361,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
               id={yearId}
               inputMode="numeric"
               placeholder={calendar === "AD" ? "YYYY" : "BS YYYY"}
-              className="w-20 sm:w-24 bg-transparent px-2 sm:px-3 py-0 text-center text-sm focus:outline-none h-full"
+              className="w-14 xs:w-16 sm:w-20 md:w-24 bg-transparent px-2 sm:px-2.5 md:px-3 py-0 text-center text-sm focus:outline-none h-full"
               value={year}
               onChange={handleYearChange}
               onKeyDown={handleKeyNav}
@@ -374,7 +374,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
               id={monthId}
               inputMode="numeric"
               placeholder="MM"
-              className="w-12 sm:w-14 bg-transparent px-2 sm:px-3 py-0 text-center text-sm focus:outline-none h-full"
+              className="w-10 sm:w-12 md:w-14 bg-transparent px-1.5 sm:px-2.5 md:px-3 py-0 text-center text-sm focus:outline-none h-full"
               value={month}
               onChange={handleMonthChange}
               onKeyDown={handleKeyNav}
@@ -387,7 +387,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
               id={dayId}
               inputMode="numeric"
               placeholder="DD"
-              className="w-12 sm:w-14 bg-transparent px-2 sm:px-3 py-0 text-center text-sm focus:outline-none h-full"
+              className="w-10 sm:w-12 md:w-14 bg-transparent px-1.5 sm:px-2.5 md:px-3 py-0 text-center text-sm focus:outline-none h-full"
               value={day}
               onChange={handleDayChange}
               onKeyDown={handleKeyNav}
