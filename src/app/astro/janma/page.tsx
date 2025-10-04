@@ -9,14 +9,7 @@ import { ADDatePicker, BSDatePicker } from "@internal/form-elements/date-picker"
 import NepaliDate from "nepali-date-converter";
 import { TimePicker } from "@internal/form-elements/time-picker";
 import { PickDistrict } from "@internal/form-elements/pick-district";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardFooter,
-  CardTitle,
-  CardDescription
-} from "@internal/components/card";
+import { useI18n } from "@internal/lib/i18n";
 import {
   districtOfNepal,
   type DistrictOfNepal
@@ -108,40 +101,37 @@ export default function JanmaPage() {
     }
   };
 
+  const { t } = useI18n();
   return (
-    <main className="w-full mx-auto px-2 sm:px-4 py-10 space-y-10">
-      <Card variant="gradient" className="w-full" unpadded>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="relative px-6 sm:px-8 py-6 sm:py-8 space-y-8"
-        >
-          <CardHeader className="gap-3 pb-6">
-            <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-orange-400 to-rose-500 flex items-center justify-center text-white text-lg font-semibold shadow-inner shadow-orange-200/40 ring-1 ring-white/40 dark:ring-white/10">
-                🜚
-              </div>
-              <div>
-                <CardTitle className="text-2xl">Janma Details</CardTitle>
-                <CardDescription className="mt-1">
-                  Enter birth details to generate astrological calculations.
-                </CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-col gap-6">
+    <main className="w-full px-2 sm:px-4 py-8 space-y-12">
+      <header className="space-y-2 max-w-2xl">
+        <div className="flex items-center gap-4">
+          <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-orange-500 via-rose-500 to-pink-500 flex items-center justify-center text-white text-lg font-semibold shadow ring-1 ring-white/40 dark:ring-white/10">
+            🜚
+          </div>
+          <div>
+            <h1 className="text-2xl font-semibold tracking-wide text-gray-800 dark:text-gray-100">
+              {t('janma.title')}
+            </h1>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 leading-snug max-w-prose">
+              {t('janma.description')}
+            </p>
+          </div>
+        </div>
+      </header>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="max-w-2xl space-y-8"
+      >
+        <div className="rounded-xl border border-amber-100/70 bg-white/75 dark:bg-gray-900/50 backdrop-blur-sm shadow-sm px-5 sm:px-7 py-6 flex flex-col gap-8">
+        <div className="flex flex-col gap-6">
               {/* Name (optional) */}
               <div className="flex flex-col gap-1 w-full">
-                <label
-                  htmlFor="name"
-                  className="text-sm font-medium text-gray-800 dark:text-gray-200"
-                >
-                  Name
-                </label>
+                <label htmlFor="name" className="text-sm font-medium text-gray-800 dark:text-gray-200">{t('janma.name')}</label>
                 <input
                   id="name"
                   type="text"
-                  placeholder="Enter name (optional)"
+                  placeholder={t('janma.name')}
                   className="rounded-md border border-gray-300/70 dark:border-gray-600 bg-white/90 dark:bg-gray-900 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/70 focus-visible:border-orange-400 transition"
                   {...register("name")}
                 />
@@ -149,115 +139,100 @@ export default function JanmaPage() {
 
               {/* Date of Birth (required) */}
               <div className="flex flex-col gap-2 w-full">
-                {/* Calendar toggle */}
-                <div className="inline-flex self-start rounded-lg border border-gray-300 dark:border-gray-600 overflow-hidden shadow-sm">
-                  {(["AD", "BS"] as const).map((cal) => (
-                    <button
-                      key={cal}
-                      type="button"
-                      onClick={() => {
-                        if (calendarValue !== cal) {
-                          setValue("calendarType", cal, { shouldDirty: true });
-                        }
-                      }}
-                      className={`px-3 py-1.5 text-xs sm:text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60 ${
-                        calendarValue === cal
-                          ? "bg-gradient-to-r from-orange-500 to-rose-500 text-white"
-                          : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
-                      }`}
-                    >
-                      {cal}
-                    </button>
-                  ))}
-                </div>
-                {/* Date Picker */}
-                <div className="flex flex-col gap-1 w-full">
-                  {hydrated ? (
-                    calendarValue === "AD" ? (
-                      <ADDatePicker
-                        label="Date of Birth"
-                        required
-                        valueDate={dateValue}
-                        maxYear={2099}
-                        minYear={1900}
-                        {...register("dateOfBirth", {
-                          required: "Date of Birth is required"
-                        })}
-                      />
+                <label className="text-sm font-medium text-gray-800 dark:text-gray-200">
+                  {t('janma.date_of_birth')} <span className="text-red-500">*</span>
+                </label>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4 w-full">
+                  {/* Calendar toggle */}
+                  <div className="inline-flex rounded-md border border-gray-300 dark:border-gray-600 overflow-hidden shadow-sm h-10">
+                    {(["AD", "BS"] as const).map((cal) => (
+                      <button
+                        key={cal}
+                        type="button"
+                        onClick={() => {
+                          if (calendarValue !== cal) {
+                            setValue("calendarType", cal, { shouldDirty: true });
+                          }
+                        }}
+                        className={`h-full px-4 text-xs sm:text-sm font-medium flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60 ${
+                          calendarValue === cal
+                            ? "bg-gradient-to-r from-orange-500 to-rose-500 text-white"
+                            : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                        }`}
+                        aria-pressed={calendarValue === cal}
+                      >
+                        {cal === 'AD' ? t('janma.ad') : t('janma.bs')}
+                      </button>
+                    ))}
+                  </div>
+                  {/* Date Picker (no internal label now) */}
+                  <div className="flex-1 min-w-0 flex flex-col gap-1">
+                    {hydrated ? (
+                      calendarValue === "AD" ? (
+                        <ADDatePicker
+                          required
+                          valueDate={dateValue}
+                          maxYear={2099}
+                          minYear={1900}
+                          {...register("dateOfBirth", {
+                            required: t('janma.datetime_required')
+                          })}
+                        />
+                      ) : (
+                        <BSDatePicker
+                          required
+                          initialDate={adToBs(dateValue)}
+                          maxYear={2090}
+                          minYear={2000}
+                          {...register("dateOfBirth", {
+                            required: t('janma.datetime_required')
+                          })}
+                        />
+                      )
                     ) : (
-                      <BSDatePicker
-                        label="Date of Birth (BS)"
-                        required
-                        // Convert current AD date to BS for display; component will emit AD hidden value
-                        initialDate={adToBs(dateValue)}
-                        maxYear={2090}
-                        minYear={2000}
-                        {...register("dateOfBirth", {
-                          required: "Date of Birth is required"
-                        })}
-                      />
-                    )
-                  ) : (
-                    <div className="h-10 w-full rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse" />
-                  )}
-                  {errors.dateOfBirth && (
-                    <p className="mt-1 text-xs text-red-600">
-                      {errors.dateOfBirth.message}
-                    </p>
-                  )}
+                      <div className="h-10 w-full rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                    )}
+                  </div>
                 </div>
+                {errors.dateOfBirth && (
+                  <p className="mt-1 text-xs text-red-600">
+                    {errors.dateOfBirth.message}
+                  </p>
+                )}
               </div>
               {/* Hidden calendar type field for persistence (kept for RHF) */}
               <input type="hidden" {...register("calendarType")} />
 
               {/* Time of Birth (optional) */}
               <div className="flex flex-col gap-1 w-full">
-                <TimePicker
-                  control={control}
-                  name="timeOfBirth"
-                  label="Time of Birth"
-                  required={false}
-                  showSeconds={false}
-                  className=""
-                />
+                <TimePicker control={control} name="timeOfBirth" label={t('janma.time_of_birth')} required={false} showSeconds={false} className="" />
               </div>
 
               {/* Place of Birth (required) */}
               <div className="flex flex-col w-full">
                 {hydrated ? (
-                  <PickDistrict
-                    control={control}
-                    name="placeOfBirth"
-                    label="Place of Birth"
-                    required
-                    className=""
-                  />
+                  <PickDistrict control={control} name="placeOfBirth" label={t('janma.place_of_birth')} required className="" />
                 ) : (
                   <div className="h-10 w-full rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse" />
                 )}
               </div>
             </div>
-          </CardContent>
-          <CardFooter>
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-orange-500 via-rose-500 to-pink-500 hover:from-orange-500 hover:via-rose-500 hover:to-rose-600 disabled:opacity-60 disabled:cursor-not-allowed text-white px-6 py-2.5 text-sm font-medium shadow-md shadow-orange-200/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-400/60 focus:ring-offset-white dark:focus:ring-offset-gray-950 transition"
-            >
-              {isSubmitting ? "Submitting..." : "Submit"}
-            </button>
-          </CardFooter>
-        </form>
-      </Card>
+        </div>
+        <div>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-orange-500 via-rose-500 to-pink-500 hover:from-orange-500 hover:via-rose-500 hover:to-rose-600 disabled:opacity-60 disabled:cursor-not-allowed text-white px-6 py-2.5 text-sm font-medium shadow-md shadow-orange-200/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-400/60 focus:ring-offset-white dark:focus:ring-offset-gray-950 transition"
+          >
+            {isSubmitting ? '...' : t('janma.submit')}
+          </button>
+        </div>
+      </form>
 
       {submitted && (
-        <section className="bg-white/60 dark:bg-gray-900/60 backdrop-blur border border-gray-200/70 dark:border-gray-700/60 rounded-xl p-5 text-xs md:text-sm font-mono overflow-x-auto shadow-sm">
-          <h2 className="text-sm font-semibold mb-3 tracking-wide text-gray-700 dark:text-gray-200">
-            Submitted Data
-          </h2>
-          <pre className="whitespace-pre-wrap break-words leading-relaxed">
-            {JSON.stringify(submitted, null, 2)}
-          </pre>
+        <section className="max-w-2xl border border-amber-100/70 bg-white/70 dark:bg-gray-900/50 backdrop-blur-sm rounded-lg p-4 text-xs md:text-sm font-mono overflow-x-auto">
+          <h2 className="text-sm font-semibold mb-3 tracking-wide text-gray-700 dark:text-gray-200">Submitted Data</h2>
+          <pre className="whitespace-pre-wrap break-words leading-relaxed">{JSON.stringify(submitted, null, 2)}</pre>
         </section>
       )}
     </main>
