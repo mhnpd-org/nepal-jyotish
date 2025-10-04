@@ -62,10 +62,5 @@ export function getJanmaDetails(): JanmaDetails {
 
   validateJanmaDetails(janmaDetails);
 
-  if (form?.calendarType === "BS") {
-    const jsDate = new NepaliDate(form?.dateOfBirth || "").toJsDate();
-    janmaDetails.dateStr = formatToDDMMYYYY(jsDate);
-  }
-
   return janmaDetails;
 }
