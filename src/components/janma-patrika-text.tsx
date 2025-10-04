@@ -111,7 +111,7 @@ export const JanmaPatrikaText: React.FC<JanmaPatrikaTextProps> = (props) => {
   );
 
   return (
-    <article className="font-[var(--font-devanagari,inherit)] leading-relaxed font-semibold text-lg md:text-xl tracking-wide selection:bg-rose-100 selection:text-rose-700">
+  <article className="font-[var(--font-devanagari,inherit)] leading-relaxed font-semibold text-base sm:text-lg md:text-xl tracking-wide selection:bg-rose-100 selection:text-rose-700">
       <section className="space-y-6">
         <p className="[text-wrap:pretty] [text-align:justify]">
           श्रीशालिवाहन शके <EmRed>{t.shalivahaniShaka}</EmRed>{" "}

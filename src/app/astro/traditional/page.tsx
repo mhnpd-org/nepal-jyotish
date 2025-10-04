@@ -50,7 +50,7 @@ export default function TraditionalPage() {
   /* Traditional Kundali rendering logic goes here */
   return (
     <div className="w-full">
-      <ChhinaFrame className="bg-white min-h-screen mx-auto w-11/12 md:w-4/5 xl:w-3/5 max-w-5xl">
+  <ChhinaFrame className="bg-white min-h-screen mx-auto w-full sm:w-11/12 md:w-4/5 xl:w-3/5 max-w-5xl">
         {/* Ganesh image centered near the top with slight spacing */}
         <div className="flex justify-center mt-6">
           <Image
@@ -94,7 +94,7 @@ export default function TraditionalPage() {
             solarMonthDays: `${kundali.suryaDetails.solarMonthDays.toFixed(0) || ""}`,
           }}
           lunar={{
-            chandraMasa: "________", // placeholder until implemented
+            chandraMasa:kundali.lagna.chandraMasa,
             chandraPaksha: kundali.tithi.paksha,
             nakshatra: kundali.nakshatra.nakshatra,
             nakshatraPada: kundali.nakshatra.pada?.toString() || "",
@@ -115,7 +115,6 @@ export default function TraditionalPage() {
           }}
           birth={{
             janmaTime: kundali.zonedDate.toLocaleString(),
-            janmaSthan: "___________",
             standardTimeOffset: "+05:45",
             localBirthTime: kundali.zonedDate.toLocaleTimeString(),
             pramanikTime:
