@@ -50,7 +50,7 @@ export default function TraditionalPage() {
   /* Traditional Kundali rendering logic goes here */
   return (
     <div className="w-full">
-  <ChhinaFrame className="bg-white min-h-screen mx-auto w-full sm:w-11/12 md:w-4/5 xl:w-3/5 max-w-5xl">
+      <ChhinaFrame className="bg-white min-h-screen mx-auto w-full sm:w-11/12 md:w-4/5 xl:w-3/5 max-w-5xl">
         {/* Ganesh image centered near the top with slight spacing */}
         <div className="flex justify-center mt-6">
           <Image
@@ -91,21 +91,25 @@ export default function TraditionalPage() {
             suryaAyana: kundali.suryaDetails.surayAyan,
             ritu: kundali.suryaDetails.ritu,
             solarMonth: kundali.suryaDetails.surayMasa,
-            solarMonthDays: `${kundali.suryaDetails.solarMonthDays.toFixed(0) || ""}`,
+            solarMonthDays: `${
+              kundali.suryaDetails.solarMonthDays.toFixed(0) || ""
+            }`
           }}
           lunar={{
-            chandraMasa:kundali.lagna.chandraMasa,
+            chandraMasa: kundali.lagna.chandraMasa,
             chandraPaksha: kundali.tithi.paksha,
             nakshatra: kundali.nakshatra.nakshatra,
             nakshatraPada: kundali.nakshatra.pada?.toString() || "",
-            nakshatraGhatyadi: ''
+            nakshatraGhatyadi: ""
           }}
           tithiBlock={{
             tithi: kundali.tithi.name,
-            tithiStartGhatyadi: `${kundali.tithi.tithiStartGhatyadi.toFixed(0)}`,
+            tithiStartGhatyadi: `${kundali.tithi.tithiStartGhatyadi.toFixed(
+              0
+            )}`,
             bhuktGhatyadi: `${kundali.tithi.bhuktGhatyadi.toFixed(0)}`,
             bhogyaGhatyadi: `${kundali.tithi.bhogyaGhatyadi.toFixed(0)}`,
-            tithiRefDetails:""
+            tithiRefDetails: ""
           }}
           lagnaBlock={{
             lagna: kundali.lagna.lagna,
