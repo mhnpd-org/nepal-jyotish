@@ -2,7 +2,11 @@
 import React, { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { useForm } from "react-hook-form";
-import { DatePicker } from "@internal/form-elements/date-picker";
+import { ADDatePicker, BSDatePicker } from "@internal/form-elements/date-picker";
+// NepaliDate for AD -> BS conversion when switching calendars
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import NepaliDate from "nepali-date-converter";
 import { TimePicker } from "@internal/form-elements/time-picker";
 import { PickDistrict } from "@internal/form-elements/pick-district";
 import {
@@ -22,7 +26,7 @@ import {
   setFormDetails
 } from "@internal/utils/get-form-details";
 
-interface JanmaFormValues {
+export interface JanmaFormValues {
   name?: string;
   dateOfBirth: string; // Always stored in AD (YYYY-MM-DD)
   calendarType: "AD" | "BS";
@@ -88,6 +92,22 @@ export default function JanmaPage() {
   const dateValue = watch("dateOfBirth");
   const calendarValue = watch("calendarType");
 
+  // Helper: convert stored AD date (YYYY-MM-DD) to BS date string for initializing BS picker
+  const adToBs = (ad: string | undefined): string | undefined => {
+    if (!ad || !/^\d{4}-\d{2}-\d{2}$/.test(ad)) return undefined;
+    try {
+      const [y, m, d] = ad.split("-").map(Number);
+      const nd = new NepaliDate(new Date(y, m - 1, d));
+      if (nd.format) {
+        return nd.format("YYYY-MM-DD") as string;
+      }
+      // Fallback if format not present; approximate using getters
+      return `${nd.getYear()}-${String(nd.getMonth() + 1).padStart(2, "0")}-${String(nd.getDate()).padStart(2, "0")}`;
+    } catch {
+      return undefined;
+    }
+  };
+
   return (
     <main className="w-full mx-auto px-2 sm:px-4 py-10 space-y-10">
       <Card variant="gradient" className="w-full" unpadded>
@@ -128,33 +148,66 @@ export default function JanmaPage() {
               </div>
 
               {/* Date of Birth (required) */}
-              <div className="flex flex-col gap-1 w-full">
-                {hydrated && (
-                  <DatePicker
-                    label="Date of Birth"
-                    required
-                    valueDate={dateValue}
-                    calendarValue={calendarValue}
-                    initialCalendar={calendarValue}
-                    onCalendarChange={(cal) => {
-                      setValue("calendarType", cal, { shouldDirty: true });
-                    }}
-                    {...register("dateOfBirth", {
-                      required: "Date of Birth is required"
-                    })}
-                    className=""
-                  />
-                )}
-                {!hydrated && (
-                  <div className="h-10 w-full rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse" />
-                )}
-                {errors.dateOfBirth && (
-                  <p className="mt-1 text-xs text-red-600">
-                    {errors.dateOfBirth.message}
-                  </p>
-                )}
+              <div className="flex flex-col gap-2 w-full">
+                {/* Calendar toggle */}
+                <div className="inline-flex self-start rounded-lg border border-gray-300 dark:border-gray-600 overflow-hidden shadow-sm">
+                  {(["AD", "BS"] as const).map((cal) => (
+                    <button
+                      key={cal}
+                      type="button"
+                      onClick={() => {
+                        if (calendarValue !== cal) {
+                          setValue("calendarType", cal, { shouldDirty: true });
+                        }
+                      }}
+                      className={`px-3 py-1.5 text-xs sm:text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60 ${
+                        calendarValue === cal
+                          ? "bg-gradient-to-r from-orange-500 to-rose-500 text-white"
+                          : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                      }`}
+                    >
+                      {cal}
+                    </button>
+                  ))}
+                </div>
+                {/* Date Picker */}
+                <div className="flex flex-col gap-1 w-full">
+                  {hydrated ? (
+                    calendarValue === "AD" ? (
+                      <ADDatePicker
+                        label="Date of Birth"
+                        required
+                        valueDate={dateValue}
+                        maxYear={2099}
+                        minYear={1900}
+                        {...register("dateOfBirth", {
+                          required: "Date of Birth is required"
+                        })}
+                      />
+                    ) : (
+                      <BSDatePicker
+                        label="Date of Birth (BS)"
+                        required
+                        // Convert current AD date to BS for display; component will emit AD hidden value
+                        initialDate={adToBs(dateValue)}
+                        maxYear={2090}
+                        minYear={2000}
+                        {...register("dateOfBirth", {
+                          required: "Date of Birth is required"
+                        })}
+                      />
+                    )
+                  ) : (
+                    <div className="h-10 w-full rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                  )}
+                  {errors.dateOfBirth && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {errors.dateOfBirth.message}
+                    </p>
+                  )}
+                </div>
               </div>
-              {/* Hidden calendar type field for persistence */}
+              {/* Hidden calendar type field for persistence (kept for RHF) */}
               <input type="hidden" {...register("calendarType")} />
 
               {/* Time of Birth (optional) */}

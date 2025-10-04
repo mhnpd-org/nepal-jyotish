@@ -1,5 +1,7 @@
-import { JanmaDetails } from "@mhnpd/panchang";
+import { JanmaDetails, validateJanmaDetails } from "@mhnpd/panchang";
+import NepaliDate from "nepali-date-converter";
 import { getEncodedItem, setEncodedItem, type JsonValue } from "./storage";
+import { JanmaFormValues } from "@internal/app/astro/janma/page";
 
 const KEY = "janmaDetails";
 
@@ -9,11 +11,16 @@ const KEY = "janmaDetails";
  * by attempting a second JSON.parse if the first result is a string that
  * looks like a serialized object/array.
  */
-export function getFormDetails<T extends JsonValue = JsonValue>(): T | undefined {
+export function getFormDetails<T extends JsonValue = JsonValue>():
+  | T
+  | undefined {
   const raw = getEncodedItem<JsonValue>(KEY);
   if (typeof raw === "string") {
     const trimmed = raw.trim();
-    if ((trimmed.startsWith("{") && trimmed.endsWith("}")) || (trimmed.startsWith("[") && trimmed.endsWith("]"))) {
+    if (
+      (trimmed.startsWith("{") && trimmed.endsWith("}")) ||
+      (trimmed.startsWith("[") && trimmed.endsWith("]"))
+    ) {
       try {
         return JSON.parse(trimmed) as T; // migrate old double-encoded value
       } catch {
@@ -34,49 +41,31 @@ export function setFormDetails(details: any) {
   setEncodedItem(KEY, details as JsonValue);
 }
 
-export function getJanmaDetails(): JanmaDetails | null {
-  const form = getFormDetails();
-  if (!form || typeof form !== "object" || Array.isArray(form)) { return null }
+export const formatToDDMMYYYY = (date: Date | string): string => {
+  const d = new Date(date);
+  const day = String(d.getDate()).padStart(2, "0");
+  const month = String(d.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+  const year = d.getFullYear();
+  return `${day}-${month}-${year}`;
+};
 
-  type SavedForm = {
-    dateOfBirth?: unknown;
-    timeOfBirth?: unknown;
-    placeOfBirth?: {
-      latitude?: unknown;
-      longitude?: unknown;
-    };
-  };
+export function getJanmaDetails(): JanmaDetails {
+  const form = getFormDetails() as JanmaFormValues | undefined;
 
-  const f = form as SavedForm;
+  const janmaDetails = {
+    dateStr: form?.dateOfBirth || "",
+    timeStr: form?.timeOfBirth || "",
+    latitude: form?.placeOfBirth.lat,
+    longitude: form?.placeOfBirth.long,
+    timeZone: "Asia/Kathmandu" // Fixed timezone for Nepal
+  } as JanmaDetails;
 
-  const dateStr = typeof f.dateOfBirth === "string" ? f.dateOfBirth : undefined;
-  const timeStr = typeof f.timeOfBirth === "string" ? f.timeOfBirth : undefined;
+  validateJanmaDetails(janmaDetails);
 
-  // Support both { latitude, longitude } and legacy / district shape { lat, long }
-  // DistrictOfNepal provides lat/long, whereas earlier expectation was latitude/longitude.
-  // We gracefully fall back so previously saved data works.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const place: any = f.placeOfBirth;
-  const latRaw = place?.latitude ?? place?.lat;
-  const lonRaw = place?.longitude ?? place?.long;
-
-  const latitude = typeof latRaw === "number"
-    ? latRaw
-    : (typeof latRaw === "string" && latRaw.trim() !== "" ? Number(latRaw) : undefined);
-
-  const longitude = typeof lonRaw === "number"
-    ? lonRaw
-    : (typeof lonRaw === "string" && lonRaw.trim() !== "" ? Number(lonRaw) : undefined);
-
-  if (!dateStr || latitude == null || Number.isNaN(latitude) || longitude == null || Number.isNaN(longitude)) {
-    return null;
+  if (form?.calendarType === "BS") {
+    const jsDate = new NepaliDate(form?.dateOfBirth || "").toJsDate();
+    janmaDetails.dateStr = formatToDDMMYYYY(jsDate);
   }
 
-  return {
-    dateStr,
-    timeStr,
-    latitude,
-    longitude,
-    timeZone: "Asia/Kathmandu"
-  } as JanmaDetails;
+  return janmaDetails;
 }
