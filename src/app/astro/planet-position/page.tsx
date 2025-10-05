@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { getJanmaDetails } from "@internal/utils/get-form-details";
-import { getKundali, KundaliResult, PlanetCombinedInfo, PlanetsInTimeFrameResult } from "@mhnpd/panchang";
+import { getKundali, Kundali, PlanetCombinedInfo, PlanetsInTimeFrameResult } from "@mhnpd/panchang";
 import { translateSanskritSafe } from "@internal/lib/devanagari";
 
 // Helper to render a vedic styled cell (sanskrit focus)
@@ -11,7 +11,7 @@ const SanskritCell: React.FC<{ value: string | number | undefined | null }> = ({
 const TS = translateSanskritSafe;
 
 export default function PlanetPositionsPage() {
-  const [kundali, setKundali] = React.useState<KundaliResult | null>(null);
+  const [kundali, setKundali] = React.useState<Kundali | null>(null);
   const [error, setError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
