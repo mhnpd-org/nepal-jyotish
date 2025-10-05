@@ -92,7 +92,7 @@ export default function TraditionalPage() {
             vikram: `${kundali.dates.vikramSamvat.year}`,
             ad: `${kundali.dates.ishwiSamvat.year}`,
             samvatsara: `${kundali.dates.samvatsara.name}`,
-            weekday: `${kundali.dates.ishwiSamvat.vaar}`
+            weekday: `${kundali.dates.ishwiSamvat.vaar?.toLowerCase()}`
           }}
           solar={{
             suryaAyana: kundali.surya.suryaAyana,
