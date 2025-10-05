@@ -1,7 +1,6 @@
 import React from "react";
 import { translateSanskritSafe, placeholder, toDevanagariDigits } from "@internal/lib/devanagari";
 
-/* ===================== Grouped Domain Interfaces ===================== */
 export interface EraInfo { shaka?: string; vikram?: string; ad?: string; samvatsara?: string; weekday?: string }
 export interface SolarInfo { suryaAyana?: string; ritu?: string; solarMonth?: string; solarMonthDays?: string }
 export interface LunarInfo { chandraMasa?: string; chandraPaksha?: string; nakshatra?: string; nakshatraPada?: string; nakshatraGhatyadi?: string }
