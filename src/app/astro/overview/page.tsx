@@ -1,10 +1,9 @@
 "use client";
 import React from 'react';
 import { getJanmaDetails } from '@internal/utils/get-form-details';
-import { getKundali, KundaliResult, PlanetCombinedInfo, PlanetsInTimeFrameResult } from '@mhnpd/panchang';
+import { getKundali, Kundali, PlanetCombinedInfo, PlanetsInTimeFrameResult } from '@mhnpd/panchang';
 import { translateSanskritSafe } from '@internal/lib/devanagari';
 
-// ---------- UI PRIMITIVES ----------
 interface KV { label: string; value: React.ReactNode; hint?: React.ReactNode; }
 const KVGrid: React.FC<{ items: KV[]; cols?: string }>= ({ items, cols = 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-5' }) => (
   <dl className={`grid gap-4 ${cols}`}>
@@ -48,7 +47,7 @@ const SoftPanel: React.FC<{ tone?: 'red' | 'rose' | 'fuchsia'; children: React.R
 };
 
 export default function AstroOverviewPage() {
-  const [kundali, setKundali] = React.useState<KundaliResult | null>(null);
+  const [kundali, setKundali] = React.useState<Kundali | null>(null);
   const [error, setError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
@@ -86,9 +85,8 @@ export default function AstroOverviewPage() {
   const planetEntries = Object.entries(kundali.planets as PlanetsInTimeFrameResult) as [string, PlanetCombinedInfo][];
   const planetList = planetEntries.map(([name, info]) => ({ name, info }));
 
-  const isoDate = kundali.zonedDate.toISOString();
-  const birthDateStr = isoDate.split('T')[0];
-  const birthTimeStr = isoDate.split('T')[1]?.slice(0,8);
+  const birthDateStr = kundali.dates.zonedDate.toLocaleDateString();
+  const birthTimeStr = kundali.dates.timeStr;
 
   return (
     <div className="max-w-6xl mx-auto px-3 sm:px-6 py-6 space-y-12">
@@ -110,25 +108,25 @@ export default function AstroOverviewPage() {
         <KVGrid items={[
           { label: 'ग्रेगोरियन', value: birthDateStr },
           { label: 'समय', value: birthTimeStr },
-          { label: 'वार', value: translateSanskritSafe(kundali.vaar) },
-          { label: 'अयन', value: translateSanskritSafe(kundali.suryaDetails.surayAyan) },
-          { label: 'ऋतु', value: translateSanskritSafe(kundali.suryaDetails.ritu) },
-          { label: 'सौर मास', value: translateSanskritSafe(kundali.suryaDetails.surayMasa) },
-          { label: 'विक्रम', value: kundali.vikaramSamvat.year },
-          { label: 'शक', value: kundali.sakaSamvat.year },
-          { label: 'संवत्सर', value: translateSanskritSafe(kundali.samvatsara.name) },
-          { label: 'मास दिन', value: kundali.suryaDetails.solarMonthDays.toFixed(0) },
+          { label: 'वार', value: translateSanskritSafe(kundali.dates.ishwiSamvat.vaar!) },
+          { label: 'अयन', value: translateSanskritSafe(kundali.surya.suryaAyana) },
+          { label: 'ऋतु', value: translateSanskritSafe(kundali.surya.ritu) },
+          { label: 'सौर मास', value: translateSanskritSafe(kundali.surya.masa) },
+          { label: 'विक्रम', value: kundali.dates.vikramSamvat.year },
+          { label: 'शक', value: kundali.dates.sakaSamvat.year },
+          { label: 'संवत्सर', value: translateSanskritSafe(kundali.dates.samvatsara.name) },
+          { label: 'मास दिन', value: kundali.surya.sauraMasaDays.toFixed(2) },
         ]} />
       </Section>
 
       {/* Lunar & Anga */}
       <Section title={translateSanskritSafe('चन्द्र अङ्ग')} description="तिथि, पक्ष, नक्षत्र, योग तथा करण।">
         <KVGrid items={[
-          { label: 'तिथि', value: translateSanskritSafe(kundali.tithi.name) },
+          { label: 'तिथि', value: translateSanskritSafe(kundali.tithi.tithi) },
           { label: 'पक्ष', value: translateSanskritSafe(kundali.tithi.paksha) },
-          { label: 'नक्षत्र', value: translateSanskritSafe(kundali.nakshatra.nakshatra), hint: `पाद ${kundali.nakshatra.pada || ''}` },
-          { label: 'योग', value: translateSanskritSafe(kundali.yoga.name) },
-          { label: 'करण', value: translateSanskritSafe(kundali.karana.name) },
+          { label: 'नक्षत्र', value: translateSanskritSafe(kundali.nakshatra.name), hint: `पाद ${kundali.nakshatra.pada || ''}` },
+          { label: 'योग', value: translateSanskritSafe(kundali.tithi.yoga.name) },
+          { label: 'करण', value: translateSanskritSafe(kundali.tithi.karana.name) },
         ]} />
       </Section>
 
@@ -137,8 +135,8 @@ export default function AstroOverviewPage() {
         <KVGrid items={[
           { label: 'लग्न', value: translateSanskritSafe(kundali.lagna.lagna) },
           { label: 'नवांश लग्न', value: translateSanskritSafe(kundali.lagna.navamshaLagna) },
-          { label: 'चन्द्र राशि', value: translateSanskritSafe(kundali.lagna.chandraRashi) },
-          { label: 'चन्द्र मास', value: translateSanskritSafe(kundali.lagna.chandraMasa) },
+          { label: 'चन्द्र राशि', value: translateSanskritSafe(kundali.nakshatra.rashi) },
+          { label: 'चन्द्र मास', value: translateSanskritSafe(kundali.tithi.chandraMasa) },
           { label: 'राशि (Asc)', value: translateSanskritSafe(kundali.lagna.lagna) },
         ]} />
       </Section>
