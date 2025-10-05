@@ -99,7 +99,7 @@ export default function TraditionalPage() {
             ritu: kundali.suryaDetails.ritu,
             solarMonth: kundali.suryaDetails.surayMasa,
             solarMonthDays: `${
-              kundali.suryaDetails.solarMonthDays.toFixed(0) || ""
+              kundali.suryaDetails.solarMonthDays.toFixed(2) || ""
             }`
           }}
           lunar={{
@@ -114,8 +114,8 @@ export default function TraditionalPage() {
             tithiStartGhatyadi: `${kundali.tithi.tithiStartGhatyadi.toFixed(
               0
             )}`,
-            bhuktGhatyadi: `${kundali.tithi.bhuktGhatyadi.toFixed(0)}`,
-            bhogyaGhatyadi: `${kundali.tithi.bhogyaGhatyadi.toFixed(0)}`,
+            bhuktGhatyadi: `${kundali.tithi.bhuktGhatyadi.toFixed(2)}`,
+            bhogyaGhatyadi: `${kundali.tithi.bhogyaGhatyadi.toFixed(2)}`,
             tithiRefDetails: ""
           }}
           lagnaBlock={{
@@ -126,14 +126,11 @@ export default function TraditionalPage() {
           }}
           birth={{
             janmaTime: kundali.zonedDate.toLocaleString(),
-            standardTimeOffset: "+05:45",
+            standardTimeOffset: kundali.iswiSamvat.timeZone,
             localBirthTime: kundali.zonedDate.toLocaleTimeString(),
-            pramanikTime:
-              kundali.zonedDate.toISOString().split("T")[1]?.slice(0, 8) || "",
+            pramanikTime:kundali.iswiSamvat.timeZone,
             sunriseGhatyadi: "", // need sunrise calculation
-            gregorianMonth: kundali.zonedDate.toLocaleString(undefined, {
-              month: "long"
-            }),
+            gregorianMonth: kundali.iswiSamvat.month,
             gregorianDate: kundali.zonedDate.getDate().toString()
           }}
           yogaKarana={{
@@ -145,11 +142,11 @@ export default function TraditionalPage() {
             kula: "____",
             spouseName: "____",
             childName: "_____",
-            syllableAkshara: "_____",
-            yoni: "_____",
-            nadi: "____",
-            gana: "____",
-            varna: "____",
+            syllableAkshara: kundali.janamaAkshara.syllable,
+            yoni: kundali.ashtaKoota.yoni,
+            nadi: kundali.ashtaKoota.nadi,
+            gana: kundali.ashtaKoota.gana,
+            varna: kundali.ashtaKoota.varna,
             additionalNotes: "____"
           }}
         />
