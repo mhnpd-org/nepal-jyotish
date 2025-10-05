@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { getJanmaDetails } from "@internal/utils/get-form-details";
-import { getKundali, KundaliResult, YoginiDasha } from "@mhnpd/panchang";
+import { getKundali, Kundali, YoginiDasha } from "@mhnpd/panchang";
 import { translateSanskritSafe } from "@internal/lib/devanagari";
 import { astroTranslate } from "@internal/lib/astro-translator";
 
@@ -101,7 +101,7 @@ const DashaItem: React.FC<DashaItemProps> = ({ item, index }) => {
 };
 
 export default function YoginiDashaVerticalPage() {
-  const [kundali, setKundali] = React.useState<KundaliResult | null>(null);
+  const [kundali, setKundali] = React.useState<Kundali | null>(null);
   const [error, setError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
