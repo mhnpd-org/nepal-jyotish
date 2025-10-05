@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { getJanmaDetails } from "@internal/utils/get-form-details";
-import { getKundali, KundaliResult, type JanmaDetails } from "@mhnpd/panchang";
+import { getKundali, JanmaDetails, Kundali} from "@mhnpd/panchang";
 import React from "react";
 import { JanmaPatrikaText } from "@internal/components/janma-patrika-text";
 import NorthDrekkanaChart from "@internal/components/north-drekkana-chart";
@@ -13,7 +13,7 @@ import { YoginiDashaTable } from "@internal/components/yogini-dasha-table";
 import { ChhinaFrame } from "@internal/components/chhina-frame";
 
 export default function TraditionalPage() {
-  const [kundali, setKundali] = React.useState<KundaliResult | null>(null);
+  const [kundali, setKundali] = React.useState<Kundali | null>(null);
   const [janmaDetails, setJanmaDetails] = React.useState<JanmaDetails | null>(null);
 
   React.useEffect(() => {
@@ -88,32 +88,28 @@ export default function TraditionalPage() {
         {/* Janma Patrika Text (grouped props) */}
         <JanmaPatrikaText
           era={{
-            shaka: kundali.sakaSamvat.year.toString(),
-            vikram: kundali.vikaramSamvat.year.toString(),
-            ad: janmaDetails ? new Date(janmaDetails.dateStr).getFullYear().toString() : "____",
-            samvatsara: `${kundali.samvatsara.name}`,
-            weekday: kundali.vaar
+            shaka: `${kundali.dates.sakaSamvat.year}`,
+            vikram: `${kundali.dates.vikramSamvat.year}`,
+            ad: `${kundali.dates.ishwiSamvat.year}`,
+            samvatsara: `${kundali.dates.samvatsara.name}`,
+            weekday: `${kundali.dates.ishwiSamvat.vaar}`
           }}
           solar={{
-            suryaAyana: kundali.suryaDetails.surayAyan,
-            ritu: kundali.suryaDetails.ritu,
-            solarMonth: kundali.suryaDetails.surayMasa,
-            solarMonthDays: `${
-              kundali.suryaDetails.solarMonthDays.toFixed(2) || ""
-            }`
+            suryaAyana: kundali.surya.suryaAyana,
+            ritu: kundali.surya.ritu,
+            solarMonth: `${kundali.surya.masa}`,
+            solarMonthDays: `${kundali.surya.sauraMasaDays.toFixed(2)}`,
           }}
           lunar={{
-            chandraMasa: kundali.lagna.chandraMasa,
+            chandraMasa: kundali.tithi.chandraMasa,
             chandraPaksha: kundali.tithi.paksha,
-            nakshatra: kundali.nakshatra.nakshatra,
+            nakshatra: kundali.nakshatra.name,
             nakshatraPada: kundali.nakshatra.pada?.toString() || "",
             nakshatraGhatyadi: ""
           }}
           tithiBlock={{
-            tithi: kundali.tithi.name,
-            tithiStartGhatyadi: `${kundali.tithi.tithiStartGhatyadi.toFixed(
-              0
-            )}`,
+            tithi: kundali.tithi.tithi,
+            tithiStartGhatyadi: `${kundali.tithi.tithiStartGhatyadi.toFixed(2)}`,
             bhuktGhatyadi: `${kundali.tithi.bhuktGhatyadi.toFixed(2)}`,
             bhogyaGhatyadi: `${kundali.tithi.bhogyaGhatyadi.toFixed(2)}`,
             tithiRefDetails: ""
@@ -121,33 +117,32 @@ export default function TraditionalPage() {
           lagnaBlock={{
             lagna: kundali.lagna.lagna,
             navamshaLagna: kundali.lagna.navamshaLagna,
-            chandraRashi: kundali.lagna.chandraRashi,
-            rashi: kundali.lagna.lagna
+            chandraRashi: kundali.nakshatra.rashi,
+            rashi: kundali.lagna.lagnaLord,
           }}
           birth={{
-            janmaTime: kundali.zonedDate.toLocaleString(),
-            standardTimeOffset: kundali.iswiSamvat.timeZone,
-            localBirthTime: kundali.zonedDate.toLocaleTimeString(),
-            pramanikTime:kundali.iswiSamvat.timeZone,
+            janmaTime: kundali.dates.timeStr,
+            standardTimeOffset:kundali.dates.timezone,
+            localBirthTime: kundali.dates.timeStr,
+            pramanikTime: kundali.dates.timeStr,
             sunriseGhatyadi: "", // need sunrise calculation
-            gregorianMonth: kundali.iswiSamvat.month,
-            gregorianDate: kundali.zonedDate.getDate().toString()
+            gregorianMonth: kundali.dates.ishwiSamvat.month,
+            gregorianDate: kundali.dates.zonedDate.toLocaleDateString(),
           }}
           yogaKarana={{
-            yoga: kundali.yoga.name,
-            karana: kundali.karana.name
+            yoga: kundali.tithi.yoga.name,
+            karana: kundali.tithi.karana.name,
           }}
           personal={{
             gotra: "_____",
             kula: "____",
             spouseName: "____",
             childName: "_____",
-            syllableAkshara: kundali.janamaAkshara.syllable,
-            yoni: kundali.ashtaKoota.yoni,
-            nadi: kundali.ashtaKoota.nadi,
-            gana: kundali.ashtaKoota.gana,
-            varna: kundali.ashtaKoota.varna,
-            additionalNotes: "____"
+            syllableAkshara: kundali.nakshatra.syllableAkshara,
+            yoni: kundali.nakshatra.yoni,
+            nadi: kundali.nakshatra.nadi,
+            gana: kundali.nakshatra.gana,
+            varna: kundali.nakshatra.varna,
           }}
         />
 
@@ -165,17 +160,17 @@ export default function TraditionalPage() {
           <NorthDrekkanaChart
             title="लग्न"
             hideRashi={true}
-            houses={kundali.lagnaChart || []}
+            houses={kundali.lagnaChart!}
           />
           <NorthDrekkanaChart
             title="राशि"
             hideRashi={true}
-            houses={kundali.vargas.D1}
+            houses={kundali.vargas[1]!}
           />
           <NorthDrekkanaChart
             title={"नवांश (D9)"}
             hideRashi={true}
-            houses={kundali.vargas.D9}
+            houses={kundali.vargas[9]!}
           />
           <NorthDrekkanaChart
             title="भाव"
