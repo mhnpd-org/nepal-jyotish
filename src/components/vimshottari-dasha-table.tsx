@@ -43,9 +43,9 @@ export const VimshottariDashaTable: React.FC<VimshottariDashaTableProps> = ({
                   key={i}
                   className="border-2 border-red-700 px-2 py-1 text-sm font-bold"
                 >
-                  <p>{translateSanskritSafe(`${cell.remainingYears}`)}</p>
-                  <p>{translateSanskritSafe(`${cell.remainingMonths}`)}</p>
-                  <p>{translateSanskritSafe(`${cell.remainingDays}`)}</p>
+                  <p>{translateSanskritSafe(`${cell.remainingYears.toFixed(2)}`)}</p>
+                  <p>{translateSanskritSafe(`${cell.remainingMonths.toFixed(0)}`)}</p>
+                  <p>{translateSanskritSafe(`${cell.remainingDays.toFixed(0)}`)}</p>
                 </td>
               ))}
               <td className="border-2 border-red-700 px-2 py-1 text-sm font-bold">
@@ -63,7 +63,7 @@ export const VimshottariDashaTable: React.FC<VimshottariDashaTableProps> = ({
                   key={i}
                   className="border-2 border-red-700 px-2 py-1 text-sm font-bold"
                 >
-                  {translateSanskritSafe(`${v.cumulativeYears}`)}
+                  {translateSanskritSafe(`${v.cumulativeYears.toFixed(2)}`)}
                 </td>
               ))}
               <td className="border-2 border-red-700 px-2 py-1 text-sm font-bold">
