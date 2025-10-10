@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { ADDatePicker, BSDatePicker } from "@internal/form-elements/date-picker";
 // NepaliDate for AD -> BS conversion when switching calendars
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -28,6 +29,8 @@ export interface JanmaFormValues {
 }
 
 export default function JanmaPage() {
+  const router = useRouter();
+  
   // Do NOT access localStorage during initial render; hydration handled in useEffect.
   const isJanma = (v: unknown): v is JanmaFormValues => {
     if (!v || typeof v !== "object") return false;
@@ -54,8 +57,6 @@ export default function JanmaPage() {
     }
   });
 
-  const [submitted, setSubmitted] = useState<JanmaFormValues | null>(null);
-
   // After mount (client), re-hydrate with any stored values (SSR got undefined).
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => {
@@ -69,7 +70,7 @@ export default function JanmaPage() {
 
   const onSubmit = (data: JanmaFormValues) => {
     setFormDetails(data);
-    setSubmitted(data);
+    router.push("/astro/traditional");
   };
 
   // Auto-persist (debounced) whenever values change after hydration
@@ -103,28 +104,30 @@ export default function JanmaPage() {
 
   const { t } = useI18n();
   return (
-    <main className="w-full px-2 sm:px-4 py-8 space-y-12">
-      <header className="space-y-2 max-w-2xl">
-        <div className="flex items-center gap-4">
-          <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-orange-500 via-rose-500 to-pink-500 flex items-center justify-center text-white text-lg font-semibold shadow ring-1 ring-white/40 dark:ring-white/10">
-            🜚
-          </div>
-          <div>
-            <h1 className="text-2xl font-semibold tracking-wide text-gray-800 dark:text-gray-100">
-              {t('janma.title')}
-            </h1>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 leading-snug max-w-prose">
-              {t('janma.description')}
-            </p>
-          </div>
-        </div>
-      </header>
+    <main className="w-full px-2 sm:px-4 py-8">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="max-w-2xl space-y-8"
+        className="w-full max-w-2xl"
       >
-        <div className="rounded-xl border border-amber-100/70 bg-white/75 dark:bg-gray-900/50 backdrop-blur-sm shadow-sm px-5 sm:px-7 py-6 flex flex-col gap-8">
-        <div className="flex flex-col gap-6">
+        <div className="rounded-xl border border-white/20 bg-white/40 dark:bg-gray-900/40 backdrop-blur-md shadow-lg px-5 sm:px-7 py-6 flex flex-col gap-8">
+          {/* Header inside card */}
+          <header className="space-y-2">
+            <div className="flex items-center gap-4">
+              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-orange-500 via-rose-500 to-pink-500 flex items-center justify-center text-white text-lg font-semibold shadow ring-1 ring-white/40 dark:ring-white/10">
+                🜚
+              </div>
+              <div>
+                <h1 className="text-2xl font-semibold tracking-wide text-gray-800 dark:text-gray-100">
+                  {t('janma.title')}
+                </h1>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 leading-snug max-w-prose">
+                  {t('janma.description')}
+                </p>
+              </div>
+            </div>
+          </header>
+
+          <div className="flex flex-col gap-6">
               {/* Name (optional) */}
               <div className="flex flex-col gap-1 w-full">
                 <label htmlFor="name" className="text-sm font-medium text-gray-800 dark:text-gray-200">{t('janma.name')}</label>
@@ -217,24 +220,19 @@ export default function JanmaPage() {
                 )}
               </div>
             </div>
-        </div>
-        <div>
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-orange-500 via-rose-500 to-pink-500 hover:from-orange-500 hover:via-rose-500 hover:to-rose-600 disabled:opacity-60 disabled:cursor-not-allowed text-white px-6 py-2.5 text-sm font-medium shadow-md shadow-orange-200/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-400/60 focus:ring-offset-white dark:focus:ring-offset-gray-950 transition"
-          >
-            {isSubmitting ? '...' : t('janma.submit')}
-          </button>
+
+            {/* Submit button inside card */}
+            <div>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-orange-500 via-rose-500 to-pink-500 hover:from-orange-500 hover:via-rose-500 hover:to-rose-600 disabled:opacity-60 disabled:cursor-not-allowed text-white px-6 py-2.5 text-sm font-medium shadow-md shadow-orange-200/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-400/60 focus:ring-offset-white dark:focus:ring-offset-gray-950 transition"
+              >
+                {isSubmitting ? '...' : t('janma.submit')}
+              </button>
+            </div>
         </div>
       </form>
-
-      {submitted && (
-        <section className="max-w-2xl border border-amber-100/70 bg-white/70 dark:bg-gray-900/50 backdrop-blur-sm rounded-lg p-4 text-xs md:text-sm font-mono overflow-x-auto">
-          <h2 className="text-sm font-semibold mb-3 tracking-wide text-gray-700 dark:text-gray-200">Submitted Data</h2>
-          <pre className="whitespace-pre-wrap break-words leading-relaxed">{JSON.stringify(submitted, null, 2)}</pre>
-        </section>
-      )}
     </main>
   );
 }
