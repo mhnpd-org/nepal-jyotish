@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { getJanmaDetails } from "@internal/utils/get-form-details";
-import { getKundali, JanmaDetails, Kundali} from "@mhnpd/panchang";
+import { getKundali, JanmaDetails, Kundali } from "@mhnpd/panchang";
 import React from "react";
 import { JanmaPatrikaText } from "@internal/components/janma-patrika-text";
 import NorthDrekkanaChart from "@internal/components/north-drekkana-chart";
@@ -14,7 +14,6 @@ import { ChhinaFrame } from "@internal/components/chhina-frame";
 
 export default function TraditionalPage() {
   const [kundali, setKundali] = React.useState<Kundali | null>(null);
-  const [janmaDetails, setJanmaDetails] = React.useState<JanmaDetails | null>(null);
 
   React.useEffect(() => {
     let mounted = true;
@@ -32,7 +31,6 @@ export default function TraditionalPage() {
         if (mounted) window.location.replace("/astro/janma");
         return;
       }
-      if (mounted) setJanmaDetails(details);
 
       try {
         const result = await getKundali(details);
@@ -56,10 +54,11 @@ export default function TraditionalPage() {
 
   /* Traditional Kundali rendering logic goes here */
   return (
-    <div className="w-full">
-      <ChhinaFrame className="bg-white min-h-screen mx-auto w-full sm:w-11/12 md:w-4/5 xl:w-3/5 max-w-5xl">
-        {/* Ganesh image centered near the top with slight spacing */}
-        <div className="flex justify-center mt-6">
+    <div className="w-full min-h-screen">
+      <div className="container mx-auto px-4 py-6 max-w-7xl">
+        <ChhinaFrame className="bg-white min-h-screen w-full sm:w-full md:max-w-3xl lg:max-w-4xl">
+          {/* Ganesh image centered near the top with slight spacing */}
+          <div className="flex justify-center mt-6">
           <Image
             src="/ganesh.png"
             alt="Ganesh"
@@ -188,6 +187,7 @@ export default function TraditionalPage() {
         <div className="mt-6 text-center leading-relaxed whitespace-pre-line" />
         <YoginiDashaTable dasha={kundali.yoginiDasa} />
       </ChhinaFrame>
+      </div>
     </div>
   );
 }
