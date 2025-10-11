@@ -86,83 +86,56 @@ export default function ChartsPage() {
   const explanation = getVargaExplanation(selectedVarga);
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50">
+    <div className="w-full min-h-screen bg-gradient-to-br from-orange-50/30 via-white to-red-50/30">
       <div className="container mx-auto px-4 py-8 max-w-7xl">
-        {/* Page Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-red-700 mb-2">
-            वर्ग कुण्डली विश्लेषण
-          </h1>
-          <p className="text-lg text-gray-600">
-            Divisional Charts Analysis (D1 - D60)
-          </p>
-        </div>
-
-        {/* Varga Selector */}
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-          <label className="block text-lg font-semibold text-gray-700 mb-3">
-            वर्ग चार्ट चयन गर्नुहोस् (Select Divisional Chart):
-          </label>
-          <select
-            value={selectedVarga}
-            onChange={(e) => setSelectedVarga(parseInt(e.target.value))}
-            className="w-full px-4 py-3 text-lg border-2 border-red-300 rounded-lg focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all"
-          >
-            {availableVargas.map((varga) => {
-              const exp = getVargaExplanation(varga);
-              return (
-                <option key={varga} value={varga}>
-                  D{varga} - {exp?.name || `Division ${varga}`}
-                  {exp?.nameEnglish ? ` (${exp.nameEnglish})` : ""}
-                </option>
-              );
-            })}
-          </select>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Chart Display */}
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl font-bold text-red-700 mb-4 text-center">
-              {explanation?.name || `D${selectedVarga}`}
-            </h2>
-            <p className="text-center text-gray-600 mb-6">
-              {explanation?.nameEnglish}
+        {/* Page Header with integrated selector */}
+        <div className="mb-8">
+          <div className="text-center mb-6">
+            <h1 className="text-4xl font-bold text-red-700 mb-2">
+              वर्ग कुण्डली विश्लेषण
+            </h1>
+            <p className="text-lg text-gray-600">
+              Divisional Charts Analysis (D1 - D60)
             </p>
-
-            {chartData.length > 0 ? (
-              <div className="flex justify-center">
-                <NorthDrekkanaChart
-                  houses={chartData}
-                  size={400}
-                  title={explanation?.name || `D${selectedVarga} Chart`}
-                  hideRashi={false}
-                />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-gray-500">
-                <p className="text-lg mb-2">यो वर्ग चार्ट उपलब्ध छैन</p>
-                <p className="text-sm">This divisional chart is not available in the data</p>
-              </div>
-            )}
           </div>
 
-          {/* Explanation Panel */}
-          {explanation && (
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h3 className="text-2xl font-bold text-red-700 mb-4 border-b-2 border-red-200 pb-2">
-                विवरण र महत्त्व
-              </h3>
+          {/* Inline Varga Selector */}
+          <div className="max-w-2xl mx-auto">
+            <select
+              value={selectedVarga}
+              onChange={(e) => setSelectedVarga(parseInt(e.target.value))}
+              className="w-full px-6 py-4 text-lg bg-white/80 backdrop-blur border border-red-200 rounded-xl focus:outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition-all shadow-sm hover:shadow-md"
+            >
+              {availableVargas.map((varga) => {
+                const exp = getVargaExplanation(varga);
+                return (
+                  <option key={varga} value={varga}>
+                    D{varga} - {exp?.name || `Division ${varga}`}
+                    {exp?.nameEnglish ? ` (${exp.nameEnglish})` : ""}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+        </div>
 
-              {/* Importance Rating */}
-              <div className="mb-6 p-4 bg-orange-50 rounded-lg">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-semibold text-gray-700">महत्त्व (Importance):</span>
-                  <div className="flex gap-1">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-8">
+          {/* Chart Display - Takes up 2 columns */}
+          <div className="lg:col-span-2">
+            <div className="sticky top-6">
+              <div className="text-center mb-4">
+                <h2 className="text-2xl font-bold text-red-700 mb-1">
+                  {explanation?.name || `D${selectedVarga}`}
+                </h2>
+                <p className="text-sm text-gray-600">
+                  {explanation?.nameEnglish}
+                </p>
+                {explanation && (
+                  <div className="flex items-center justify-center gap-1 mt-2">
                     {Array.from({ length: 5 }, (_, i) => (
                       <span
                         key={i}
-                        className={`text-xl ${
+                        className={`text-lg ${
                           i < explanation.importance ? "text-yellow-500" : "text-gray-300"
                         }`}
                       >
@@ -170,57 +143,78 @@ export default function ChartsPage() {
                       </span>
                     ))}
                   </div>
-                </div>
+                )}
               </div>
 
+              {chartData.length > 0 ? (
+                <div className="flex justify-center bg-white/60 backdrop-blur rounded-2xl p-6 shadow-lg">
+                  <NorthDrekkanaChart
+                    houses={chartData}
+                    size={400}
+                    title={explanation?.name || `D${selectedVarga} Chart`}
+                    hideRashi={false}
+                  />
+                </div>
+              ) : (
+                <div className="bg-white/60 backdrop-blur rounded-2xl p-12 shadow-lg">
+                  <div className="text-center text-gray-500">
+                    <p className="text-lg mb-2">यो वर्ग चार्ट उपलब्ध छैन</p>
+                    <p className="text-sm">This divisional chart is not available</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Explanation Panel - Takes up 3 columns */}
+          {explanation && (
+            <div className="lg:col-span-3 space-y-6">
               {/* Significations */}
-              <div className="mb-6">
-                <h4 className="text-lg font-bold text-gray-800 mb-3 flex items-center">
-                  <span className="text-red-600 mr-2">●</span>
+              <div className="bg-white/60 backdrop-blur rounded-2xl p-6 shadow-lg border border-red-100/50">
+                <h4 className="text-lg font-bold text-red-700 mb-4 flex items-center">
+                  <span className="mr-2">●</span>
                   मुख्य विषयहरू (Primary Significations)
                 </h4>
-                <ul className="space-y-2 ml-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {explanation.significations.map((sig, idx) => (
-                    <li key={idx} className="text-gray-700 flex items-start">
-                      <span className="text-red-500 mr-2 mt-1">▸</span>
-                      <span>{sig}</span>
-                    </li>
+                    <div key={idx} className="flex items-start bg-red-50/50 rounded-lg p-3">
+                      <span className="text-red-500 mr-2 mt-0.5 flex-shrink-0">▸</span>
+                      <span className="text-gray-700 text-sm">{sig}</span>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
 
               {/* Areas of Life */}
-              <div className="mb-6">
-                <h4 className="text-lg font-bold text-gray-800 mb-3 flex items-center">
-                  <span className="text-red-600 mr-2">●</span>
+              <div className="bg-white/60 backdrop-blur rounded-2xl p-6 shadow-lg border border-orange-100/50">
+                <h4 className="text-lg font-bold text-red-700 mb-4 flex items-center">
+                  <span className="mr-2">●</span>
                   जीवन क्षेत्रहरू (Areas of Life)
                 </h4>
-                <ul className="space-y-2 ml-6">
+                <div className="space-y-2">
                   {explanation.areasOfLife.map((area, idx) => (
-                    <li key={idx} className="text-gray-700 flex items-start">
-                      <span className="text-red-500 mr-2 mt-1">▸</span>
-                      <span>{area}</span>
-                    </li>
+                    <div key={idx} className="flex items-start">
+                      <span className="text-orange-500 mr-2 mt-1 flex-shrink-0">▸</span>
+                      <span className="text-gray-700">{area}</span>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
 
               {/* Traditional Interpretation */}
-              <div className="mb-4">
-                <h4 className="text-lg font-bold text-gray-800 mb-3 flex items-center">
-                  <span className="text-red-600 mr-2">●</span>
+              <div className="bg-gradient-to-br from-orange-50/80 to-red-50/80 backdrop-blur rounded-2xl p-6 shadow-lg border-l-4 border-red-500">
+                <h4 className="text-lg font-bold text-red-700 mb-4 flex items-center">
+                  <span className="mr-2">●</span>
                   परम्परागत व्याख्या (Traditional Interpretation)
                 </h4>
-                <div className="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-lg border-l-4 border-red-500">
-                  <p className="text-gray-800 leading-relaxed text-justify">
-                    {explanation.interpretation}
-                  </p>
-                </div>
+                <p className="text-gray-800 leading-relaxed">
+                  {explanation.interpretation}
+                </p>
               </div>
 
               {/* Additional Note for important charts */}
               {explanation.importance >= 4 && (
-                <div className="mt-6 p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-r-lg">
+                <div className="bg-yellow-50/80 backdrop-blur rounded-2xl p-5 shadow-lg border-l-4 border-yellow-500">
                   <p className="text-sm text-gray-700">
                     <span className="font-bold text-yellow-700">विशेष नोट:</span> यो अत्यन्त महत्त्वपूर्ण वर्ग कुण्डली हो र यसको विस्तृत विश्लेषण अनिवार्य मानिन्छ।
                   </p>
@@ -234,11 +228,11 @@ export default function ChartsPage() {
         </div>
 
         {/* Quick Navigation */}
-        <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
-          <h3 className="text-xl font-bold text-red-700 mb-4">
+        <div className="mt-8">
+          <h3 className="text-xl font-bold text-red-700 mb-5 text-center">
             प्रमुख वर्ग कुण्डलीहरू (Important Divisional Charts)
           </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-10 gap-2">
             {STANDARD_VARGAS.map((varga) => {
               const exp = getVargaExplanation(varga);
               const isAvailable = availableVargas.includes(varga);
@@ -249,19 +243,16 @@ export default function ChartsPage() {
                   key={varga}
                   onClick={() => isAvailable && setSelectedVarga(varga)}
                   disabled={!isAvailable}
-                  className={`p-3 rounded-lg text-center transition-all ${
+                  className={`p-3 rounded-xl text-center transition-all ${
                     isSelected
-                      ? "bg-red-600 text-white shadow-lg scale-105"
+                      ? "bg-red-600 text-white shadow-lg scale-105 ring-2 ring-red-300"
                       : isAvailable
-                      ? "bg-orange-100 text-gray-800 hover:bg-orange-200 hover:shadow-md"
-                      : "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      ? "bg-white/60 backdrop-blur text-gray-800 hover:bg-white hover:shadow-md border border-orange-200/50"
+                      : "bg-gray-100/50 text-gray-400 cursor-not-allowed"
                   }`}
                   title={exp?.nameEnglish}
                 >
-                  <div className="font-bold text-lg">D{varga}</div>
-                  <div className="text-xs mt-1 truncate">
-                    {exp?.name.split("(")[0].trim() || `Division ${varga}`}
-                  </div>
+                  <div className="font-bold text-base">D{varga}</div>
                   {exp && (
                     <div className="flex justify-center mt-1">
                       {Array.from({ length: exp.importance }, (_, i) => (
@@ -278,18 +269,19 @@ export default function ChartsPage() {
         </div>
 
         {/* General Information */}
-        <div className="mt-8 bg-gradient-to-r from-red-50 to-orange-50 rounded-lg shadow-lg p-6">
-          <h3 className="text-xl font-bold text-red-700 mb-4">
+        <div className="mt-8 bg-gradient-to-br from-red-50/60 to-orange-50/60 backdrop-blur rounded-2xl p-8 border border-red-100/50">
+          <h3 className="text-xl font-bold text-red-700 mb-5 flex items-center justify-center">
+            <span className="mr-2">📖</span>
             वर्ग कुण्डली परिचय (About Divisional Charts)
           </h3>
-          <div className="prose prose-sm max-w-none text-gray-700 space-y-3">
-            <p className="leading-relaxed">
+          <div className="space-y-4 text-gray-700 max-w-4xl mx-auto">
+            <p className="leading-relaxed text-center">
               <strong>वर्ग कुण्डली (Varga Kundali)</strong> वैदिक ज्योतिषको अत्यन्त महत्त्वपूर्ण भाग हो। मुख्य राशि कुण्डली (D1) बाहेक, विभिन्न वर्ग कुण्डलीहरू जीवनका विशिष्ट क्षेत्रहरूको गहन विश्लेषण प्रदान गर्दछन्।
             </p>
-            <p className="leading-relaxed">
+            <p className="leading-relaxed text-center">
               प्रत्येक राशिलाई विभिन्न भागमा विभाजन गरेर बनाइएका यी कुण्डलीहरूले जन्म कुण्डलीको सूक्ष्म विवरण प्रकट गर्दछन्। <strong>D1 देखि D60 सम्म</strong> कुल ६० वर्ग कुण्डलीहरू छन्, तर तीमध्ये केही विशेष महत्त्वपूर्ण मानिन्छन्।
             </p>
-            <p className="leading-relaxed">
+            <p className="leading-relaxed text-center">
               <strong>षोडश वर्ग (Shodasavarga - 16 divisions)</strong> र <strong>षड्वर्ग (Shadvarga - 6 divisions)</strong> परम्परागत ज्योतिषमा विशेष प्रचलित छन्। नवमांश (D9) र दशमांश (D10) सबैभन्दा महत्त्वपूर्ण मानिन्छन्।
             </p>
           </div>
