@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { getJanmaDetails } from "@internal/utils/get-form-details";
-import { getKundali, Kundali, PlanetCombinedInfo, PlanetsInTimeFrameResult } from "@mhnpd/panchang";
+import { getKundali, Kundali, PlanetCombinedInfo, PlanetsInTimeFrameResult } from "@mhnpd-org/panchang";
 import { translateSanskritSafe } from "@internal/lib/devanagari";
 
 // Helper to render a vedic styled cell (sanskrit focus)

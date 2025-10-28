@@ -1,4 +1,4 @@
-import { JanmaDetails, validateJanmaDetails } from "@mhnpd/panchang";
+import { JanmaDetails, validateJanmaDetails } from "@mhnpd-org/panchang";
 import { getEncodedItem, setEncodedItem, type JsonValue } from "./storage";
 import { JanmaFormValues } from "@internal/app/astro/janma/page";
 

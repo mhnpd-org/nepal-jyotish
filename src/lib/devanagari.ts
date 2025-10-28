@@ -1,5 +1,5 @@
 /** Utility helpers for Sanskrit / Devanagari presentation */
-import { translateToSanskrit } from '@mhnpd/panchang';
+import { translateToSanskrit } from '@mhnpd-org/panchang';
 
 // Map arabic numerals to Devanagari digits
 const DIGIT_MAP: Record<string,string> = {"0":"०","1":"१","2":"२","3":"३","4":"४","5":"५","6":"६","7":"७","8":"८","9":"९"};

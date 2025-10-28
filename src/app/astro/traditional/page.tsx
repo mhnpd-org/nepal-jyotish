@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { getJanmaDetails } from "@internal/utils/get-form-details";
-import { getKundali, JanmaDetails, Kundali } from "@mhnpd/panchang";
+import { getKundali, JanmaDetails, Kundali } from "@mhnpd-org/panchang";
 import React from "react";
 import { JanmaPatrikaText } from "@internal/components/janma-patrika-text";
 import NorthDrekkanaChart from "@internal/components/north-drekkana-chart";

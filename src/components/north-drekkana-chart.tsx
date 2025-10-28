@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { astroTranslate } from "@internal/lib/astro-translator";
-import { BhavaChart, LagnaChart, VargasChart } from "@mhnpd/panchang";
+import { BhavaChart, LagnaChart, VargasChart } from "@mhnpd-org/panchang";
 import { translateSanskritSafe } from "@internal/lib/devanagari";
 
 /** Props for the North Indian Drekkana Chart component */

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { YoginiDasha } from "@mhnpd/panchang";
+import { YoginiDasha } from "@mhnpd-org/panchang";
 import { astroTranslate } from "@internal/lib/astro-translator";
 import { translateSanskritSafe } from "@internal/lib/devanagari";
 

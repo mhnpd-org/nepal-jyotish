@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { TribhagiDasha } from "@mhnpd/panchang";
+import { TribhagiDasha } from "@mhnpd-org/panchang";
 import { astroTranslate } from "@internal/lib/astro-translator";
 import { translateSanskritSafe } from "@internal/lib/devanagari";
 

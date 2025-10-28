@@ -1,4 +1,4 @@
-import { PlanetCombinedInfo, PlanetsInTimeFrameResult } from "@mhnpd/panchang";
+import { PlanetCombinedInfo, PlanetsInTimeFrameResult } from "@mhnpd-org/panchang";
 import React from "react";
 
 interface Props {

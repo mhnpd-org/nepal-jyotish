@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import { getJanmaDetails } from "@internal/utils/get-form-details";
-import { getKundali, JanmaDetails, Kundali } from "@mhnpd/panchang";
-import { DChart } from "@mhnpd/panchang/enum";
+import { getKundali, JanmaDetails, Kundali } from "@mhnpd-org/panchang";
+import { DChart } from "@mhnpd-org/panchang/enum";
 import NorthDrekkanaChart from "@internal/components/north-drekkana-chart";
 import { 
   getVargaExplanation, 

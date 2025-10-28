@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { getJanmaDetails } from "@internal/utils/get-form-details";
-import { getKundali, Kundali, YoginiDasha } from "@mhnpd/panchang";
+import { getKundali, Kundali, YoginiDasha } from "@mhnpd-org/panchang";
 import { translateSanskritSafe } from "@internal/lib/devanagari";
 import { astroTranslate } from "@internal/lib/astro-translator";
 
