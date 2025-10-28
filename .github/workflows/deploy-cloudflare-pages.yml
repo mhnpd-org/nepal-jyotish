@@ -19,6 +19,9 @@ jobs:
           node-version: "18"
           cache: npm
 
+      - name: Configure npm for GitHub Packages
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+
       - name: Install dependencies
         run: npm ci
 
@@ -43,4 +46,4 @@ jobs:
 
       - name: Summary
         run: |
-          echo "Build complete for $GITHUB_SHA on $GITHUB_REF" 
+          echo "Build complete for $GITHUB_SHA on $GITHUB_REF"
