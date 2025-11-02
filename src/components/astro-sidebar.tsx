@@ -3,49 +3,49 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useI18n } from '@internal/lib/i18n';
+// translations removed — using static English labels
 
 // Sidebar menu configuration
 const NAV_ITEMS = [
-  { href: '/astro/janma', key: 'nav.janma', icon: (
+  { href: '/astro/janma', label: 'Janma Details', icon: (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
       <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 20.5a7.5 7.5 0 0115 0" />
     </svg>
   )},
-  { href: '/astro/overview', key: 'nav.overview', icon: (
+  { href: '/astro/overview', label: 'Overview', icon: (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
       <path strokeLinecap="round" strokeLinejoin="round" d="M3 4h7v7H3zM14 4h7v7h-7zM14 15h7v7h-7zM3 15h7v7H3z" />
     </svg>
   )},
-  { href: '/astro/traditional', key: 'nav.traditional', icon: (
+  { href: '/astro/traditional', label: 'Traditional', icon: (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
       <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
       <path strokeLinecap="round" strokeLinejoin="round" d="M12 14v7" />
     </svg>
   )},
-  { href: '/astro/charts', key: 'nav.charts', icon: (
+  { href: '/astro/charts', label: 'Varga Charts', icon: (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
       <path strokeLinecap="round" strokeLinejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
     </svg>
   )},
-  { href: '/astro/planet-position', key: 'nav.planet_positions', icon: (
+  { href: '/astro/planet-position', label: 'Planet Positions', icon: (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
       <circle cx="12" cy="12" r="3" />
       <path strokeLinecap="round" strokeLinejoin="round" d="M3 12c0 1.53 4.03 5 9 5s9-3.47 9-5-4.03-5-9-5-9 3.47-9 5z" />
     </svg>
   )},
-  { href: '/astro/vimshottari-dasha', key: 'nav.vimshottari', icon: (
+  { href: '/astro/vimshottari-dasha', label: 'Vimshottari', icon: (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
       <path strokeLinecap="round" strokeLinejoin="round" d="M6 3v18M12 3v18M18 3v18" />
     </svg>
   )},
-  { href: '/astro/tribhagi-dasha', key: 'nav.tribhagi', icon: (
+  { href: '/astro/tribhagi-dasha', label: 'Tribhagi', icon: (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
       <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h10M4 18h7" />
     </svg>
   )},
-  { href: '/astro/yogini-dasha', key: 'nav.yogini', icon: (
+  { href: '/astro/yogini-dasha', label: 'Yogini', icon: (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
       <circle cx="12" cy="12" r="2.5" />
       <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v3M12 17v3M4 12h3M17 12h3M6.8 6.8l2.1 2.1M15.1 15.1l2.1 2.1M17.2 6.8l-2.1 2.1M8.9 15.1l-2.1 2.1" />
@@ -55,7 +55,6 @@ const NAV_ITEMS = [
 
 export default function AstroSidebar() {
   const pathname = usePathname();
-  const { t } = useI18n();
   return (
   <aside className="group/sidebar relative w-14 md:w-64 shrink-0 bg-white/90 backdrop-blur-sm border-r border-amber-100/60 shadow-[0_0_0_1px_rgba(255,255,255,0.2)]">
       <div className="pointer-events-none absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-amber-200 to-transparent" />
@@ -77,9 +76,9 @@ export default function AstroSidebar() {
               <span className={['shrink-0', active ? 'text-amber-800' : 'text-amber-600 group-hover:text-amber-700'].join(' ')}>
                 {item.icon}
               </span>
-              <span className="hidden md:inline font-medium tracking-wide text-[0.82rem]">{t(item.key)}</span>
+              <span className="hidden md:inline font-medium tracking-wide text-[0.82rem]">{item.label}</span>
               <span className="md:hidden absolute left-full top-1/2 -translate-y-1/2 ml-3 px-2 py-1 text-xs rounded bg-amber-800 text-white shadow-lg opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
-                {t(item.key)}
+                {item.label}
               </span>
               {active && (
                 <span className="absolute -left-2 md:-left-3 top-1/2 -translate-y-1/2 h-6 w-[3px] rounded-full bg-gradient-to-b from-amber-400 to-amber-600 shadow-[0_0_0_1px_rgba(255,255,255,0.4)]" aria-hidden />

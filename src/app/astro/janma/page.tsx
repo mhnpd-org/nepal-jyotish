@@ -10,7 +10,7 @@ import { ADDatePicker, BSDatePicker } from "@internal/form-elements/date-picker"
 import NepaliDate from "nepali-date-converter";
 import { TimePicker } from "@internal/form-elements/time-picker";
 import { PickDistrict } from "@internal/form-elements/pick-district";
-import { useI18n } from "@internal/lib/i18n";
+// translations removed — using static English labels
 import {
   districtOfNepal,
   type DistrictOfNepal
@@ -102,7 +102,19 @@ export default function JanmaPage() {
     }
   };
 
-  const { t } = useI18n();
+  // static English labels (previously in en.json)
+  const labels = {
+    title: 'Janma Details',
+    description: 'Enter birth details below. Fields are prefilled with current Kathmandu/Nepal date, time and coordinates.',
+    name: 'Full name (optional)',
+    date_of_birth: 'Date of Birth',
+    ad: 'AD',
+    bs: 'BS',
+    datetime_required: 'Date & time is required',
+    time_of_birth: 'Time of Birth',
+    place_of_birth: 'Place of Birth',
+    submit: 'Submit'
+  } as const;
   return (
     <main className="w-full px-2 sm:px-4 py-8">
       <form
@@ -118,10 +130,10 @@ export default function JanmaPage() {
               </div>
               <div>
                 <h1 className="text-2xl font-semibold tracking-wide text-gray-800 dark:text-gray-100">
-                  {t('janma.title')}
+                  {labels.title}
                 </h1>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 leading-snug max-w-prose">
-                  {t('janma.description')}
+                  {labels.description}
                 </p>
               </div>
             </div>
@@ -130,11 +142,11 @@ export default function JanmaPage() {
           <div className="flex flex-col gap-6">
               {/* Name (optional) */}
               <div className="flex flex-col gap-1 w-full">
-                <label htmlFor="name" className="text-sm font-medium text-gray-800 dark:text-gray-200">{t('janma.name')}</label>
+                <label htmlFor="name" className="text-sm font-medium text-gray-800 dark:text-gray-200">{labels.name}</label>
                 <input
                   id="name"
                   type="text"
-                  placeholder={t('janma.name')}
+                  placeholder={labels.name}
                   className="rounded-md border border-gray-300/70 dark:border-gray-600 bg-white/90 dark:bg-gray-900 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/70 focus-visible:border-orange-400 transition"
                   {...register("name")}
                 />
@@ -143,7 +155,7 @@ export default function JanmaPage() {
               {/* Date of Birth (required) */}
               <div className="flex flex-col gap-2 w-full">
                 <label className="text-sm font-medium text-gray-800 dark:text-gray-200">
-                  {t('janma.date_of_birth')} <span className="text-red-500">*</span>
+                  {labels.date_of_birth} <span className="text-red-500">*</span>
                 </label>
                 <div className="flex flex-col sm:flex-row sm:items-center gap-4 w-full">
                   {/* Calendar toggle */}
@@ -164,7 +176,7 @@ export default function JanmaPage() {
                         }`}
                         aria-pressed={calendarValue === cal}
                       >
-                        {cal === 'AD' ? t('janma.ad') : t('janma.bs')}
+                        {cal === 'AD' ? labels.ad : labels.bs}
                       </button>
                     ))}
                   </div>
@@ -178,7 +190,7 @@ export default function JanmaPage() {
                           maxYear={2099}
                           minYear={1900}
                           {...register("dateOfBirth", {
-                            required: t('janma.datetime_required')
+                            required: labels.datetime_required
                           })}
                         />
                       ) : (
@@ -188,7 +200,7 @@ export default function JanmaPage() {
                           maxYear={2090}
                           minYear={2000}
                           {...register("dateOfBirth", {
-                            required: t('janma.datetime_required')
+                            required: labels.datetime_required
                           })}
                         />
                       )
@@ -208,13 +220,13 @@ export default function JanmaPage() {
 
               {/* Time of Birth (optional) */}
               <div className="flex flex-col gap-1 w-full">
-                <TimePicker control={control} name="timeOfBirth" label={t('janma.time_of_birth')} required={false} showSeconds={false} className="" />
+                <TimePicker control={control} name="timeOfBirth" label={labels.time_of_birth} required={false} showSeconds={false} className="" />
               </div>
 
               {/* Place of Birth (required) */}
               <div className="flex flex-col w-full">
                 {hydrated ? (
-                  <PickDistrict control={control} name="placeOfBirth" label={t('janma.place_of_birth')} required className="" />
+                  <PickDistrict control={control} name="placeOfBirth" label={labels.place_of_birth} required className="" />
                 ) : (
                   <div className="h-10 w-full rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse" />
                 )}
@@ -228,7 +240,7 @@ export default function JanmaPage() {
                 disabled={isSubmitting}
                 className="inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-orange-500 via-rose-500 to-pink-500 hover:from-orange-500 hover:via-rose-500 hover:to-rose-600 disabled:opacity-60 disabled:cursor-not-allowed text-white px-6 py-2.5 text-sm font-medium shadow-md shadow-orange-200/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-400/60 focus:ring-offset-white dark:focus:ring-offset-gray-950 transition"
               >
-                {isSubmitting ? '...' : t('janma.submit')}
+                {isSubmitting ? '...' : labels.submit}
               </button>
             </div>
         </div>
