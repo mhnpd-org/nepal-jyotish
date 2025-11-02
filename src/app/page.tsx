@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import BlogCard from "@internal/components/blog-card";
 import Logo from "@internal/layouts/logo";
 import Footer from "@internal/layouts/footer";
@@ -65,7 +66,9 @@ export default function LandingPage() {
           <div className="absolute top-1/2 right-20 w-20 h-20 border-2 border-white/5 rounded-lg rotate-45"></div>
         </div>
 
-        <div className="max-w-3xl relative z-10">
+        <div className="max-w-7xl mx-auto relative z-10 flex items-center gap-12">
+          {/* Left column: text */}
+          <div className="max-w-3xl">
           <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight tracking-tight drop-shadow-lg">
             नेपाली ज्योतिष<br />
             <span className="text-amber-200">सरल र स्पष्ट</span>
@@ -78,7 +81,7 @@ export default function LandingPage() {
               href="/astro/janma"
               className="px-6 py-3 bg-white text-rose-700 font-semibold rounded-lg hover:bg-white/95 transition-colors shadow-lg"
             >
-              सुरु गर्नुहोस्
+             एप खोल्नुहोस्
             </Link>
             <Link
               href="/blogs"
@@ -86,6 +89,21 @@ export default function LandingPage() {
             >
               लेखहरू पढ्नुहोस् →
             </Link>
+          </div>
+          </div>
+
+          {/* Right column: decorative image (visible on md and larger) */}
+          <div className="hidden md:flex items-center justify-center flex-1 pointer-events-none">
+            <div className="w-[360px] h-[350px] bg-white/3 backdrop-blur rounded-2xl p-4 shadow-2xl flex items-center justify-center">
+              <Image
+                src="/kundali.png"
+                alt="Decorative astrological emblem"
+                width={320}
+                height={180}
+                className="object-contain"
+                priority={false}
+              />
+            </div>
           </div>
         </div>
       </section>
