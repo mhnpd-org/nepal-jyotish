@@ -106,10 +106,24 @@ export default function LandingPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">जन्म पत्रिका</h3>
-              <p className="text-gray-700 leading-relaxed">
-                सटीक खगोलीय गणनाबाट तपाईंको पूर्ण जन्मकुण्डली तुरुन्तै तयार गर्नुहोस्।
+              <h3 className="text-xl font-bold text-gray-900 mb-3">जन्म पत्रिका</h3>
+              <p className="text-gray-700 leading-relaxed mb-4">
+                तपाईंको जन्म मिति, समय र स्थानको आधारमा सटीक खगोलीय गणनाबाट पूर्ण जन्मकुण्डली तुरुन्तै तयार गर्नुहोस्।
               </p>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-rose-600 mt-0.5">•</span>
+                  <span>राशि चक्र र नवांश कुण्डली</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-rose-600 mt-0.5">•</span>
+                  <span>सभै वर्ग चार्टहरू (D1-D60)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-rose-600 mt-0.5">•</span>
+                  <span>ग्रह योग र दोष विश्लेषण</span>
+                </li>
+              </ul>
             </div>
 
             <div className="bg-white/70 backdrop-blur rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
@@ -118,10 +132,24 @@ export default function LandingPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">ग्रह स्थिति</h3>
-              <p className="text-gray-700 leading-relaxed">
-                विस्तृत ग्रह स्थिति र तिनीहरूको प्रभाव सरल भाषामा बुझ्नुहोस्।
+              <h3 className="text-xl font-bold text-gray-900 mb-3">ग्रह स्थिति</h3>
+              <p className="text-gray-700 leading-relaxed mb-4">
+                नौ ग्रहहरूको विस्तृत स्थिति, राशि, नक्षत्र, र तिनीहरूको प्रभाव तपाईंको जीवनमा सरल भाषामा बुझ्नुहोस्।
               </p>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-rose-600 mt-0.5">•</span>
+                  <span>ग्रह बल र शुभाशुभ फल</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-rose-600 mt-0.5">•</span>
+                  <span>नक्षत्र र पाद विवरण</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-rose-600 mt-0.5">•</span>
+                  <span>भाव स्वामी र योगकारक ग्रह</span>
+                </li>
+              </ul>
             </div>
 
             <div className="bg-white/70 backdrop-blur rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
@@ -130,10 +158,24 @@ export default function LandingPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">दशा प्रणाली</h3>
-              <p className="text-gray-700 leading-relaxed">
-                विंशोत्तरी, योगिनी र त्रिभागी दशा प्रणाली सबै एकै ठाउँमा।
+              <h3 className="text-xl font-bold text-gray-900 mb-3">दशा प्रणाली</h3>
+              <p className="text-gray-700 leading-relaxed mb-4">
+                विभिन्न दशा प्रणालीहरू मार्फत तपाईंको जीवनको विभिन्न कालखण्डहरूको भविष्यवाणी र विश्लेषण गर्नुहोस्।
               </p>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-rose-600 mt-0.5">•</span>
+                  <span>विंशोत्तरी दशा (120 वर्ष)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-rose-600 mt-0.5">•</span>
+                  <span>योगिनी दशा (36 वर्ष)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-rose-600 mt-0.5">•</span>
+                  <span>त्रिभागी दशा र अन्तर्दशा</span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
