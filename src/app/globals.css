@@ -6,11 +6,13 @@
   --vedanga-gradient: linear-gradient(90deg, hsla(33, 100%, 52%, 1) 0%, hsla(2, 78%, 62%, 1) 87%);
 }
 
-@theme inline {
+/* Theme variables (manual since @theme unsupported in lint context) */
+:root {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-nepali-ui, var(--font-geist-sans));
   --font-mono: var(--font-geist-mono);
+  --font-devanagari-serif: var(--font-nepali-serif);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -21,14 +23,32 @@
 }
 
 body {
-  /* Reset default user-agent margins that were causing right & bottom white gaps */
   margin: 0;
   padding: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-  /* Prevent accidental horizontal scroll from wide flex children */
+  font-family: var(--font-sans), 'Mukta', 'Noto Sans Devanagari', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Noto Color Emoji';
+  font-feature-settings: "kern" 1, "liga" 1, "clig" 1;
+  -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+}
+
+/* Heading font stack with subtle serif for Nepali for improved glyph detail */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-devanagari-serif), var(--font-sans), 'Noto Serif Devanagari', serif;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+/* Improve Devanagari readability inside prose */
+.prose :where(p, li, blockquote) {
+  font-family: var(--font-sans), 'Mukta', 'Noto Sans Devanagari', sans-serif;
+  font-weight: 400;
+}
+
+/* Numeral alignment for mixed Devanagari + Latin */
+code, pre, kbd, samp {
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 .bg-vedanga-gradient {
@@ -41,7 +61,10 @@ body {
 
 /* --- Traditional Dasha Table Styles --- */
 .dasha-section-title {
-  @apply text-xl font-semibold text-blue-700 tracking-wide;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1d4ed8; /* blue-700 */
+  letter-spacing: 0.02em;
 }
 
 .dasha-classic-table {

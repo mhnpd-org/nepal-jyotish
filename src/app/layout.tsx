@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Noto_Serif_Devanagari, Mukta } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -10,6 +10,22 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+// Primary Nepali readable sans for paragraphs & UI
+const mukta = Mukta({
+  variable: "--font-nepali-ui",
+  subsets: ["devanagari", "latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: 'swap'
+});
+
+// Serif Devanagari for headings / emphasis
+const notoSerifDev = Noto_Serif_Devanagari({
+  variable: "--font-nepali-serif",
+  subsets: ["devanagari"],
+  weight: ["400", "500", "600", "700"],
+  display: 'swap'
 });
 
 export const metadata: Metadata = {
@@ -98,7 +114,7 @@ export default function RootLayout({
     <html lang="ne">
       <body
         suppressHydrationWarning
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${mukta.variable} ${notoSerifDev.variable} antialiased font-sans`}
       >
         {children}
       </body>
