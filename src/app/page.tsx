@@ -111,14 +111,11 @@ export default function LandingPage() {
           {/* Left column: text */}
           <div className="max-w-3xl">
           <h1 id="hero-heading" className="text-5xl md:text-6xl font-bold text-white leading-tight tracking-tight drop-shadow-lg">
-            नेपाली चाइना मेकर<br />
+            नेपाली ज्योतिष<br />
             <span className="text-amber-200">परम्परागत कुण्डली निर्माण</span>
           </h1>
-          <h2 className="mt-4 text-2xl md:text-3xl font-semibold text-white/95 drop-shadow">
-            Hamro Jyotish, Mero Jyotish
-          </h2>
           <p className="mt-6 text-xl text-white/95 leading-relaxed max-w-2xl drop-shadow">
-            वैदिक ज्योतिष र सूर्य सिद्धान्त (Surya Siddhanta) मा आधारित निःशुल्क परम्परागत नेपाली चाइना मेकर। 
+            वैदिक ज्योतिष र सूर्य सिद्धान्त (Surya Siddhanta) मा आधारित निःशुल्क परम्परागत नेपाली कुण्डली निर्माण,
             जन्म पत्रिका निर्माण, ग्रह गति अवलोकन, र दशा गणना — सबै एकै ठाउँमा।
           </p>
           <div className="mt-10 flex items-center gap-4">
