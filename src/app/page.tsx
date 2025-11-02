@@ -19,28 +19,6 @@ export default function LandingPage() {
   // Get 8 recent blog posts from MDX files
   const blogs = getRecentBlogPosts(8);
 
-  // Fallback to static blogs if no MDX files exist yet
-  const displayBlogs = blogs.length > 0 ? blogs.map(blog => ({
-    title: blog.title,
-    excerpt: blog.excerpt,
-    href: `/blogs/${blog.slug}`,
-  })) : [
-    {
-      title: "नेपाली ज्योतिष परिचय",
-      excerpt: "नेपाली परम्परागत ज्योतिषका आधारभूत अवधारणाहरूको छोटो मार्गदर्शिका।",
-      href: "/blog/intro-jyotish",
-    },
-    {
-      title: "जन्म पत्रिका बुझ्ने तरिका",
-      excerpt: "जन्मकुण्डली (जनम पत्रिका) कसरी पढ्ने र व्याख्या गर्ने — उदाहरणसहित।",
-      href: "/blog/janma-patrika",
-    },
-    {
-      title: "ग्रहकाल (दशा) प्रणाली",
-      excerpt: "भविष्यवाणीमा प्रयोग हुने विभिन्न दशा प्रणालीहरूको अवलोकन।",
-      href: "/blog/dasha-overview",
-    },
-  ];
 
   return (
     <main className="min-h-screen bg-vedanga-gradient">
@@ -211,8 +189,8 @@ export default function LandingPage() {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {displayBlogs.map((b) => (
-            <BlogCard key={b.title} title={b.title} excerpt={b.excerpt} href={b.href} />
+          {blogs.map((b) => (
+            <BlogCard key={b.title} title={b.title} excerpt={b.excerpt} href={b.slug} />
           ))}
         </div>
         
