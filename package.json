@@ -14,7 +14,6 @@
     "type-check": "tsc --noEmit",
     "pages:build": "next build --turbopack",
     "pages:deploy": "wrangler pages deploy out --project-name=vedanga-jotish",
-    "generate-sitemap": "node ./scripts/generate-sitemap.js",
     "postbuild": "node ./scripts/generate-sitemap.js"
   },
   "dependencies": {
