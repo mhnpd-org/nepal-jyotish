@@ -1,6 +1,7 @@
 import Link from "next/link";
 import BlogCard from "@internal/components/blog-card";
 import Logo from "@internal/layouts/logo";
+import Footer from "@internal/layouts/footer";
 import { getRecentBlogPosts } from "@internal/lib/blogs";
 import type { Metadata } from "next";
 
@@ -50,7 +51,7 @@ export default function LandingPage() {
 
           <nav className="flex items-center gap-6">
             <Link 
-              href="/blog" 
+              href="/blogs" 
               className="text-sm text-white/90 hover:text-white transition-colors"
             >
               लेखहरू
@@ -102,7 +103,7 @@ export default function LandingPage() {
               सुरु गर्नुहोस्
             </Link>
             <Link
-              href="/blog"
+              href="/blogs"
               className="px-6 py-3 text-white font-medium hover:text-amber-200 transition-colors"
             >
               लेखहरू पढ्नुहोस् →
@@ -232,42 +233,7 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-b from-transparent to-amber-900/20 border-t border-white/10 mt-20">
-        <div className="max-w-7xl mx-auto px-6 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div className="md:col-span-2">
-              <Logo size="sm" variant="light" href="/" className="mb-3" />
-              <p className="text-sm text-white/90 max-w-sm">
-                परम्परागत नेपाली ज्योतिष प्रणाली र आधुनिक प्रविधिको संगम। सरल, सटीक र विश्वसनीय।
-              </p>
-            </div>
-
-            <div>
-              <h5 className="text-sm font-semibold text-white mb-3">लिङ्कहरू</h5>
-              <ul className="space-y-2 text-sm text-white/85">
-                <li><Link href="/astro/janma" className="hover:text-amber-200 transition-colors">एप खोल्नुहोस्</Link></li>
-                <li><Link href="/astro/overview" className="hover:text-amber-200 transition-colors">अवलोकन</Link></li>
-                <li><Link href="/blog" className="hover:text-amber-200 transition-colors">ब्लग</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h5 className="text-sm font-semibold text-white mb-3">कानूनी</h5>
-              <ul className="space-y-2 text-sm text-white/85">
-                <li><Link href="/privacy" className="hover:text-amber-200 transition-colors">गोपनीयता नीति</Link></li>
-                <li><Link href="/terms" className="hover:text-amber-200 transition-colors">सेवा नियम</Link></li>
-                <li><Link href="/contact" className="hover:text-amber-200 transition-colors">सम्पर्क</Link></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="pt-8 border-t border-white/10">
-            <p className="text-sm text-white/75 text-center">
-              © {new Date().getFullYear()} वेदाङ्ग ज्योतिष। सर्वाधिकार सुरक्षित।
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer variant="dark" />
     </main>
   );
 }

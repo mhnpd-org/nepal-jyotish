@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Logo from "@internal/layouts/logo";
+import Footer from "@internal/layouts/footer";
 import { getAllBlogPosts } from "@internal/lib/blogs";
 import type { Metadata } from "next";
 
@@ -14,20 +16,38 @@ export default function BlogsPage() {
     <main className="min-h-screen bg-gradient-to-b from-rose-50 to-amber-50">
       {/* Header */}
       <header className="bg-gradient-to-r from-rose-700 to-orange-600 text-white">
-        <div className="max-w-7xl mx-auto px-6 py-16">
-          <Link 
-            href="/" 
-            className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-6 transition-colors"
-          >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            <span>मुख्य पृष्ठ</span>
-          </Link>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">लेखहरू</h1>
-          <p className="text-xl text-white/90 max-w-2xl">
-            नेपाली ज्योतिष सम्बन्धी ज्ञान र जानकारीहरू
-          </p>
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between mb-8">
+            <Logo size="md" variant="light" />
+            
+            <nav className="flex items-center gap-6">
+              <Link 
+                href="/" 
+                className="text-sm text-white/90 hover:text-white transition-colors"
+              >
+                मुख्य पृष्ठ
+              </Link>
+              <Link 
+                href="/blogs" 
+                className="text-sm text-white font-semibold transition-colors"
+              >
+                लेखहरू
+              </Link>
+              <Link 
+                href="/astro/janma" 
+                className="px-4 py-2 bg-white text-rose-700 text-sm font-medium rounded-lg hover:bg-white/95 transition-colors shadow-sm"
+              >
+                एप खोल्नुहोस्
+              </Link>
+            </nav>
+          </div>
+          
+          <div className="py-8">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">लेखहरू</h1>
+            <p className="text-xl text-white/90 max-w-2xl">
+              नेपाली ज्योतिष सम्बन्धी ज्ञान र जानकारीहरू
+            </p>
+          </div>
         </div>
       </header>
 
@@ -95,6 +115,9 @@ export default function BlogsPage() {
           </div>
         )}
       </section>
+
+      {/* Footer */}
+      <Footer variant="light" />
     </main>
   );
 }
