@@ -43,10 +43,10 @@ export default function LandingPage() {
 
           <nav className="flex items-center gap-6">
             <Link 
-              href="/astro/overview" 
+              href="/blog" 
               className="text-sm text-white/90 hover:text-white transition-colors"
             >
-              अवलोकन
+              लेखहरू
             </Link>
             <Link 
               href="/astro/janma" 
@@ -59,8 +59,27 @@ export default function LandingPage() {
       </header>
 
       {/* Hero section */}
-      <section className="max-w-7xl mx-auto px-6 pt-20 pb-24">
-        <div className="max-w-3xl">
+      <section className="max-w-7xl mx-auto px-6 pt-20 pb-24 relative overflow-hidden">
+        {/* Decorative background shapes */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          {/* Large circle top right */}
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
+          {/* Medium circle bottom left */}
+          <div className="absolute -bottom-12 -left-12 w-72 h-72 bg-amber-400/10 rounded-full blur-2xl"></div>
+          {/* Small accent circle */}
+          <div className="absolute top-1/3 right-1/4 w-40 h-40 bg-rose-400/8 rounded-full blur-xl"></div>
+          
+          {/* Geometric shapes */}
+          <svg className="absolute top-20 right-12 w-24 h-24 text-white/5" viewBox="0 0 100 100" fill="currentColor">
+            <polygon points="50,15 90,85 10,85" />
+          </svg>
+          <svg className="absolute bottom-32 right-1/3 w-16 h-16 text-amber-200/10" viewBox="0 0 100 100" fill="currentColor">
+            <circle cx="50" cy="50" r="40" />
+          </svg>
+          <div className="absolute top-1/2 right-20 w-20 h-20 border-2 border-white/5 rounded-lg rotate-45"></div>
+        </div>
+
+        <div className="max-w-3xl relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight tracking-tight drop-shadow-lg">
             नेपाली ज्योतिष<br />
             <span className="text-amber-200">सरल र स्पष्ट</span>
@@ -76,10 +95,10 @@ export default function LandingPage() {
               सुरु गर्नुहोस्
             </Link>
             <Link
-              href="/astro/overview"
+              href="/blog"
               className="px-6 py-3 text-white font-medium hover:text-amber-200 transition-colors"
             >
-              थप जान्नुहोस् →
+              लेखहरू पढ्नुहोस् →
             </Link>
           </div>
         </div>
