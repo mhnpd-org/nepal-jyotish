@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import BlogCard from "@internal/components/blog-card";
+import Logo from "@internal/layouts/logo";
 
 export const revalidate = 0; // render at build-time (0 = no revalidation) - ensures static render
 
@@ -28,18 +28,7 @@ export default function LandingPage() {
       {/* Minimal header */}
       <header className="bg-gradient-to-b from-amber-900/30 via-amber-900/10 to-transparent">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5">
-            <Image 
-              src="/logo.svg" 
-              alt="Vedanga Logo" 
-              width={32} 
-              height={32} 
-              className="rounded shadow-[0_0_0_1px_rgba(255,255,255,0.3)]"
-            />
-            <span className="text-xl font-semibold text-white">
-              वेदाङ्ग <span className="text-amber-200 font-light">ज्योतिष</span>
-            </span>
-          </Link>
+          <Logo size="md" variant="light" />
 
           <nav className="flex items-center gap-6">
             <Link 
@@ -172,18 +161,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-6 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div className="md:col-span-2">
-              <div className="flex items-center gap-2.5 mb-3">
-                <Image 
-                  src="/logo.svg" 
-                  alt="Vedanga Logo" 
-                  width={28} 
-                  height={28} 
-                  className="rounded shadow-[0_0_0_1px_rgba(255,255,255,0.3)]"
-                />
-                <span className="text-lg font-semibold text-white">
-                  वेदाङ्ग <span className="text-amber-200 font-light">ज्योतिष</span>
-                </span>
-              </div>
+              <Logo size="sm" variant="light" href="/" className="mb-3" />
               <p className="text-sm text-white/90 max-w-sm">
                 परम्परागत नेपाली ज्योतिष प्रणाली र आधुनिक प्रविधिको संगम। सरल, सटीक र विश्वसनीय।
               </p>
