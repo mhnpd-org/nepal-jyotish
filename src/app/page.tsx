@@ -7,7 +7,7 @@ import { getRecentBlogPosts } from "@internal/lib/blogs";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "नेपाली चाइना मेकर | Traditional Nepali China & Kundali Maker - Hamro Jyotish",
+  title: "नेपाली कुण्डली निर्माण | परम्परागत नेपाली चाइना मेकर - हाम्रो ज्योतिष",
   description: "नेपाल ज्योतिष - निःशुल्क परम्परागत नेपाली चाइना मेकर र कुण्डली निर्माण। Vedic Jyotish based on Surya Siddhanta (सूर्य सिद्धान्त)। Create accurate birth charts (जन्म पत्रिका), view planetary motions (ग्रह गति), calculate Vimshottari, Yogini, Tribhagi Dasha. Hamro Jyotish, Mero Jyotish - Traditional China maker for all Nepali.",
   keywords: [
     "Nepali China Maker",
