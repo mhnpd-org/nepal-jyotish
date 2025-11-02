@@ -1,6 +1,7 @@
 import Link from "next/link";
 import BlogCard from "@internal/components/blog-card";
 import Logo from "@internal/layouts/logo";
+import { getRecentBlogPosts } from "@internal/lib/blogs";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -14,7 +15,15 @@ export const metadata: Metadata = {
 };
 
 export default function LandingPage() {
-  const blogs = [
+  // Get 8 recent blog posts from MDX files
+  const blogs = getRecentBlogPosts(8);
+
+  // Fallback to static blogs if no MDX files exist yet
+  const displayBlogs = blogs.length > 0 ? blogs.map(blog => ({
+    title: blog.title,
+    excerpt: blog.excerpt,
+    href: `/blogs/${blog.slug}`,
+  })) : [
     {
       title: "नेपाली ज्योतिष परिचय",
       excerpt: "नेपाली परम्परागत ज्योतिषका आधारभूत अवधारणाहरूको छोटो मार्गदर्शिका।",
@@ -22,7 +31,7 @@ export default function LandingPage() {
     },
     {
       title: "जन्म पत्रिका बुझ्ने तरिका",
-      excerpt: "जन्मकुण्डली (जनма पत्रिका) कसरी पढ्ने र व्याख्या गर्ने — उदाहरणसहित।",
+      excerpt: "जन्मकुण्डली (जनम पत्रिका) कसरी पढ्ने र व्याख्या गर्ने — उदाहरणसहित।",
       href: "/blog/janma-patrika",
     },
     {
@@ -201,10 +210,25 @@ export default function LandingPage() {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {blogs.map((b) => (
+          {displayBlogs.map((b) => (
             <BlogCard key={b.title} title={b.title} excerpt={b.excerpt} href={b.href} />
           ))}
         </div>
+        
+        {/* View all blogs link if we have actual blog posts */}
+        {blogs.length > 0 && (
+          <div className="mt-8 text-center">
+            <Link
+              href="/blogs"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-white text-rose-700 font-medium rounded-lg hover:bg-white/95 transition-colors shadow-sm"
+            >
+              <span>सबै लेखहरू हेर्नुहोस्</span>
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
+          </div>
+        )}
       </section>
 
       {/* Footer */}

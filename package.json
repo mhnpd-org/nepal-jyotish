@@ -16,16 +16,24 @@
     "pages:deploy": "wrangler pages deploy out --project-name=vedanga-jotish"
   },
   "dependencies": {
+    "@mdx-js/loader": "^3.1.1",
+    "@mdx-js/react": "^3.1.1",
     "@mhnpd-org/panchang": "^1.0.21",
+    "@next/mdx": "^16.0.1",
     "d3": "^7",
     "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.1",
+    "gray-matter": "^4.0.3",
     "nepali-date-converter": "^3.4.0",
     "next": "15.5.3",
+    "next-mdx-remote": "^5.0.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.0.0",
     "react-select": "^5.8.0",
+    "rehype-highlight": "^7.0.2",
+    "remark": "^15.0.1",
+    "remark-gfm": "^4.0.1",
     "timezone-support": "^2.0.0"
   },
   "devDependencies": {
