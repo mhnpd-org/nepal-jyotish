@@ -8,10 +8,10 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Home - Nepal Jyotish",
-  description: "Nepal Jyotish - परम्परागत नेपाली ज्योतिष प्रणाली। Generate accurate birth charts (जन्म पत्रिका), analyze planetary positions (ग्रह स्थिति), and calculate dasha periods (दशा गणना) using traditional Nepali Vedic astrology methods.",
+  description: "Free jyotish and china maker. It can build traditional Nepal china and dash chart.",
   openGraph: {
     title: "Nepal Jyotish - Traditional Nepali Astrology",
-    description: "Free online Nepali astrology tools for birth charts, planetary positions, and dasha calculations.",
+    description: "Free jyotish and china maker. It can build traditional Nepal china and dash chart.",
     url: "https://nepaljyotish.org",
   },
 };
