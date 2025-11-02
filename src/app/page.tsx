@@ -13,8 +13,6 @@ export const metadata: Metadata = {
   },
 };
 
-export const revalidate = 0; // render at build-time (0 = no revalidation) - ensures static render
-
 export default function LandingPage() {
   const blogs = [
     {
