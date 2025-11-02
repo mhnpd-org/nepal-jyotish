@@ -44,6 +44,62 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy out --project-name=vedanga-jotish
 
+      - name: Notify IndexNow
+        if: github.ref == 'refs/heads/main'
+        run: |
+          set -euo pipefail
+          SITE_URL="https://nepaljyotish.org"
+          SITEMAP="out/sitemap.xml"
+          KEY_FILE_OUT="out/00e18545d71549439f51bea8c7424278.txt"
+          KEY_FILE_PUBLIC="public/00e18545d71549439f51bea8c7424278.txt"
+
+          if [ ! -f "$SITEMAP" ]; then
+            echo "Sitemap not found at $SITEMAP"
+            exit 0
+          fi
+
+          # Extract up to 20 URLs from sitemap
+          URLS=$(grep -o 'https://nepaljyotish.org[^<]*' "$SITEMAP" | head -20 | tr '\n' ',' | sed 's/,$//')
+          if [ -z "$URLS" ]; then
+            echo "No URLs found in sitemap"
+            exit 0
+          fi
+
+          # Build JSON array
+          URL_ARRAY="["
+          IFS=',' read -ra URL_LIST <<< "$URLS"
+          for i in "${!URL_LIST[@]}"; do
+            idx=$i
+            if [ "$idx" -gt 0 ]; then
+              URL_ARRAY+="," 
+            fi
+            URL_ARRAY+="\"${URL_LIST[$idx]}\""
+          done
+          URL_ARRAY+="]"
+
+          # Read key (prefer out/ then public/)
+          if [ -f "$KEY_FILE_OUT" ]; then
+            KEY=$(cat "$KEY_FILE_OUT")
+          elif [ -f "$KEY_FILE_PUBLIC" ]; then
+            KEY=$(cat "$KEY_FILE_PUBLIC")
+          else
+            echo "IndexNow key file not found (checked $KEY_FILE_OUT and $KEY_FILE_PUBLIC)"
+            exit 0
+          fi
+
+          echo "::add-mask::$KEY"
+
+          # Submit to IndexNow
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://api.indexnow.org/indexnow" \
+            -H "Content-Type: application/json" \
+            -d "{\"host\": \"nepaljyotish.org\", \"key\": \"$KEY\", \"keyLocation\": \"$SITE_URL/${KEY}.txt\", \"urlList\": $URL_ARRAY }")
+
+          echo "IndexNow API returned status: $HTTP_STATUS"
+          if [ "$HTTP_STATUS" -ge 400 ]; then
+            echo "IndexNow submission failed with status $HTTP_STATUS"
+            exit 1
+          fi
+
       - name: Summary
         run: |
           echo "Build complete for $GITHUB_SHA on $GITHUB_REF"
