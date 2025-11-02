@@ -122,9 +122,9 @@ export default function LandingPage() {
             <Link
               href="/astro/janma"
               className="px-6 py-3 bg-white text-rose-700 font-semibold rounded-lg hover:bg-white/95 transition-colors shadow-lg"
-              aria-label="चाइना बनाउन एप खोल्नुहोस्"
+              aria-label="कुण्डली बनाउन एप खोल्नुहोस्"
             >
-             चाइना बनाउनुहोस्
+              कुण्डली बनाउनुहोस्
             </Link>
             <Link
               href="/blogs"
@@ -159,7 +159,7 @@ export default function LandingPage() {
             मुख्य सुविधाहरू
           </h2>
           <p className="text-3xl font-bold text-gray-900 mb-8">
-            Traditional China & Vedic Jyotish Features
+            परम्परागत कुण्डली र वैदिक ज्योतिष विशेषताहरू
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <article className="bg-white/70 backdrop-blur rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
