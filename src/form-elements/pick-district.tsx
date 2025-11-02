@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Controller, Control, FieldValues, Path } from "react-hook-form";
 import Select, { SingleValue, StylesConfig, GroupBase, CSSObjectWithLabel } from "react-select";
 import type { ControlProps, OptionProps } from "react-select";
@@ -45,6 +45,12 @@ export function PickDistrict<TFieldValues extends FieldValues>(props: PickDistri
 	} = props;
 
 	const kathmandu = useMemo(() => districtOfNepal.find(d => d.district_en === "Kathmandu"), []);
+
+	// Portal target must be set client-side to avoid SSR/CSR differences
+	const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
+	useEffect(() => {
+		setPortalTarget(document.body);
+	}, []);
 
 	// Map districts to react-select options
 	const options = useMemo(() => districtOfNepal.map(d => ({
@@ -105,7 +111,7 @@ export function PickDistrict<TFieldValues extends FieldValues>(props: PickDistri
 								instanceId={`${name}-district-select`}
 								isDisabled={disabled}
 								options={options}
-								menuPortalTarget={typeof window !== 'undefined' ? document.body : undefined}
+									menuPortalTarget={portalTarget}
 								menuPosition="absolute"
 								placeholder={searchPlaceholder}
 								defaultValue={options.find(o => o.value === (kathmandu?.district_en))}
