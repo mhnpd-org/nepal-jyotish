@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { astroTranslate } from "@internal/lib/astro-translator";
 import { BhavaChart, LagnaChart, VargasChart } from "@mhnpd-org/panchang";
 import { translateSanskritSafe } from "@internal/lib/devanagari";
 
@@ -285,7 +284,7 @@ export const NorthDrekkanaChart: React.FC<NorthDrekkanaChartProps> = ({
         className="chart-title"
         style={{ textShadow: "0 2px 4px rgba(0,0,0,0.1)" }}
       >
-        {astroTranslate(title.toLowerCase()) || title}
+        {title}
       </text>
     </svg>
   );

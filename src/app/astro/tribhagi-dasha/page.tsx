@@ -3,7 +3,6 @@ import React from "react";
 import { getJanmaDetails } from "@internal/utils/get-form-details";
 import { getKundali, Kundali, TribhagiDasha } from "@mhnpd-org/panchang";
 import { translateSanskritSafe } from "@internal/lib/devanagari";
-import { astroTranslate } from "@internal/lib/astro-translator";
 
 interface DashaItemProps { item: TribhagiDasha; index: number; }
 
@@ -16,12 +15,12 @@ const AntardashaTable: React.FC<{ data: NonNullable<TribhagiDasha['antardashas']
           <thead className="bg-gradient-to-r from-rose-50 to-pink-50">
             <tr className="text-rose-700">
               <th className="border border-rose-200 px-2 py-1 font-semibold">#</th>
-              <th className="border border-rose-200 px-2 py-1 font-semibold">{astroTranslate("antardasha") || "अन्तर्दशा"}</th>
-              <th className="border border-rose-200 px-2 py-1 font-semibold whitespace-nowrap">{astroTranslate("अवधि (BS)")}</th>
-              <th className="border border-rose-200 px-2 py-1 font-semibold">{astroTranslate("वर्ष")}</th>
-              <th className="border border-rose-200 px-2 py-1 font-semibold">{astroTranslate("मास")}</th>
-              <th className="border border-rose-200 px-2 py-1 font-semibold">{astroTranslate("दिन")}</th>
-              <th className="border border-rose-200 px-2 py-1 font-semibold">{astroTranslate("योग")}</th>
+              <th className="border border-rose-200 px-2 py-1 font-semibold">अन्तर्दशा</th>
+              <th className="border border-rose-200 px-2 py-1 font-semibold whitespace-nowrap">अवधि (BS)</th>
+              <th className="border border-rose-200 px-2 py-1 font-semibold">वर्ष</th>
+              <th className="border border-rose-200 px-2 py-1 font-semibold">मास</th>
+              <th className="border border-rose-200 px-2 py-1 font-semibold">दिन</th>
+              <th className="border border-rose-200 px-2 py-1 font-semibold">योग</th>
             </tr>
           </thead>
           <tbody>
@@ -43,7 +42,7 @@ const AntardashaTable: React.FC<{ data: NonNullable<TribhagiDasha['antardashas']
         </table>
       </div>
       <div className="px-3 py-1 text-[10px] sm:text-[11px] text-gray-500 border-t border-rose-200 bg-rose-50/60 flex items-center gap-2">
-        <span className="inline-block h-2 w-2 rounded-full bg-rose-300" /> {astroTranslate("Current")} {astroTranslate("antardasha") || "अन्तर्दशा"}
+        <span className="inline-block h-2 w-2 rounded-full bg-rose-300" /> वर्तमान अन्तर्दशा
       </div>
     </div>
   );
@@ -66,7 +65,7 @@ const DashaItem: React.FC<DashaItemProps> = ({ item, index }) => {
       <div className="flex flex-col gap-1 text-[15px] sm:text-base leading-relaxed">
         <div className="flex flex-wrap items-baseline gap-2">
           <h3 className="text-base sm:text-lg font-semibold text-rose-700 tracking-wide">
-            {translateSanskritSafe(item.dashaLord)} {astroTranslate("Tribhagi")} {astroTranslate("mahadasha")}
+            {translateSanskritSafe(item.dashaLord)} त्रिभागि महादशा
           </h3>
           <span className="text-xs sm:text-sm font-medium text-gray-600 bg-rose-100/70 px-2 py-0.5 rounded">
             {translateSanskritSafe(item.startDateInBs)} — {translateSanskritSafe(item.endDateInBs)}
@@ -79,15 +78,15 @@ const DashaItem: React.FC<DashaItemProps> = ({ item, index }) => {
               aria-expanded={open}
             >
               <span className={`transform transition-transform ${open ? 'rotate-90' : ''}`} aria-hidden="true">▶</span>
-              {astroTranslate("antardasha") || "अन्तर्दशा"}
+              अन्तर्दशा
             </button>
           )}
         </div>
         <div className="text-sm text-gray-700 flex flex-wrap gap-x-6 gap-y-1">
-          <span><b>{astroTranslate("वर्ष")}</b>: {translateSanskritSafe(item.remainingYears.toFixed(2))}</span>
-          <span><b>{astroTranslate("मास")}</b>: {translateSanskritSafe(item.remainingMonths.toString())}</span>
-          <span><b>{astroTranslate("दिन")}</b>: {translateSanskritSafe(item.remainingDays.toString())}</span>
-          <span><b>{astroTranslate("योग")}</b>: {translateSanskritSafe(item.cumulativeYears.toFixed(2))}</span>
+          <span><b>वर्ष</b>: {translateSanskritSafe(item.remainingYears.toFixed(2))}</span>
+          <span><b>मास</b>: {translateSanskritSafe(item.remainingMonths.toString())}</span>
+          <span><b>दिन</b>: {translateSanskritSafe(item.remainingDays.toString())}</span>
+          <span><b>योग</b>: {translateSanskritSafe(item.cumulativeYears.toFixed(2))}</span>
         </div>
         <div className="text-xs sm:text-sm italic text-gray-500">
           AD: {item.startDateInAd.toDateString()} – {item.endDateInAd.toDateString()}
@@ -135,7 +134,7 @@ export default function TribhagiDashaVerticalPage() {
           {translateSanskritSafe("त्रिभागि महादशा क्रम")}
         </h1>
         <p className="text-sm text-gray-600 leading-relaxed">
-          {astroTranslate("Tribhagi")} {astroTranslate("mahadasha")} {astroTranslate("overview") || "क्रम र यसको अन्तर्दशा विवरण"}
+          त्रिभागि महादशा क्रम र यसको अन्तर्दशा विवरण
         </p>
       </header>
       <ol className="relative divide-y divide-rose-100/60 border border-rose-200/40 rounded-lg bg-rose-50/20 dark:bg-rose-50/10 p-2 sm:p-3">
@@ -144,7 +143,7 @@ export default function TribhagiDashaVerticalPage() {
         ))}
       </ol>
       <p className="text-[11px] sm:text-xs text-gray-500 italic pt-1">
-        {astroTranslate("Current")} {astroTranslate("antardasha") || "अन्तर्दशा"} {astroTranslate("highlighted") || "हल्का रङ्गमा देखाइएको छ"}.
+        वर्तमान अन्तर्दशा हल्का रङ्गमा देखाइएको छ.
       </p>
     </div>
   );
