@@ -8,9 +8,9 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "नेपाली कुण्डली निर्माण | परम्परागत नेपाली चाइना मेकर - हाम्रो ज्योतिष",
-  description: "नेपाल ज्योतिष - निःशुल्क परम्परागत नेपाली चाइना मेकर र कुण्डली निर्माण। Vedic Jyotish based on Surya Siddhanta (सूर्य सिद्धान्त)। Create accurate birth charts (जन्म पत्रिका), view planetary motions (ग्रह गति), calculate Vimshottari, Yogini, Tribhagi Dasha. Hamro Jyotish, Mero Jyotish - Traditional China maker for all Nepali.",
+  description: "नेपाल ज्योतिष - निःशुल्क परम्परागत नेपाली चाइना मेकर र कुण्डली निर्माण। Vedic Jyotish based on Surya Siddhanta (सूर्य सिद्धान्त)। Create accurate birth charts (जन्म पत्रिका), view planetary motions (ग्रह गति), calculate Vimshottari, Yogini, Tribhagi Dasha. Hamro Jyotish, Mero Jyotish - Traditional kundali maker for all Nepali.",
   keywords: [
-    "Nepali China Maker",
+    "Nepali kundali Maker",
     "नेपाली चाइना मेकर",
     "Traditional Kundali",
     "परम्परागत कुण्डली",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     "सूर्य सिद्धान्त",
     "Vedic Jyotish",
     "वैदिक ज्योतिष",
-    "Free China Maker",
+    "Free kundali Maker",
     "निःशुल्क चाइना",
     "Nepali Jyotish Online",
     "Traditional Astrology Nepal",
@@ -32,8 +32,8 @@ export const metadata: Metadata = {
     "ग्रह गति"
   ],
   openGraph: {
-    title: "नेपाली चाइना मेकर | Traditional Nepali China & Kundali - Hamro Jyotish",
-    description: "Free Traditional Nepali China Maker based on Vedic Jyotish and Surya Siddhanta. Create birth charts, view planetary motions. Hamro Jyotish, Mero Jyotish.",
+    title: "नेपाली कुण्डली निर्माण | Traditional Nepali Kundali",
+    description: "Free Traditional Nepali Kundali Maker based on Vedic Jyotish and Surya Siddhanta. Create birth charts, view planetary motions. Hamro Jyotish, Mero Jyotish.",
     url: "https://nepaljyotish.org",
     type: "website",
     images: [
@@ -41,14 +41,14 @@ export const metadata: Metadata = {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Nepal Jyotish - Traditional Nepali China Maker',
+        alt: 'नेपाली कुण्डली निर्माण | Traditional Nepali Kundali & Kundali',
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "नेपाली चाइना मेकर | Traditional China & Kundali",
-    description: "Free Traditional Nepali China Maker based on Vedic Jyotish and Surya Siddhanta",
+    title: "नेपाली कुण्डली निर्माण | Traditional Nepali Kundali",
+    description: "Free Traditional Nepali Kundali Maker based on Vedic Jyotish and Surya Siddhanta",
   },
   alternates: {
     canonical: "/",
@@ -141,7 +141,7 @@ export default function LandingPage() {
             <div className="w-[360px] h-[350px] bg-white/3 backdrop-blur rounded-2xl p-4 shadow-2xl flex items-center justify-center">
               <Image
                 src="/kundali.png"
-                alt="Traditional Nepali China (Kundali) Chart - Vedic Astrology"
+                alt="Traditional Nepali kundali (Kundali) Chart - Vedic Astrology"
                 width={320}
                 height={180}
                 className="object-contain"
@@ -171,7 +171,7 @@ export default function LandingPage() {
               <h3 className="text-xl font-bold text-gray-900 mb-3">परम्परागत चाइना (Janma Patrika)</h3>
               <p className="text-gray-700 leading-relaxed mb-4">
                 सूर्य सिद्धान्त (Surya Siddhanta) आधारित सटीक खगोलीय गणनाबाट पूर्ण जन्म कुण्डली तुरुन्तै तयार गर्नुहोस्। 
-                तपाईंको जन्म मिति, समय र स्थानको आधारमा Traditional Nepali China Chart।
+                तपाईंको जन्म मिति, समय र स्थानको आधारमा Traditional Nepali kundali Chart।
               </p>
               <ul className="space-y-2 text-sm text-gray-600">
                 <li className="flex items-start gap-2">

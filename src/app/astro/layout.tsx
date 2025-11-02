@@ -5,11 +5,11 @@ import Logo from '@internal/layouts/logo';
 import { SITE_CONFIG, PAGE_METADATA, getBreadcrumbSchema } from '@internal/lib/seo-config';
 
 export const metadata: Metadata = {
-  title: "Nepali Jyotish Tools - Traditional China & Kundali Maker",
-  description: "Access all traditional Nepali Jyotish tools - China Maker (जन्म पत्रिका), Varga Charts, Planetary Positions, Vimshottari, Yogini, Tribhagi Dasha calculations based on Vedic Jyotish and Surya Siddhanta.",
+  title: "Nepali Jyotish Tools - Traditional kundali & Kundali Maker",
+  description: "Access all traditional Nepali Jyotish tools - kundali Maker (जन्म पत्रिका), Varga Charts, Planetary Positions, Vimshottari, Yogini, Tribhagi Dasha calculations based on Vedic Jyotish and Surya Siddhanta.",
   keywords: PAGE_METADATA.home.keywords,
   openGraph: {
-    title: "Nepali Jyotish Tools - Traditional China & Kundali Maker",
+    title: "Nepali Jyotish Tools - Traditional kundali & Kundali Maker",
     description: "Traditional Nepali Jyotish tools based on Vedic Jyotish and Surya Siddhanta",
     url: `${SITE_CONFIG.url}/astro`,
   },

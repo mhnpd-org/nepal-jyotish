@@ -1,14 +1,14 @@
 # Nepal Jyotish - नेपाल ज्योतिष
 
-Traditional Nepali China Maker & Kundali Platform based on Vedic Jyotish and Surya Siddhanta.
+Traditional Nepali kundali Maker & Kundali Platform based on Vedic Jyotish and Surya Siddhanta.
 
 ## 🌟 Overview
 
-Nepal Jyotish is a free, comprehensive online platform for creating traditional Nepali birth charts (China/चाइना) and Kundali. Built with modern web technologies while honoring ancient Vedic astrological principles from Surya Siddhanta.
+Nepal Jyotish is a free, comprehensive online platform for creating traditional Nepali birth charts (kundali/चाइना) and Kundali. Built with modern web technologies while honoring ancient Vedic astrological principles from Surya Siddhanta.
 
 ### Key Features
 
-- **Traditional China Maker** (परम्परागत चाइना) - Create authentic Nepali birth charts
+- **Traditional kundali Maker** (परम्परागत चाइना) - Create authentic Nepali birth charts
 - **Complete Kundali** - Full birth chart with all divisional charts (D1-D60)
 - **Planetary Positions** - Real-time graha sthiti based on Surya Siddhanta
 - **Dasha Systems** - Vimshottari, Yogini, and Tribhagi Dasha calculations
@@ -47,8 +47,8 @@ This project is fully optimized for search engines with comprehensive SEO best p
 ### Target Keywords
 
 - Nepali Jyotish, Nepal Jyotish
-- China, Traditional, Kundali
-- Nepali China Maker
+- kundali, Traditional, Kundali
+- Nepali kundali Maker
 - Vedic Jyotish, Surya Siddhanta
 - Hamro Jyotish, Mero Jyotish
 - And 70+ more targeted keywords
@@ -76,7 +76,7 @@ nep-astro/
 │   ├── app/                    # Next.js App Router pages
 │   │   ├── astro/             # Jyotish tools
 │   │   │   ├── janma/         # Birth chart input
-│   │   │   ├── traditional/   # Traditional China view
+│   │   │   ├── traditional/   # Traditional kundali view
 │   │   │   ├── charts/        # Varga charts (D1-D60)
 │   │   │   ├── planet-position/ # Planetary positions
 │   │   │   ├── vimshottari-dasha/
@@ -140,7 +140,7 @@ See [SEO-IMPLEMENTATION.md](./SEO-IMPLEMENTATION.md) for detailed instructions.
 
 ### Blog Topics
 
-- Nepal ma China kaise banaye
+- Nepal ma kundali kaise banaye
 - Vimshottari Dasha calculation methods
 - Nakshatra analysis
 - Planetary position effects
@@ -169,4 +169,4 @@ This is a community project aimed at preserving and promoting traditional Nepali
 ---
 
 **नेपाली ज्योतिष - परम्परागत चाइना मेकर**  
-Traditional Nepali China Maker & Kundali for Everyone
+Traditional Nepali kundali Maker & Kundali for Everyone

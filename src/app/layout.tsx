@@ -30,7 +30,7 @@ const notoSerifDev = Noto_Serif_Devanagari({
 
 export const metadata: Metadata = {
   title: {
-    default: "नेपाली ज्योतिष | Nepal Jyotish - Traditional Nepali China Maker & Kundali | Vedic Astrology",
+    default: "नेपाली ज्योतिष | Nepal Jyotish - Traditional Nepali kundali Maker & Kundali | Vedic Astrology",
     template: "%s | Nepal Jyotish - नेपाली ज्योतिष",
   },
   description: "Nepal Jyotish (नेपाल ज्योतिष) - परम्परागत नेपाली चाइना मेकर र कुण्डली निर्माण। Free online Nepali astrology tools based on Vedic Jyotish and Surya Siddhanta. Create traditional birth charts (जन्म पत्रिका), view planetary positions (ग्रह स्थिति), calculate Vimshottari, Yogini, Tribhagi Dasha. Hamro Jyotish, Mero Jyotish - सबैको लागि निःशुल्क ज्योतिष सेवा।",
@@ -49,10 +49,9 @@ export const metadata: Metadata = {
     // Primary Keywords (English)
     "Nepali Jyotish",
     "Nepal Jyotish",
-    "China",
-    "Traditional",
     "Kundali",
-    "Nepali China Maker",
+    "Traditional",
+    "Nepali Kundali Maker",
     "Vedic Jyotish",
     "Surya Siddhanta",
     "Suraya Siddanta",
@@ -83,8 +82,8 @@ export const metadata: Metadata = {
     "Nepali Horoscope",
     "Free Kundali",
     "Online Kundali Maker",
-    "China Chart",
-    "Traditional China",
+    "Kundali Chart",
+    "Traditional kundali",
     
     // Secondary Keywords (Nepali)
     "जन्म पत्रिका",
@@ -155,7 +154,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "नेपाली ज्योतिष | Nepal Jyotish - Traditional China Maker & Kundali",
+    title: "नेपाली ज्योतिष | Nepal Jyotish - Traditional kundali Maker & Kundali",
     description: "परम्परागत नेपाली चाइना मेकर र कुण्डली निर्माण। Free Vedic astrology tools based on Surya Siddhanta. Create birth charts, view planetary positions, calculate Dasha. Hamro Jyotish, Mero Jyotish.",
     url: "https://nepaljyotish.org",
     siteName: "Nepal Jyotish - नेपाली ज्योतिष",
@@ -166,14 +165,14 @@ export const metadata: Metadata = {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Nepal Jyotish - Traditional Nepali China Maker and Kundali',
+        alt: 'Nepal Jyotish - Traditional Nepali kundali Maker and Kundali',
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "नेपाली ज्योतिष | Nepal Jyotish - Traditional China & Kundali Maker",
-    description: "Free Traditional Nepali China Maker & Kundali based on Vedic Jyotish and Surya Siddhanta. Hamro Jyotish, Mero Jyotish.",
+    title: "नेपाली ज्योतिष | Nepal Jyotish - Traditional kundali & Kundali Maker",
+    description: "Free Traditional Nepali kundali Maker & Kundali based on Vedic Jyotish and Surya Siddhanta. Hamro Jyotish, Mero Jyotish.",
     images: ['/og-image.png'],
   },
   robots: {
@@ -222,7 +221,7 @@ export default function RootLayout({
               "name": "Nepal Jyotish",
               "alternateName": ["नेपाल ज्योतिष", "Nepali Jyotish", "Hamro Jyotish", "Mero Jyotish"],
               "url": "https://nepaljyotish.org",
-              "description": "Traditional Nepali China Maker and Kundali based on Vedic Jyotish and Surya Siddhanta",
+              "description": "Traditional Nepali kundali Maker and Kundali based on Vedic Jyotish and Surya Siddhanta",
               "inLanguage": ["ne", "en"],
               "potentialAction": {
                 "@type": "SearchAction",
@@ -244,7 +243,7 @@ export default function RootLayout({
               "name": "Nepal Jyotish",
               "url": "https://nepaljyotish.org",
               "logo": "https://nepaljyotish.org/favicon-192.png",
-              "description": "Traditional Nepali Astrology Platform - China Maker, Kundali Generator based on Vedic Jyotish and Surya Siddhanta",
+              "description": "Traditional Nepali Astrology Platform - kundali Maker, Kundali Generator based on Vedic Jyotish and Surya Siddhanta",
               "sameAs": [
                 // Add your social media URLs when available
               ],
@@ -262,7 +261,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "SoftwareApplication",
-              "name": "Nepal Jyotish - Nepali China Maker",
+              "name": "Nepal Jyotish - Nepali kundali Maker",
               "applicationCategory": "LifestyleApplication",
               "operatingSystem": "Web Browser",
               "offers": {
@@ -270,9 +269,9 @@ export default function RootLayout({
                 "price": "0",
                 "priceCurrency": "NPR"
               },
-              "description": "Free Traditional Nepali China Maker and Kundali Generator based on Vedic Jyotish and Surya Siddhanta",
+              "description": "Free Traditional Nepali kundali Maker and Kundali Generator based on Vedic Jyotish and Surya Siddhanta",
               "featureList": [
-                "Traditional Nepali China (Birth Chart)",
+                "Traditional Nepali kundali (Birth Chart)",
                 "Kundali Generation",
                 "Planetary Position Calculation",
                 "Vimshottari Dasha",

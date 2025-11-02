@@ -46,7 +46,7 @@ function writeSitemap(entries) {
 }
 
 function writeRobots() {
-  const content = `# Nepal Jyotish - Traditional Nepali China Maker & Kundali
+  const content = `# Nepal Jyotish - Traditional Nepali kundali Maker & Kundali
 # Robots.txt for https://nepaljyotish.org
 
 User-agent: *

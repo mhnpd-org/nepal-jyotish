@@ -7,7 +7,7 @@ export const SITE_CONFIG = {
   name: "Nepal Jyotish",
   nameNepali: "नेपाल ज्योतिष",
   url: "https://nepaljyotish.org",
-  description: "Traditional Nepali China Maker and Kundali based on Vedic Jyotish and Surya Siddhanta",
+  description: "Traditional Nepali kundali Maker and Kundali based on Vedic Jyotish and Surya Siddhanta",
   descriptionNepali: "परम्परागत नेपाली चाइना मेकर र कुण्डली निर्माण - वैदिक ज्योतिष र सूर्य सिद्धान्तमा आधारित",
   locale: "ne_NP",
   alternateNames: [
@@ -15,7 +15,7 @@ export const SITE_CONFIG = {
     "Mero Jyotish",
     "हाम्रो ज्योतिष",
     "मेरो ज्योतिष",
-    "Nepali China Maker",
+    "Nepali kundali Maker",
     "नेपाली चाइना मेकर"
   ]
 };
@@ -25,10 +25,10 @@ export const PRIMARY_KEYWORDS = [
   // English
   "Nepali Jyotish",
   "Nepal Jyotish",
-  "China",
+  "kundali",
   "Traditional",
   "Kundali",
-  "Nepali China Maker",
+  "Nepali kundali Maker",
   "Vedic Jyotish",
   "Surya Siddhanta",
   "Suraya Siddanta",
@@ -66,8 +66,8 @@ export const SECONDARY_KEYWORDS = [
   "परम्परागत ज्योतिष",
   
   // Chart Types
-  "China Chart",
-  "Traditional China",
+  "kundali Chart",
+  "Traditional kundali",
   "Free Kundali",
   "Online Kundali Maker",
   
@@ -126,32 +126,32 @@ export const ALL_KEYWORDS = [...PRIMARY_KEYWORDS, ...SECONDARY_KEYWORDS];
 // Page-specific metadata templates
 export const PAGE_METADATA = {
   home: {
-    titleTemplate: "नेपाली चाइना मेकर | Traditional Nepali China & Kundali Maker - Hamro Jyotish",
-    description: "नेपाल ज्योतिष - निःशुल्क परम्परागत नेपाली चाइना मेकर र कुण्डली निर्माण। Vedic Jyotish based on Surya Siddhanta (सूर्य सिद्धान्त)। Create accurate birth charts (जन्म पत्रिका), view planetary motions (ग्रह गति), calculate Vimshottari, Yogini, Tribhagi Dasha. Hamro Jyotish, Mero Jyotish - Traditional China maker for all Nepali.",
+    titleTemplate: "नेपाली चाइना मेकर | Traditional Nepali kundali & Kundali Maker - Hamro Jyotish",
+    description: "नेपाल ज्योतिष - निःशुल्क परम्परागत नेपाली चाइना मेकर र कुण्डली निर्माण। Vedic Jyotish based on Surya Siddhanta (सूर्य सिद्धान्त)। Create accurate birth charts (जन्म पत्रिका), view planetary motions (ग्रह गति), calculate Vimshottari, Yogini, Tribhagi Dasha. Hamro Jyotish, Mero Jyotish - Traditional kundali maker for all Nepali.",
     keywords: PRIMARY_KEYWORDS
   },
   
   janma: {
-    titleTemplate: "जन्म पत्रिका | Janma Patrika - Traditional Nepali China Maker",
-    description: "Create traditional Nepali China (जन्म पत्रिका) based on Vedic Jyotish and Surya Siddhanta. Free online Kundali maker with accurate planetary positions, Rashi chart, Navamsa, and all divisional charts (D1-D60). Hamro Jyotish birth chart generator.",
+    titleTemplate: "जन्म पत्रिका | Janma Patrika - Traditional Nepali kundali Maker",
+    description: "Create traditional Nepali kundali (जन्म पत्रिका) based on Vedic Jyotish and Surya Siddhanta. Free online Kundali maker with accurate planetary positions, Rashi chart, Navamsa, and all divisional charts (D1-D60). Hamro Jyotish birth chart generator.",
     keywords: [
       "Janma Patrika",
       "जन्म पत्रिका",
       "Birth Chart",
-      "Nepali China Maker",
-      "Traditional China",
+      "Nepali kundali Maker",
+      "Traditional kundali",
       "Free Kundali",
       ...PRIMARY_KEYWORDS
     ]
   },
   
   traditional: {
-    titleTemplate: "परम्परागत चाइना | Traditional China Chart - Nepal Jyotish",
-    description: "Traditional Nepali China chart (परम्परागत चाइना) based on ancient Vedic Jyotish principles and Surya Siddhanta calculations. View birth chart in traditional format with Ghara (houses) and Graha (planets) positions.",
+    titleTemplate: "परम्परागत चाइना | Traditional kundali Chart - Nepal Jyotish",
+    description: "Traditional Nepali kundali chart (परम्परागत चाइना) based on ancient Vedic Jyotish principles and Surya Siddhanta calculations. View birth chart in traditional format with Ghara (houses) and Graha (planets) positions.",
     keywords: [
-      "Traditional China",
+      "Traditional kundali",
       "परम्परागत चाइना",
-      "China Chart",
+      "kundali Chart",
       "Traditional Kundali",
       "Ghara",
       "घर",
@@ -227,7 +227,7 @@ export const PAGE_METADATA = {
   
   blogs: {
     titleTemplate: "ज्योतिष लेखहरू | Jyotish Articles - Nepal Jyotish",
-    description: "Learn about Nepali Jyotish through detailed articles in Nepali language. Topics include Nakshatra, Rashi, Dasha systems, traditional China reading, and Vedic astrology principles based on Surya Siddhanta.",
+    description: "Learn about Nepali Jyotish through detailed articles in Nepali language. Topics include Nakshatra, Rashi, Dasha systems, traditional kundali reading, and Vedic astrology principles based on Surya Siddhanta.",
     keywords: [
       "Jyotish Articles",
       "ज्योतिष लेखहरू",
@@ -276,7 +276,7 @@ export const getWebSiteSchema = () => ({
 export const getSoftwareApplicationSchema = () => ({
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  "name": `${SITE_CONFIG.name} - Nepali China Maker`,
+  "name": `${SITE_CONFIG.name} - Nepali kundali Maker`,
   "applicationCategory": "LifestyleApplication",
   "operatingSystem": "Web Browser",
   "offers": {
@@ -284,9 +284,9 @@ export const getSoftwareApplicationSchema = () => ({
     "price": "0",
     "priceCurrency": "NPR"
   },
-  "description": "Free Traditional Nepali China Maker and Kundali Generator based on Vedic Jyotish and Surya Siddhanta",
+  "description": "Free Traditional Nepali kundali Maker and Kundali Generator based on Vedic Jyotish and Surya Siddhanta",
   "featureList": [
-    "Traditional Nepali China (Birth Chart)",
+    "Traditional Nepali kundali (Birth Chart)",
     "Kundali Generation",
     "Planetary Position Calculation",
     "Planetary Motion Tracking",
