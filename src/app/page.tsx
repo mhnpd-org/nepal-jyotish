@@ -7,12 +7,51 @@ import { getRecentBlogPosts } from "@internal/lib/blogs";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Home - Nepal Jyotish",
-  description: "Free jyotish and china maker. It can build traditional Nepal china and dash chart.",
+  title: "नेपाली चाइना मेकर | Traditional Nepali China & Kundali Maker - Hamro Jyotish",
+  description: "नेपाल ज्योतिष - निःशुल्क परम्परागत नेपाली चाइना मेकर र कुण्डली निर्माण। Vedic Jyotish based on Surya Siddhanta (सूर्य सिद्धान्त)। Create accurate birth charts (जन्म पत्रिका), view planetary motions (ग्रह गति), calculate Vimshottari, Yogini, Tribhagi Dasha. Hamro Jyotish, Mero Jyotish - Traditional China maker for all Nepali.",
+  keywords: [
+    "Nepali China Maker",
+    "नेपाली चाइना मेकर",
+    "Traditional Kundali",
+    "परम्परागत कुण्डली",
+    "Hamro Jyotish",
+    "Mero Jyotish",
+    "हाम्रो ज्योतिष",
+    "मेरो ज्योतिष",
+    "Surya Siddhanta",
+    "सूर्य सिद्धान्त",
+    "Vedic Jyotish",
+    "वैदिक ज्योतिष",
+    "Free China Maker",
+    "निःशुल्क चाइना",
+    "Nepali Jyotish Online",
+    "Traditional Astrology Nepal",
+    "जन्म पत्रिका",
+    "Janma Patrika",
+    "Planetary Motion",
+    "ग्रह गति"
+  ],
   openGraph: {
-    title: "Nepal Jyotish - Traditional Nepali Astrology",
-    description: "Free jyotish and china maker. It can build traditional Nepal china and dash chart.",
+    title: "नेपाली चाइना मेकर | Traditional Nepali China & Kundali - Hamro Jyotish",
+    description: "Free Traditional Nepali China Maker based on Vedic Jyotish and Surya Siddhanta. Create birth charts, view planetary motions. Hamro Jyotish, Mero Jyotish.",
     url: "https://nepaljyotish.org",
+    type: "website",
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Nepal Jyotish - Traditional Nepali China Maker',
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "नेपाली चाइना मेकर | Traditional China & Kundali",
+    description: "Free Traditional Nepali China Maker based on Vedic Jyotish and Surya Siddhanta",
+  },
+  alternates: {
+    canonical: "/",
   },
 };
 
@@ -28,16 +67,18 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Logo size="md" variant="light" />
 
-          <nav className="flex items-center gap-6">
+          <nav className="flex items-center gap-6" aria-label="Main navigation">
             <Link 
               href="/blogs" 
               className="text-sm text-white/90 hover:text-white transition-colors"
+              aria-label="ज्योतिष लेखहरू पढ्नुहोस्"
             >
               लेखहरू
             </Link>
             <Link 
               href="/astro/janma" 
               className="px-4 py-2 bg-white text-rose-700 text-sm font-medium rounded-lg hover:bg-white/95 transition-colors shadow-sm"
+              aria-label="नेपाली चाइना मेकर एप खोल्नुहोस्"
             >
               एप खोल्नुहोस्
             </Link>
@@ -46,7 +87,7 @@ export default function LandingPage() {
       </header>
 
       {/* Hero section */}
-      <section className="max-w-7xl mx-auto px-6 pt-20 pb-24 relative overflow-hidden">
+      <section className="max-w-7xl mx-auto px-6 pt-20 pb-24 relative overflow-hidden" aria-labelledby="hero-heading">
         {/* Decorative background shapes */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
           {/* Large circle top right */}
@@ -69,23 +110,29 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto relative z-10 flex items-center gap-12">
           {/* Left column: text */}
           <div className="max-w-3xl">
-          <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight tracking-tight drop-shadow-lg">
-            नेपाली ज्योतिष<br />
-            <span className="text-amber-200">सरल र स्पष्ट</span>
+          <h1 id="hero-heading" className="text-5xl md:text-6xl font-bold text-white leading-tight tracking-tight drop-shadow-lg">
+            नेपाली चाइना मेकर<br />
+            <span className="text-amber-200">परम्परागत कुण्डली निर्माण</span>
           </h1>
+          <h2 className="mt-4 text-2xl md:text-3xl font-semibold text-white/95 drop-shadow">
+            Hamro Jyotish, Mero Jyotish
+          </h2>
           <p className="mt-6 text-xl text-white/95 leading-relaxed max-w-2xl drop-shadow">
-            परम्परागत ज्योतिष प्रणाली आधुनिक तरिकाले। जन्मपत्रिका निर्माण, ग्रह स्थिति विश्लेषण, र दशा गणना — सबै एकै ठाउँमा।
+            वैदिक ज्योतिष र सूर्य सिद्धान्त (Surya Siddhanta) मा आधारित निःशुल्क परम्परागत नेपाली चाइना मेकर। 
+            जन्म पत्रिका निर्माण, ग्रह गति अवलोकन, र दशा गणना — सबै एकै ठाउँमा।
           </p>
           <div className="mt-10 flex items-center gap-4">
             <Link
               href="/astro/janma"
               className="px-6 py-3 bg-white text-rose-700 font-semibold rounded-lg hover:bg-white/95 transition-colors shadow-lg"
+              aria-label="चाइना बनाउन एप खोल्नुहोस्"
             >
-             एप खोल्नुहोस्
+             चाइना बनाउनुहोस्
             </Link>
             <Link
               href="/blogs"
               className="px-6 py-3 text-white font-medium hover:text-amber-200 transition-colors"
+              aria-label="ज्योतिष लेखहरू पढ्नुहोस्"
             >
               लेखहरू पढ्नुहोस् →
             </Link>
@@ -97,11 +144,11 @@ export default function LandingPage() {
             <div className="w-[360px] h-[350px] bg-white/3 backdrop-blur rounded-2xl p-4 shadow-2xl flex items-center justify-center">
               <Image
                 src="/kundali.png"
-                alt="Decorative astrological emblem"
+                alt="Traditional Nepali China (Kundali) Chart - Vedic Astrology"
                 width={320}
                 height={180}
                 className="object-contain"
-                priority={false}
+                priority={true}
               />
             </div>
           </div>
@@ -109,89 +156,93 @@ export default function LandingPage() {
       </section>
 
       {/* Features section */}
-      <section className="bg-[rgba(255,255,250,0.92)] backdrop-blur">
+      <section className="bg-[rgba(255,255,250,0.92)] backdrop-blur" aria-labelledby="features-heading">
         <div className="max-w-7xl mx-auto px-6 py-20">
-          <h2 className="text-sm font-semibold text-rose-700 uppercase tracking-wider mb-8">
+          <h2 id="features-heading" className="text-sm font-semibold text-rose-700 uppercase tracking-wider mb-2">
             मुख्य सुविधाहरू
           </h2>
+          <p className="text-3xl font-bold text-gray-900 mb-8">
+            Traditional China & Vedic Jyotish Features
+          </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white/70 backdrop-blur rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+            <article className="bg-white/70 backdrop-blur rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
               <div className="w-12 h-12 bg-gradient-to-br from-rose-600 to-orange-500 rounded-lg flex items-center justify-center mb-4 shadow-sm">
                 <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">जन्म पत्रिका</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">परम्परागत चाइना (Janma Patrika)</h3>
               <p className="text-gray-700 leading-relaxed mb-4">
-                तपाईंको जन्म मिति, समय र स्थानको आधारमा सटीक खगोलीय गणनाबाट पूर्ण जन्मकुण्डली तुरुन्तै तयार गर्नुहोस्।
+                सूर्य सिद्धान्त (Surya Siddhanta) आधारित सटीक खगोलीय गणनाबाट पूर्ण जन्म कुण्डली तुरुन्तै तयार गर्नुहोस्। 
+                तपाईंको जन्म मिति, समय र स्थानको आधारमा Traditional Nepali China Chart।
               </p>
               <ul className="space-y-2 text-sm text-gray-600">
                 <li className="flex items-start gap-2">
                   <span className="text-rose-600 mt-0.5">•</span>
-                  <span>राशि चक्र र नवांश कुण्डली</span>
+                  <span>राशि चक्र र नवांश कुण्डली (Rashi & Navamsa)</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-rose-600 mt-0.5">•</span>
-                  <span>सभै वर्ग चार्टहरू (D1-D60)</span>
+                  <span>सभै वर्ग चार्टहरू (D1-D60 Divisional Charts)</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-rose-600 mt-0.5">•</span>
-                  <span>ग्रह योग र दोष विश्लेषण</span>
+                  <span>ग्रह योग र दोष विश्लेषण (Yoga & Dosha Analysis)</span>
                 </li>
               </ul>
-            </div>
+            </article>
 
-            <div className="bg-white/70 backdrop-blur rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+            <article className="bg-white/70 backdrop-blur rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
               <div className="w-12 h-12 bg-gradient-to-br from-rose-600 to-orange-500 rounded-lg flex items-center justify-center mb-4 shadow-sm">
                 <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">ग्रह स्थिति</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">ग्रह गति र स्थिति (Planetary Motion)</h3>
               <p className="text-gray-700 leading-relaxed mb-4">
-                नौ ग्रहहरूको विस्तृत स्थिति, राशि, नक्षत्र, र तिनीहरूको प्रभाव तपाईंको जीवनमा सरल भाषामा बुझ्नुहोस्।
+                Vedic Jyotish अनुसार नौ ग्रहहरूको विस्तृत स्थिति, गति, राशि, नक्षत्र, र तिनीहरूको प्रभाव तपाईंको जीवनमा सरल भाषामा बुझ्नुहोस्।
               </p>
               <ul className="space-y-2 text-sm text-gray-600">
                 <li className="flex items-start gap-2">
                   <span className="text-rose-600 mt-0.5">•</span>
-                  <span>ग्रह बल र शुभाशुभ फल</span>
+                  <span>ग्रह बल र शुभाशुभ फल (Graha Bala & Effects)</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-rose-600 mt-0.5">•</span>
-                  <span>नक्षत्र र पाद विवरण</span>
+                  <span>नक्षत्र र पाद विवरण (Nakshatra Details)</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-rose-600 mt-0.5">•</span>
-                  <span>भाव स्वामी र योगकारक ग्रह</span>
+                  <span>भाव स्वामी र योगकारक ग्रह (House Lords & Yoga Karaka)</span>
                 </li>
               </ul>
-            </div>
+            </article>
 
-            <div className="bg-white/70 backdrop-blur rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+            <article className="bg-white/70 backdrop-blur rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
               <div className="w-12 h-12 bg-gradient-to-br from-rose-600 to-orange-500 rounded-lg flex items-center justify-center mb-4 shadow-sm">
                 <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">दशा प्रणाली</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">दशा प्रणाली (Dasha Systems)</h3>
               <p className="text-gray-700 leading-relaxed mb-4">
-                विभिन्न दशा प्रणालीहरू मार्फत तपाईंको जीवनको विभिन्न कालखण्डहरूको भविष्यवाणी र विश्लेषण गर्नुहोस्।
+                Traditional Vedic Dasha systems मार्फत तपाईंको जीवनको विभिन्न कालखण्डहरूको भविष्यवाणी र विश्लेषण गर्नुहोस्।
               </p>
               <ul className="space-y-2 text-sm text-gray-600">
                 <li className="flex items-start gap-2">
                   <span className="text-rose-600 mt-0.5">•</span>
-                  <span>विंशोत्तरी दशा (120 वर्ष)</span>
+                  <span>विंशोत्तरी दशा (Vimshottari Dasha - 120 वर्ष)</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-rose-600 mt-0.5">•</span>
-                  <span>योगिनी दशा (36 वर्ष)</span>
+                  <span>योगिनी दशा (Yogini Dasha - 36 वर्ष)</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-rose-600 mt-0.5">•</span>
-                  <span>त्रिभागी दशा र अन्तर्दशा</span>
+                  <span>त्रिभागी दशा र अन्तर्दशा (Tribhagi Dasha)</span>
                 </li>
               </ul>
-            </div>
+            </article>
           </div>
         </div>
       </section>

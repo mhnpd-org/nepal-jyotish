@@ -46,7 +46,33 @@ function writeSitemap(entries) {
 }
 
 function writeRobots() {
-  const content = `User-agent: *\nAllow: /\nSitemap: ${SITE_URL}/sitemap.xml\n`;
+  const content = `# Nepal Jyotish - Traditional Nepali China Maker & Kundali
+# Robots.txt for https://nepaljyotish.org
+
+User-agent: *
+Allow: /
+Allow: /blogs/
+Allow: /astro/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /out/
+
+# Crawl-delay for polite crawling (optional)
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: ${SITE_URL}/sitemap.xml
+
+# Additional search engine specific rules
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+`;
   fs.writeFileSync(path.join(outDir, 'robots.txt'), content, 'utf8');
   console.log('Written robots.txt');
 }
@@ -55,10 +81,19 @@ function main() {
   ensureOut();
   const entries = buildUrlEntries();
 
-  // Add some static routes
+  // Add static routes with proper priorities
   const staticRoutes = [
-    { loc: `${SITE_URL}/`, lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 1 },
-    { loc: `${SITE_URL}/blogs`, lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.8 },
+    { loc: `${SITE_URL}/`, lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 1.0 },
+    { loc: `${SITE_URL}/blogs`, lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.9 },
+    { loc: `${SITE_URL}/astro`, lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.9 },
+    { loc: `${SITE_URL}/astro/janma`, lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.95 },
+    { loc: `${SITE_URL}/astro/traditional`, lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.9 },
+    { loc: `${SITE_URL}/astro/charts`, lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.85 },
+    { loc: `${SITE_URL}/astro/planet-position`, lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.85 },
+    { loc: `${SITE_URL}/astro/vimshottari-dasha`, lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.85 },
+    { loc: `${SITE_URL}/astro/yogini-dasha`, lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.85 },
+    { loc: `${SITE_URL}/astro/tribhagi-dasha`, lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.85 },
+    { loc: `${SITE_URL}/astro/overview`, lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.8 },
   ];
 
   const all = [...staticRoutes, ...entries];

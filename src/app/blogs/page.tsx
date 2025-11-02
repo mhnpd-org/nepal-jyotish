@@ -3,17 +3,45 @@ import Logo from "@internal/layouts/logo";
 import Footer from "@internal/layouts/footer";
 import { getAllBlogPosts } from "@internal/lib/blogs";
 import type { Metadata } from "next";
+import { PAGE_METADATA, SITE_CONFIG, getBreadcrumbSchema } from "@internal/lib/seo-config";
 
 export const metadata: Metadata = {
-  title: "लेखहरू - Nepal Jyotish",
-  description: "नेपाली ज्योतिष सम्बन्धी लेख र जानकारीहरू। जन्म पत्रिका, ग्रह स्थिति, दशा प्रणाली र अन्य ज्योतिषीय विषयहरूमा गहन ज्ञान।",
+  title: PAGE_METADATA.blogs.titleTemplate,
+  description: PAGE_METADATA.blogs.description,
+  keywords: PAGE_METADATA.blogs.keywords,
+  openGraph: {
+    title: "ज्योतिष लेखहरू | Jyotish Articles - Nepal Jyotish",
+    description: PAGE_METADATA.blogs.description,
+    url: `${SITE_CONFIG.url}/blogs`,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ज्योतिष लेखहरू | Jyotish Articles",
+    description: "Learn Nepali Jyotish through detailed articles in Nepali",
+  },
+  alternates: {
+    canonical: "/blogs",
+  },
 };
 
 export default function BlogsPage() {
   const blogs = getAllBlogPosts();
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-rose-50 to-amber-50">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            getBreadcrumbSchema([
+              { name: "Home", url: SITE_CONFIG.url },
+              { name: "लेखहरू", url: `${SITE_CONFIG.url}/blogs` }
+            ])
+          )
+        }}
+      />
+      <main className="min-h-screen bg-gradient-to-b from-rose-50 to-amber-50">
       {/* Header */}
       <header className="bg-gradient-to-r from-rose-700 to-orange-600 text-white">
         <div className="max-w-7xl mx-auto px-6 py-4">
@@ -119,5 +147,6 @@ export default function BlogsPage() {
       {/* Footer */}
       <Footer variant="light" />
     </main>
+    </>
   );
 }
