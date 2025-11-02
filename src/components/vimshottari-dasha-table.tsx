@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { VimshottariDasha } from "@mhnpd-org/panchang";
-import { astroTranslate } from "@internal/lib/astro-translator";
 import { translateSanskritSafe } from "@internal/lib/devanagari";
 
 export interface VimshottariDashaTableProps {
@@ -14,9 +13,7 @@ export const VimshottariDashaTable: React.FC<VimshottariDashaTableProps> = ({
   return (
     <div className="space-y-6">
       <h2 className="text-center font-bold text-lg text-red-700 mb-2">
-        {`अथ ${astroTranslate("vimshottari")} ${astroTranslate(
-          "mahadasha"
-        )} चक्रम्`}
+        {`अथ विक्षोत्तरी महादशा चक्रम्`}
       </h2>
 
       <div className="w-full overflow-x-auto">
@@ -50,9 +47,9 @@ export const VimshottariDashaTable: React.FC<VimshottariDashaTableProps> = ({
               ))}
               <td className="border-2 border-red-700 px-2 py-1 text-sm font-bold">
                 <div className="flex flex-col leading-tight">
-                  <span>{astroTranslate("वर्ष")}</span>
-                  <span>{astroTranslate("मास")}</span>
-                  <span>{astroTranslate("दिन")}</span>
+                  <span>वर्ष</span>
+                  <span>मास</span>
+                  <span>दिन</span>
                 </div>
               </td>
             </tr>
@@ -67,7 +64,7 @@ export const VimshottariDashaTable: React.FC<VimshottariDashaTableProps> = ({
                 </td>
               ))}
               <td className="border-2 border-red-700 px-2 py-1 text-sm font-bold">
-                {astroTranslate("योग")}
+                योग
               </td>
             </tr>
           </tbody>
