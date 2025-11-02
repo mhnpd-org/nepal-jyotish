@@ -51,6 +51,84 @@ code, pre, kbd, samp {
   font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
+/* Professional Article Typography */
+.prose-article {
+  color: #374151;
+  max-width: none;
+}
+
+.prose-article > * + * {
+  margin-top: 1.5em;
+}
+
+.prose-article strong {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.prose-article em {
+  color: #4b5563;
+  font-style: italic;
+}
+
+.prose-article ul {
+  list-style-type: disc;
+  padding-left: 1.5em;
+}
+
+.prose-article ol {
+  list-style-type: decimal;
+  padding-left: 1.5em;
+}
+
+.prose-article ul ul,
+.prose-article ol ul {
+  list-style-type: circle;
+}
+
+.prose-article ul ul ul,
+.prose-article ol ol ul {
+  list-style-type: square;
+}
+
+/* Better link hover states */
+.prose-article a:hover {
+  text-decoration-thickness: 3px;
+}
+
+/* Table responsiveness */
+.prose-article table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+/* Reading experience optimizations */
+@media (min-width: 640px) {
+  .prose-article {
+    font-size: 1.125rem;
+    line-height: 1.8;
+  }
+}
+
+/* Print styles for articles */
+@media print {
+  .prose-article {
+    font-size: 12pt;
+    line-height: 1.6;
+  }
+  
+  .prose-article a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .prose-article a::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #666;
+  }
+}
+
 .bg-vedanga-gradient {
   background: var(--vedanga-gradient);
 }
