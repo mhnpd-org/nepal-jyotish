@@ -34,7 +34,7 @@ jobs:
       - name: Build application (static export)
         run: npm run build
         env:
-          NEXT_PUBLIC_SITE_URL: https://app.nepaljyotish.org
+          NEXT_PUBLIC_SITE_URL: https://nepaljyotish.org
 
       - name: Deploy to Cloudflare Pages
         if: github.ref == 'refs/heads/main'

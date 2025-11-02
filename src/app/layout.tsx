@@ -14,11 +14,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Vedanga Jotish",
-    template: "%s · Vedanga Jotish",
+    default: "Nepal Jyotish - नेपाल ज्योतिष | Traditional Nepali Astrology",
+    template: "%s | Nepal Jyotish",
   },
-  description: "Vedanga Jotish – Traditional Nepali Vedic astrology tools, charts and dashas.",
-  applicationName: "Vedanga Jotish",
+  description: "Nepal Jyotish (नेपाल ज्योतिष) - परम्परागत नेपाली ज्योतिष प्रणाली। Free online Nepali astrology tools for birth charts (जन्म पत्रिका), planetary positions (ग्रह स्थिति), and dasha calculations (दशा गणना). Accurate Vedic astrology in Nepali.",
+  applicationName: "Nepal Jyotish",
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
@@ -29,8 +29,57 @@ export const metadata: Metadata = {
     shortcut: ["/favicon.svg"],
   },
   manifest: "/site.webmanifest",
-  keywords: ["Jyotish", "Vedic Astrology", "Nepali", "Kundali", "Dasha"],
-  authors: [{ name: "Vedanga Jotish" }],
+  keywords: [
+    "Nepal Jyotish",
+    "नेपाल ज्योतिष",
+    "Nepali Astrology",
+    "नेपाली ज्योतिष",
+    "जन्म पत्रिका",
+    "Birth Chart",
+    "Kundali",
+    "कुण्डली",
+    "Vedic Astrology",
+    "वैदिक ज्योतिष",
+    "Dasha",
+    "दशा",
+    "Vimshottari",
+    "विंशोत्तरी",
+    "Planetary Position",
+    "ग्रह स्थिति",
+    "Nakshatra",
+    "नक्षत्र",
+    "Nepali Horoscope"
+  ],
+  authors: [{ name: "Nepal Jyotish", url: "https://nepaljyotish.org" }],
+  creator: "Nepal Jyotish",
+  publisher: "Nepal Jyotish",
+  metadataBase: new URL("https://nepaljyotish.org"),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Nepal Jyotish - नेपाल ज्योतिष | Traditional Nepali Astrology",
+    description: "परम्परागत नेपाली ज्योतिष प्रणाली। Free online Nepali astrology tools for birth charts, planetary positions, and dasha calculations.",
+    url: "https://nepaljyotish.org",
+    siteName: "Nepal Jyotish",
+    locale: "ne_NP",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Nepal Jyotish - नेपाल ज्योतिष",
+    description: "Traditional Nepali Astrology - Birth Charts, Planetary Positions & Dasha Calculations",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export const viewport: Viewport = {
@@ -46,7 +95,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ne">
       <body
         suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

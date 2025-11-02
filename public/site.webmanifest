@@ -1,11 +1,12 @@
 {
-  "name": "Vedanga Jotish",
-  "short_name": "Vedanga",
-  "description": "Traditional Nepali Vedic astrology tools, charts and dashas.",
+  "name": "Nepal Jyotish - नेपाल ज्योतिष",
+  "short_name": "Nepal Jyotish",
+  "description": "Traditional Nepali astrology tools - Birth charts, planetary positions, and dasha calculations",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#b71c1c",
+  "lang": "ne",
   "icons": [
     {
       "src": "/favicon-192.png",
