@@ -97,7 +97,7 @@ export default function TraditionalPage() {
             suryaAyana: kundali.surya.suryaAyana,
             ritu: kundali.surya.ritu,
             solarMonth: `${kundali.surya.masa}`,
-            solarMonthDays: `${kundali.surya.sauraMasaDays.toFixed(2)}`,
+            solarMonthDays: `${kundali.dates.vikramSamvat.day!.toFixed(0)}`,
           }}
           lunar={{
             chandraMasa: kundali.tithi.chandraMasa,

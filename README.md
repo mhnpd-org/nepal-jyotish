@@ -12,6 +12,13 @@
 
 ## Work In Progress: The process is we will jot down the idea here and time spent in this project should focus on tasks mention here. Please add the task and work on the task mention here only so we actually focus on specific task rather then being lost on the innovation ideas and kill time.
 
+### Bug:
+
+- Overview:
+  - नक्ष -> नक्षत्र
+- Traditinal page:
+  - Chandra masa mile ko xana.
+
 ##### Blogs:
 
 - Check existing blog for the mistake and finallzed it.
