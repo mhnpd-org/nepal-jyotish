@@ -124,8 +124,9 @@ export const JanmaPatrikaText: React.FC<JanmaPatrikaTextProps> = (props) => {
           तदा जन्मसमये <EmRed>{t.janmaTime}</EmRed> लग्ने{" "}
           <EmBlue>{t.lagna}</EmBlue>
           नवमांशे <EmBlue>{t.navamshaLagna}</EmBlue> राशौ चन्द्रमसि{" "}
-          <EmBlue>{t.chandraRashi}</EmBlue> राशिगते एवं विधे पश्चात् देशे मण्डले
-          तदनन्तर्गत स्थाने (जन्मस्थान <EmRed>{t.janmaSthan}</EmRed> मानक समय{" "}
+          <EmBlue>{t.chandraRashi}</EmBlue> राशिगते एवं विधे पश्चात् देशे<EmBlue>{ph}</EmBlue> मण्डले
+          <EmBlue>{ph}</EmBlue> 
+          तदन्तर्गत स्थाने (जन्मस्थान <EmRed>{t.janmaSthan}</EmRed> मानक समय{" "}
           <EmRed>GMT {toDevanagariDigits(t.standardTimeOffset)}</EmRed> स्थानीय
           जन्मसमय
           <EmRed> {t.localBirthTime}</EmRed>) निवसतः गोत्रोत्पन्न
