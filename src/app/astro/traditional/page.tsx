@@ -117,7 +117,7 @@ export default function TraditionalPage() {
             lagna: kundali.lagna.lagna,
             navamshaLagna: kundali.lagna.navamshaLagna,
             chandraRashi: kundali.nakshatra.rashi,
-            rashi: kundali.lagna.lagnaLord,
+            rashi: kundali.nakshatra.rashi,
           }}
           birth={{
             janmaTime: kundali.dates.timeStr,
