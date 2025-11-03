@@ -19,7 +19,7 @@ export const GrahaTable: React.FC<Props> = ({
   return (
     <div className="overflow-x-auto">
       <h2 className="text-center text-xl font-bold text-red-700 mb-2">
-        एतस्मयजा ग्रहाणां स्पष्टा
+        अत्रस्मिन् ग्रहाणां स्पष्टा
       </h2>
 
       <table className="w-full border-2 border-red-700 border-collapse text-sm text-center">
