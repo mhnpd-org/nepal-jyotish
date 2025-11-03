@@ -20,11 +20,16 @@
 ##### Design:
 
 - Update the design of the main astro/janma page.
+- Too many cards in barga kundali page. Reduce the number of cards and improve the design layout.
+-
 
 ##### Mobile Responsiveness:
 
 - traditional page break on mobile view.
--
+- Homepage action buttons (both) are appearing in two line in mobile view.
+- App button on the header is also appearing in two lines in mobile view.
+- Janma details page icon is not properly aligned in mobile view.
+- AD/BS selection is too big in mobile view.
 
 ##### Additional Tools:
 
