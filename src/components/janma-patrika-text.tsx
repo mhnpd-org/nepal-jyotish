@@ -135,10 +135,10 @@ export const JanmaPatrikaText: React.FC<JanmaPatrikaTextProps> = (props) => {
         </p>
         <p className="[text-wrap:pretty] [text-align:justify]">
           अस्य होराशास्त्र प्रमाणेन <EmBlue>{t.nakshatra}</EmBlue> नक्षत्रस्य
-          <EmRed> {t.nakshatraPada}</EmRed> चरणत्वेन काराक्षरः
-          <EmRed> {t.syllableAkshara}</EmRed> योनि <EmRed>{t.yoni}</EmRed>
-          नाडी <EmRed>{t.nadi}</EmRed> गण <EmRed>{t.gana}</EmRed>
-          वर्ण <EmRed>{t.varna}</EmRed> राशि <EmRed>{t.rashi}</EmRed>
+          <EmRed> {t.nakshatraPada}</EmRed> चरणत्वेन  <EmRed> {t.syllableAkshara}</EmRed> काराक्षरः
+          <EmRed>{t.yoni} {" "}</EmRed> योनि 
+         <EmRed>{t.nadi}</EmRed> नाडी <EmRed>{t.gana}</EmRed> गण 
+          <EmRed>{t.varna}</EmRed> वर्ण  <EmRed>{t.rashi}</EmRed> राशि 
           शुभ नाम <EmRed>{t.childName}</EmRed> प्रतिष्ठितम्।
           {t.additionalNotes.trim() && t.additionalNotes !== ph && (
             <> {t.additionalNotes}</>
