@@ -102,51 +102,50 @@ export const JanmaPatrikaText: React.FC<JanmaPatrikaTextProps> = (props) => {
           श्रीवीरविक्रमादित्य संवत्
           <EmRed> {t.veerVikramadityaSamvat}</EmRed> ईसवीय सन्
           <EmRed> {t.adYear}</EmRed> अत्रास्मिन् वर्षे{" "}
-          <EmBlue>{t.samvatsaraName}</EmBlue> नाम संवत्सरे श्रीसूर्य{" "}
+          <EmBlue>{t.samvatsaraName}</EmBlue> नाम संवत्सरे श्री सूर्यः{" "}
           <EmBlue>{t.suryaAyana}</EmBlue> अयने <EmBlue>{t.ritu}</EmBlue> ऋतौ अथ
           चान्द्रमानेन <EmBlue>{t.chandraMasa}</EmBlue> मासे{" "}
-          <EmBlue>{t.chandraPaksha}</EmBlue> पक्षे आगत{" "}
+          <EmBlue>{t.chandraPaksha}</EmBlue> पक्षे आगते{" "}
           <EmBlue>{t.weekday}</EmBlue> वासरे <EmBlue>{t.tithi}</EmBlue> तिथौ
-          घट्यादिः
-          <EmRed> {t.tithiStartGhatyadi}</EmRed> तत् तिथि{" "}
-          <EmRed>{t.nakshatra}</EmRed> नक्षत्रे घट्यादिः
-          <EmRed> {t.nakshatraGhatyadi}</EmRed> जन्मसमये भुक्त घट्यादिः{" "}
+          घट्यादयः
+          <EmRed> {t.tithiStartGhatyadi}</EmRed> तस्यां तिथौ{" "}
+          <EmRed>{t.nakshatra}</EmRed> नक्षत्रे घट्यादयः
+          <EmRed> {t.nakshatraGhatyadi}</EmRed> जन्मसमये भुक्ता घट्यादयः{" "}
           <EmRed>{t.bhuktGhatyadi}</EmRed>
-          भोग्य घट्यादिः <EmRed>{t.bhogyaGhatyadi}</EmRed> प्रसंगादय{" "}
-          <EmBlue>{t.yoga}</EmBlue> योगे तात्कालिक <EmBlue>{t.karana}</EmBlue>{" "}
+          भोग्या घट्यादयः <EmRed>{t.bhogyaGhatyadi}</EmRed> प्रसंगादयः{" "}
+          <EmBlue>{t.yoga}</EmBlue> योगे तात्कालिके <EmBlue>{t.karana}</EmBlue>{" "}
           करणे इति पश्चात् सौरमानेन
-          <EmBlue> {t.solarMonth}</EmBlue> मासे सूर्यसंक्रमादिनेषु{" "}
+          <EmBlue> {t.solarMonth}</EmBlue> मासे सूर्यसंक्रमादिषु{" "}
           <EmRed>{t.solarMonthDays}</EmRed>
-          तदनुसार ( ईसवीय मास <EmRed>{t.gregorianMonth}</EmRed> तारिखः
+          तदनुसारम् ( ईसवीय मास <EmRed>{t.gregorianMonth}</EmRed> दिनाङ्कः
           <EmRed> {t.gregorianDate}</EmRed> ) प्रमाणिक{" "}
           <EmRed>{t.pramanikTime}</EmRed>
-          समये स्थानीय सूर्योदयदिष्ट घट्यादिः <EmRed>{t.sunriseGhatyadi}</EmRed>
+          समये स्थानीय सूर्योदयदृष्टा घट्यादयः <EmRed>{t.sunriseGhatyadi}</EmRed>
           तदा जन्मसमये <EmRed>{t.janmaTime}</EmRed> लग्ने{" "}
           <EmBlue>{t.lagna}</EmBlue>
-          नवमांशे <EmBlue>{t.navamshaLagna}</EmBlue> राशौ चन्द्रमसि{" "}
-          <EmBlue>{t.chandraRashi}</EmBlue> राशिगते एवं विधे पश्चात् देशे<EmBlue>{ph}</EmBlue> मण्डले
-          <EmBlue>{ph}</EmBlue> 
-          तदन्तर्गत स्थाने (जन्मस्थान <EmRed>{t.janmaSthan}</EmRed> मानक समय{" "}
-          <EmRed>GMT {toDevanagariDigits(t.standardTimeOffset)}</EmRed> स्थानीय
-          जन्मसमय
+          नवमांशे <EmBlue>{t.navamshaLagna}</EmBlue> राशौ चन्द्रराशौ{" "}
+          <EmBlue>{t.chandraRashi}</EmBlue> एवमविधे पश्चात् देशे <EmBlue>{ph}</EmBlue> मण्डले
+          <EmBlue>{ph}</EmBlue>{" "}
+          तदन्तर्गत स्थाने (जन्मस्थाने <EmRed>{t.janmaSthan}</EmRed> मानक-समयः{" "}
+          <EmRed>GMT {toDevanagariDigits(t.standardTimeOffset)}</EmRed> स्थानीय-जन्म-समयः
           <EmRed> {t.localBirthTime}</EmRed>) निवसतः गोत्रोत्पन्न
           <EmRed> {t.gotra}</EmRed> कुल <EmRed>{t.kula}</EmRed> विवाहिता
           भार्याया
-          <EmRed> {t.spouseName}</EmRed> गर्भस्थ रत्नम् अजीजनत्।
+          <EmRed> {t.spouseName}</EmRed> गर्भस्थं रत्नम् अजीजनत्।
         </p>
         <p className="[text-wrap:pretty] [text-align:justify]">
-          अस्य होराशास्त्र प्रमाणेन <EmBlue>{t.nakshatra}</EmBlue> नक्षत्रस्य
-          <EmRed> {t.nakshatraPada}</EmRed> चरणत्वेन  <EmRed> {t.syllableAkshara}</EmRed> काराक्षरः
-          <EmRed>{t.yoni} {" "}</EmRed> योनि 
+          अस्य होराशास्त्रप्रमाणेन <EmBlue>{t.nakshatra}</EmBlue> नक्षत्रस्य
+          <EmRed> {t.nakshatraPada}</EmRed> चरणत्वेन <EmRed> {t.syllableAkshara}</EmRed> काराक्षरं
+          <EmRed>{t.yoni}</EmRed> योनि 
          <EmRed>{t.nadi}</EmRed> नाडी <EmRed>{t.gana}</EmRed> गण 
-          <EmRed>{t.varna}</EmRed> वर्ण  <EmRed>{t.rashi}</EmRed> राशि 
-          शुभ नाम <EmRed>{t.childName}</EmRed> प्रतिष्ठितम्।
+          <EmRed>{t.varna}</EmRed> वर्ण <EmRed>{t.rashi}</EmRed> राशि 
+          शुभं नाम <EmRed>{t.childName}</EmRed> प्रतिष्ठितम्।
           {t.additionalNotes.trim() && t.additionalNotes !== ph && (
             <> {t.additionalNotes}</>
           )}
         </p>
         <p className="[text-align:justify]">
-          तिथेयः विवरणम् : <EmBlue>{t.tithiRefDetails}</EmBlue>
+          तिथेः विवरणम् : <EmBlue>{t.tithiRefDetails}</EmBlue>
         </p>
       </section>
     </article>
