@@ -114,5 +114,10 @@ export function getAllBlogSlugs(): string[] {
  */
 export function getRecentBlogPosts(limit: number = 8): BlogMetadata[] {
   const allPosts = getAllBlogPosts();
-  return allPosts.slice(0, limit);
+  return allPosts.slice(0, limit).map(post => ({
+    slug: `/blogs/${post.slug}`,
+    title: post.title,
+    excerpt: post.excerpt,
+    date: post.date,  
+  }));
 }

@@ -14,7 +14,6 @@
 
 ##### Blogs:
 
-- Blog links are not working
 - Check existing blog for the mistake and finallzed it.
 - Finallize the home page.
 
