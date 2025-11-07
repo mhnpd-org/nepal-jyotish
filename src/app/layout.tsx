@@ -174,7 +174,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/og-image.png",
+        url: "/logo.png",
         width: 1200,
         height: 630,
         alt: "Nepal Jyotish - Traditional Nepali kundali Maker and Kundali"
@@ -187,7 +187,7 @@ export const metadata: Metadata = {
       "नेपाली ज्योतिष | Nepal Jyotish - Traditional kundali & Kundali Maker",
     description:
       "Free Traditional Nepali kundali Maker & Kundali based on Vedic Jyotish and Surya Siddhanta. Hamro Jyotish, Mero Jyotish.",
-    images: ["/og-image.png"]
+    images: ["/logo.png"]
   },
   robots: {
     index: true,
