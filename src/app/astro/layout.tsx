@@ -32,14 +32,14 @@ export default function AstroLayout({ children }: { children: React.ReactNode })
           )
         }}
       />
-      <div className="min-h-screen flex flex-col bg-vedanga-gradient w-full overflow-x-hidden">
-        <header className="h-16 flex items-center gap-4 px-4 sm:px-5 md:px-8 bg-gradient-to-b from-amber-900/30 via-amber-900/10 to-transparent w-full">
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 w-full overflow-x-hidden">
+        <header className="h-16 flex items-center gap-4 px-4 sm:px-5 md:px-8 bg-gradient-to-r from-amber-600 via-orange-500 to-amber-600 border-b border-amber-700/30 shadow-md w-full">
           <Logo size="md" variant="light" href="/" />
         </header>
         <div className="flex flex-1 relative w-full min-w-0">
           <AstroSidebar />
-          <main className="flex-1 min-w-0 p-3 sm:p-4 md:p-7 bg-[rgba(255,255,250,0.82)] backdrop-blur supports-[backdrop-filter]:bg-[rgba(255,255,250,0.72)] shadow-inner">
-            <div className="mx-auto max-w-6xl w-full min-w-0">
+          <main className="flex-1 min-w-0 p-3 sm:p-4 md:p-7 bg-white/95 backdrop-blur-sm shadow-sm">
+            <div className="mx-auto max-w-6xl w-full min-w-0 text-gray-900">
               {children}
             </div>
           </main>

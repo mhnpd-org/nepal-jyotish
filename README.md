@@ -15,9 +15,8 @@
 ### Bug:
 
 - Overview:
-  - नक्ष -> नक्षत्र
+
 - Traditinal page:
-  - Chandra masa mile ko xana.
 
 ##### Blogs:
 
