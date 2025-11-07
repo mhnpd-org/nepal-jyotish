@@ -23,7 +23,7 @@ export default function Footer({ variant = "light" }: FooterProps) {
             </p>
           </div>
 
-          <div>
+          <div className="text-left md:text-right">
             <h5 className={`text-sm font-semibold ${isDark ? "text-white" : "text-gray-900"} mb-3`}>
               लिङ्कहरू
             </h5>
@@ -82,7 +82,7 @@ export default function Footer({ variant = "light" }: FooterProps) {
 
         <div className={`pt-8 border-t ${isDark ? "border-white/10" : "border-gray-200"}`}>
           <p className={`text-sm ${isDark ? "text-white/75" : "text-gray-500"} text-center`}>
-            © {new Date().getFullYear()} वेदाङ्ग ज्योतिष। सर्वाधिकार सुरक्षित।
+            © {new Date().getFullYear()} Nepal Jyotish। सर्वाधिकार सुरक्षित।
           </p>
         </div>
       </div>
