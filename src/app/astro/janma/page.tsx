@@ -104,146 +104,138 @@ export default function JanmaPage() {
 
   // static English labels (previously in en.json)
   const labels = {
-    title: 'Janma Details',
-    description: 'Enter birth details below. Fields are prefilled with current Kathmandu/Nepal date, time and coordinates.',
-    name: 'Full name (optional)',
-    date_of_birth: 'Date of Birth',
-    ad: 'AD',
-    bs: 'BS',
-    datetime_required: 'Date & time is required',
-    time_of_birth: 'Time of Birth',
-    place_of_birth: 'Place of Birth',
-    submit: 'Submit'
+    title: 'जन्म विवरण',
+    description: 'तल जन्म विवरण प्रविष्ट गर्नुहोस्। फिल्डहरू हालको काठमाडौं/नेपाल मिति, समय र निर्देशांकहरूसँग पूर्व भरिएका छन्।',
+    name: 'पूरा नाम (वैकल्पिक)',
+    date_of_birth: 'जन्म मिति',
+    ad: 'ई.स.',
+    bs: 'वि.स.',
+    datetime_required: 'मिति र समय आवश्यक छ',
+    time_of_birth: 'जन्म समय',
+    place_of_birth: 'जन्म स्थान',
+    submit: 'पेश गर्नुहोस्'
   } as const;
   return (
-    <main className="w-full px-2 sm:px-4 py-8">
+    <main className="w-full">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-2xl"
+        className="w-full max-w-3xl mx-auto"
       >
-        <div className="rounded-xl border border-white/20 bg-white/40 dark:bg-gray-900/40 backdrop-blur-md shadow-lg px-5 sm:px-7 py-6 flex flex-col gap-8">
-          {/* Header inside card */}
-          <header className="space-y-2">
-            <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-orange-500 via-rose-500 to-pink-500 flex items-center justify-center text-white text-lg font-semibold shadow ring-1 ring-white/40 dark:ring-white/10">
-                🜚
-              </div>
-              <div>
-                <h1 className="text-2xl font-semibold tracking-wide text-gray-800 dark:text-gray-100">
-                  {labels.title}
-                </h1>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 leading-snug max-w-prose">
-                  {labels.description}
-                </p>
-              </div>
+        {/* Header - clean and simple */}
+        <header className="mb-8 text-center sm:text-left">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+            {labels.title}
+          </h1>
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-2 leading-relaxed">
+            {labels.description}
+          </p>
+        </header>
+
+        {/* Simple form without card wrapper */}
+        <div className="flex flex-col gap-6">
+            {/* Name (optional) */}
+            <div className="flex flex-col gap-2 w-full">
+              <label htmlFor="name" className="text-sm font-semibold text-gray-800 dark:text-gray-200">{labels.name}</label>
+              <input
+                id="name"
+                type="text"
+                placeholder={labels.name}
+                className="rounded-lg border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-2.5 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:border-orange-500 transition-all"
+                {...register("name")}
+              />
             </div>
-          </header>
 
-          <div className="flex flex-col gap-6">
-              {/* Name (optional) */}
-              <div className="flex flex-col gap-1 w-full">
-                <label htmlFor="name" className="text-sm font-medium text-gray-800 dark:text-gray-200">{labels.name}</label>
-                <input
-                  id="name"
-                  type="text"
-                  placeholder={labels.name}
-                  className="rounded-md border border-gray-300/70 dark:border-gray-600 bg-white/90 dark:bg-gray-900 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/70 focus-visible:border-orange-400 transition"
-                  {...register("name")}
-                />
-              </div>
-
-              {/* Date of Birth (required) */}
-              <div className="flex flex-col gap-2 w-full">
-                <label className="text-sm font-medium text-gray-800 dark:text-gray-200">
-                  {labels.date_of_birth} <span className="text-red-500">*</span>
-                </label>
-                <div className="flex flex-col sm:flex-row sm:items-center gap-4 w-full">
-                  {/* Calendar toggle */}
-                  <div className="inline-flex rounded-md border border-gray-300 dark:border-gray-600 overflow-hidden shadow-sm h-10">
-                    {(["AD", "BS"] as const).map((cal) => (
-                      <button
-                        key={cal}
-                        type="button"
-                        onClick={() => {
-                          if (calendarValue !== cal) {
-                            setValue("calendarType", cal, { shouldDirty: true });
-                          }
-                        }}
-                        className={`h-full px-4 text-xs sm:text-sm font-medium flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60 ${
-                          calendarValue === cal
-                            ? "bg-gradient-to-r from-orange-500 to-rose-500 text-white"
-                            : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
-                        }`}
-                        aria-pressed={calendarValue === cal}
-                      >
-                        {cal === 'AD' ? labels.ad : labels.bs}
-                      </button>
-                    ))}
-                  </div>
-                  {/* Date Picker (no internal label now) */}
-                  <div className="flex-1 min-w-0 flex flex-col gap-1">
-                    {hydrated ? (
-                      calendarValue === "AD" ? (
-                        <ADDatePicker
-                          required
-                          valueDate={dateValue}
-                          maxYear={2099}
-                          minYear={1900}
-                          {...register("dateOfBirth", {
-                            required: labels.datetime_required
-                          })}
-                        />
-                      ) : (
-                        <BSDatePicker
-                          required
-                          initialDate={adToBs(dateValue)}
-                          maxYear={2090}
-                          minYear={2000}
-                          {...register("dateOfBirth", {
-                            required: labels.datetime_required
-                          })}
-                        />
-                      )
-                    ) : (
-                      <div className="h-10 w-full rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse" />
-                    )}
-                  </div>
+            {/* Date of Birth (required) */}
+            <div className="flex flex-col gap-2 w-full">
+              <label className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+                {labels.date_of_birth} <span className="text-red-500">*</span>
+              </label>
+              <div className="flex flex-col sm:flex-row sm:items-start gap-3 w-full">
+                {/* Calendar toggle */}
+                <div className="inline-flex rounded-lg border-2 border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm bg-white dark:bg-gray-900">
+                  {(["AD", "BS"] as const).map((cal) => (
+                    <button
+                      key={cal}
+                      type="button"
+                      onClick={() => {
+                        if (calendarValue !== cal) {
+                          setValue("calendarType", cal, { shouldDirty: true });
+                        }
+                      }}
+                      className={`h-11 px-6 sm:px-8 text-sm sm:text-base font-semibold flex items-center justify-center transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 ${
+                        calendarValue === cal
+                          ? "bg-gradient-to-r from-orange-500 to-rose-500 text-white shadow-md"
+                          : "bg-transparent text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+                      }`}
+                      aria-pressed={calendarValue === cal}
+                    >
+                      {cal === 'AD' ? labels.ad : labels.bs}
+                    </button>
+                  ))}
                 </div>
-                {errors.dateOfBirth && (
-                  <p className="mt-1 text-xs text-red-600">
-                    {errors.dateOfBirth.message}
-                  </p>
-                )}
+                {/* Date Picker (no internal label now) */}
+                <div className="flex-1 min-w-0 flex flex-col gap-1">
+                  {hydrated ? (
+                    calendarValue === "AD" ? (
+                      <ADDatePicker
+                        required
+                        valueDate={dateValue}
+                        maxYear={2099}
+                        minYear={1900}
+                        {...register("dateOfBirth", {
+                          required: labels.datetime_required
+                        })}
+                      />
+                    ) : (
+                      <BSDatePicker
+                        required
+                        initialDate={adToBs(dateValue)}
+                        maxYear={2090}
+                        minYear={2000}
+                        {...register("dateOfBirth", {
+                          required: labels.datetime_required
+                        })}
+                      />
+                    )
+                  ) : (
+                    <div className="h-11 w-full rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                  )}
+                </div>
               </div>
-              {/* Hidden calendar type field for persistence (kept for RHF) */}
-              <input type="hidden" {...register("calendarType")} />
+              {errors.dateOfBirth && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.dateOfBirth.message}
+                </p>
+              )}
+            </div>
+            {/* Hidden calendar type field for persistence (kept for RHF) */}
+            <input type="hidden" {...register("calendarType")} />
 
-              {/* Time of Birth (optional) */}
-              <div className="flex flex-col gap-1 w-full">
-                <TimePicker control={control} name="timeOfBirth" label={labels.time_of_birth} required={false} showSeconds={false} className="" />
-              </div>
-
-              {/* Place of Birth (required) */}
-              <div className="flex flex-col w-full">
-                {hydrated ? (
-                  <PickDistrict control={control} name="placeOfBirth" label={labels.place_of_birth} required className="" />
-                ) : (
-                  <div className="h-10 w-full rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse" />
-                )}
-              </div>
+            {/* Time of Birth (optional) */}
+            <div className="flex flex-col gap-2 w-full">
+              <TimePicker control={control} name="timeOfBirth" label={labels.time_of_birth} required={false} showSeconds={false} className="" />
             </div>
 
-            {/* Submit button inside card */}
-            <div>
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-orange-500 via-rose-500 to-pink-500 hover:from-orange-500 hover:via-rose-500 hover:to-rose-600 disabled:opacity-60 disabled:cursor-not-allowed text-white px-6 py-2.5 text-sm font-medium shadow-md shadow-orange-200/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-400/60 focus:ring-offset-white dark:focus:ring-offset-gray-950 transition"
-              >
-                {isSubmitting ? '...' : labels.submit}
-              </button>
+            {/* Place of Birth (required) */}
+            <div className="flex flex-col w-full">
+              {hydrated ? (
+                <PickDistrict control={control} name="placeOfBirth" label={labels.place_of_birth} required className="" />
+              ) : (
+                <div className="h-11 w-full rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse" />
+              )}
             </div>
-        </div>
+          </div>
+
+          {/* Submit button */}
+          <div className="mt-8">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 via-rose-500 to-pink-500 hover:from-orange-600 hover:via-rose-600 hover:to-pink-600 disabled:opacity-60 disabled:cursor-not-allowed text-white px-8 py-3 text-base font-semibold shadow-lg shadow-orange-300/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-all"
+            >
+              {isSubmitting ? 'पेश गर्दै...' : labels.submit}
+            </button>
+          </div>
       </form>
     </main>
   );
