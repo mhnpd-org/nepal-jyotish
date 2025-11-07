@@ -118,17 +118,17 @@ export default function LandingPage() {
             वैदिक ज्योतिष र सूर्य सिद्धान्त (Surya Siddhanta) मा आधारित निःशुल्क परम्परागत नेपाली कुण्डली निर्माण,
             जन्म पत्रिका निर्माण, ग्रह गति अवलोकन, र दशा गणना — सबै एकै ठाउँमा।
           </p>
-          <div className="mt-10 flex items-center gap-4">
+          <div className="mt-10 flex flex-wrap items-center gap-3 sm:gap-4">
             <Link
               href="/astro/janma"
-              className="px-6 py-3 bg-white text-rose-700 font-semibold rounded-lg hover:bg-white/95 transition-colors shadow-lg"
+              className="px-5 sm:px-6 py-3 bg-white text-rose-700 font-semibold rounded-lg hover:bg-white/95 transition-colors shadow-lg text-sm sm:text-base whitespace-nowrap"
               aria-label="कुण्डली बनाउन एप खोल्नुहोस्"
             >
               कुण्डली बनाउनुहोस्
             </Link>
             <Link
               href="/blogs"
-              className="px-6 py-3 text-white font-medium hover:text-amber-200 transition-colors"
+              className="px-5 sm:px-6 py-3 text-white font-medium hover:text-amber-200 transition-colors text-sm sm:text-base whitespace-nowrap border-2 border-white rounded-lg hover:bg-white/10"
               aria-label="ज्योतिष लेखहरू पढ्नुहोस्"
             >
               लेखहरू पढ्नुहोस् →
