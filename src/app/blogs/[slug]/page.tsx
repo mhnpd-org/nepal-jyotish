@@ -53,16 +53,16 @@ type MDXComponentProps = React.HTMLAttributes<HTMLElement>;
 
 const components = {
   h1: (props: MDXComponentProps) => (
-    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-5 mt-12 first:mt-0 leading-snug border-b-2 border-rose-100 pb-3" {...props} />
+    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 mt-12 first:mt-0 leading-snug border-b-2 border-rose-100 pb-3" {...props} />
   ),
   h2: (props: MDXComponentProps) => (
-    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-5 mt-12 leading-snug border-b-2 border-rose-100 pb-3" {...props} />
+    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 mt-12 leading-snug border-b-2 border-rose-100 pb-3" {...props} />
   ),
   h3: (props: MDXComponentProps) => (
-    <h3 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-4 mt-10 leading-snug" {...props} />
+    <h3 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-3 mt-10 leading-snug" {...props} />
   ),
   h4: (props: MDXComponentProps) => (
-    <h4 className="text-xl md:text-2xl font-semibold text-gray-800 mb-3 mt-8 leading-normal" {...props} />
+    <h4 className="text-xl md:text-2xl font-semibold text-gray-800 mb-2 mt-8 leading-normal" {...props} />
   ),
   p: (props: MDXComponentProps) => (
     <p className="text-lg md:text-xl text-gray-700 mb-6 leading-relaxed" style={{ lineHeight: '1.8' }} {...props} />
