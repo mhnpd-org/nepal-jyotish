@@ -45,16 +45,16 @@ export const metadata: Metadata = {
   applicationName: "Nepal Jyotish - नेपाली चाइना मेकर",
   icons: {
     icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
-      { url: "/favicon-192.png", sizes: "192x192", type: "image/png" }
+      { url: "/favicon/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/favicon/favicon.ico", sizes: "48x48" }
     ],
     apple: [
-      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }
+      { url: "/favicon/apple-touch-icon.png", sizes: "180x180", type: "image/png" }
     ],
-    shortcut: ["/favicon.svg"]
+    shortcut: ["/favicon/favicon.ico"]
   },
-  manifest: "/site.webmanifest",
+  manifest: "/favicon/site.webmanifest",
   keywords: [
     // Primary Keywords (English)
     "Nepali Jyotish",
@@ -275,7 +275,7 @@ export default function RootLayout({
               "@type": "Organization",
               name: "Nepal Jyotish",
               url: "https://nepaljyotish.org",
-              logo: "https://nepaljyotish.org/favicon-192.png",
+              logo: "https://nepaljyotish.org/favicon/web-app-manifest-192x192.png",
               description:
                 "Traditional Nepali Astrology Platform - kundali Maker, Kundali Generator based on Vedic Jyotish and Surya Siddhanta",
               sameAs: [
