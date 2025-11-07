@@ -125,22 +125,22 @@ export default async function BlogPage({ params }: BlogPageProps) {
           <div className="flex items-center justify-between">
             <Logo size="sm" variant="dark" />
             
-            <nav className="flex items-center gap-6">
+            <nav className="flex items-center gap-3 sm:gap-6">
               <Link 
                 href="/" 
-                className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                className="text-xs sm:text-sm text-gray-600 hover:text-gray-900 transition-colors whitespace-nowrap"
               >
                 मुख्य पृष्ठ
               </Link>
               <Link 
                 href="/blogs" 
-                className="text-sm text-gray-900 font-semibold"
+                className="text-xs sm:text-sm text-gray-900 font-semibold whitespace-nowrap"
               >
                 लेखहरू
               </Link>
               <Link 
                 href="/astro/janma" 
-                className="px-4 py-2 bg-rose-600 text-white text-sm font-medium rounded-lg hover:bg-rose-700 transition-colors"
+                className="px-3 sm:px-4 py-2 bg-rose-600 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-rose-700 transition-colors whitespace-nowrap"
               >
                 एप खोल्नुहोस्
               </Link>
@@ -231,25 +231,25 @@ export default async function BlogPage({ params }: BlogPageProps) {
 
         {/* Article footer with sharing/navigation */}
         <div className="mt-16 pt-12 border-t border-gray-200">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 sm:gap-6">
             <Link
               href="/blogs"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors group"
+              className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors group text-sm sm:text-base whitespace-nowrap"
             >
-              <svg className="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
               <span>सबै लेखहरू हेर्नुहोस्</span>
             </Link>
 
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-gray-500">लेख मन पर्यो?</span>
+            <div className="flex flex-col sm:flex-row items-center gap-3 bg-gradient-to-r from-rose-50 to-orange-50 p-4 sm:px-6 sm:py-4 rounded-lg">
+              <span className="text-xs sm:text-sm text-gray-700 font-medium">लेख मन पर्यो?</span>
               <Link
                 href="/astro/janma"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-rose-600 text-white font-medium rounded-lg hover:bg-rose-700 transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 bg-rose-600 text-white font-medium rounded-lg hover:bg-rose-700 transition-colors text-sm sm:text-base whitespace-nowrap w-full sm:w-auto"
               >
                 <span>ज्योतिष सेवा प्रयोग गर्नुहोस्</span>
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
               </Link>
