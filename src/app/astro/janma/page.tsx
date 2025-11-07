@@ -152,7 +152,7 @@ export default function JanmaPage() {
               </label>
               <div className="flex flex-col sm:flex-row sm:items-start gap-3 w-full">
                 {/* Calendar toggle */}
-                <div className="inline-flex rounded-lg border-2 border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm bg-white dark:bg-gray-900">
+                <div className="inline-flex self-start rounded-lg border-2 border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm bg-white dark:bg-gray-900">
                   {(["AD", "BS"] as const).map((cal) => (
                     <button
                       key={cal}
@@ -162,7 +162,7 @@ export default function JanmaPage() {
                           setValue("calendarType", cal, { shouldDirty: true });
                         }
                       }}
-                      className={`h-11 px-6 sm:px-8 text-sm sm:text-base font-semibold flex items-center justify-center transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 ${
+                      className={`h-11 px-6 text-sm sm:text-base font-semibold flex items-center justify-center transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 ${
                         calendarValue === cal
                           ? "bg-gradient-to-r from-orange-500 to-rose-500 text-white shadow-md"
                           : "bg-transparent text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
