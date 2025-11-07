@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Logo from '@internal/layouts/logo';
 // translations removed — using static English labels
 
 // Sidebar menu configuration
@@ -53,41 +54,79 @@ const NAV_ITEMS = [
   )},
 ];
 
-export default function AstroSidebar() {
+interface AstroSidebarProps {
+  mobileOpen?: boolean;
+  onMobileClose?: () => void;
+}
+
+export default function AstroSidebar({ mobileOpen = false, onMobileClose }: AstroSidebarProps) {
   const pathname = usePathname();
+  
   return (
-  <aside className="group/sidebar relative w-14 md:w-64 shrink-0 bg-white/80 backdrop-blur-sm border-r border-amber-200/60 shadow-sm">
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-amber-300/40 to-transparent" />
-  <nav className="flex flex-col py-4 px-1 md:px-3 gap-1">
-        {NAV_ITEMS.map(item => {
-          const active = pathname?.startsWith(item.href);
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={[
-                'group relative flex items-center rounded-lg transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white',
-                'px-2 md:px-3 py-2.5 gap-0 md:gap-3 justify-center md:justify-start',
-                active
-                  ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md'
-                  : 'text-gray-700 hover:text-gray-900 hover:bg-amber-50/80'
-              ].join(' ')}
-            >
-              <span className={['shrink-0', active ? 'text-white' : 'text-amber-600 group-hover:text-amber-700'].join(' ')}>
-                {item.icon}
-              </span>
-              <span className="hidden md:inline font-medium tracking-wide text-sm">{item.label}</span>
-              <span className="md:hidden absolute left-full top-1/2 -translate-y-1/2 ml-3 px-2 py-1 text-xs rounded-md bg-gray-800 text-white shadow-lg opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
-                {item.label}
-              </span>
-              {active && (
-                <span className="absolute -left-2 md:-left-3 top-1/2 -translate-y-1/2 h-8 w-1 rounded-full bg-gradient-to-b from-amber-400 via-orange-500 to-amber-600 shadow-md" aria-hidden />
-              )}
-            </Link>
-          );
-        })}
-      </nav>
-      <div className="pointer-events-none absolute bottom-3 left-4 right-4 h-8 rounded-full bg-gradient-to-r from-amber-200/20 via-orange-200/30 to-amber-200/20 blur-xl" />
-    </aside>
+    <>
+      {/* Mobile backdrop overlay */}
+      {mobileOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
+          onClick={onMobileClose}
+          aria-hidden="true"
+        />
+      )}
+      
+      {/* Sidebar */}
+      <aside className={[
+        "fixed md:relative inset-y-0 left-0 z-50",
+        "w-64 md:w-64 shrink-0",
+        "bg-white/95 md:bg-white/80 backdrop-blur-sm",
+        "border-r border-amber-200/60 shadow-lg md:shadow-sm",
+        "transform transition-transform duration-300 ease-in-out",
+        mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+      ].join(' ')}>
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-amber-300/40 to-transparent" />
+        
+        {/* Mobile header with logo and close button */}
+        <div className="md:hidden flex items-center justify-between p-4 border-b border-amber-200/60">
+          <Logo size="sm" variant="dark" />
+          <button
+            onClick={onMobileClose}
+            className="p-2 rounded-lg text-gray-600 hover:bg-amber-50 hover:text-gray-900 transition-colors"
+            aria-label="Close menu"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-6 w-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        
+        <nav className="flex flex-col py-4 px-3 gap-1">
+          {NAV_ITEMS.map(item => {
+            const active = pathname?.startsWith(item.href);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={onMobileClose}
+                className={[
+                  'group relative flex items-center rounded-lg transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white',
+                  'px-3 py-2.5 gap-3 justify-start',
+                  active
+                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md'
+                    : 'text-gray-700 hover:text-gray-900 hover:bg-amber-50/80'
+                ].join(' ')}
+              >
+                <span className={['shrink-0', active ? 'text-white' : 'text-amber-600 group-hover:text-amber-700'].join(' ')}>
+                  {item.icon}
+                </span>
+                <span className="font-medium tracking-wide text-sm">{item.label}</span>
+                {active && (
+                  <span className="absolute -left-3 top-1/2 -translate-y-1/2 h-8 w-1 rounded-full bg-gradient-to-b from-amber-400 via-orange-500 to-amber-600 shadow-md" aria-hidden />
+                )}
+              </Link>
+            );
+          })}
+        </nav>
+        <div className="pointer-events-none absolute bottom-3 left-4 right-4 h-8 rounded-full bg-gradient-to-r from-amber-200/20 via-orange-200/30 to-amber-200/20 blur-xl" />
+      </aside>
+    </>
   );
 }
