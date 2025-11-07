@@ -106,20 +106,31 @@ export default function AstroSidebar({ mobileOpen = false, onMobileClose }: Astr
                 key={item.href}
                 href={item.href}
                 onClick={onMobileClose}
+                prefetch={true}
                 className={[
-                  'group relative flex items-center rounded-lg transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white',
+                  'group relative flex items-center rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white',
                   'px-3 py-2.5 gap-3 justify-start',
+                  'transition-[background-color,box-shadow] duration-100',
                   active
                     ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md'
-                    : 'text-gray-700 hover:text-gray-900 hover:bg-amber-50/80'
+                    : 'bg-transparent text-gray-700 hover:text-gray-900 hover:bg-amber-50'
                 ].join(' ')}
               >
-                <span className={['shrink-0', active ? 'text-white' : 'text-amber-600 group-hover:text-amber-700'].join(' ')}>
+                <span className={[
+                  'shrink-0',
+                  active ? 'text-white' : 'text-amber-600 group-hover:text-amber-700'
+                ].join(' ')}>
                   {item.icon}
                 </span>
-                <span className="font-medium tracking-wide text-sm">{item.label}</span>
+                <span className={[
+                  'font-medium tracking-wide text-sm',
+                  active ? 'text-white' : ''
+                ].join(' ')}>{item.label}</span>
                 {active && (
-                  <span className="absolute -left-3 top-1/2 -translate-y-1/2 h-8 w-1 rounded-full bg-gradient-to-b from-amber-400 via-orange-500 to-amber-600 shadow-md" aria-hidden />
+                  <span 
+                    className="absolute -left-3 top-1/2 -translate-y-1/2 h-8 w-1 rounded-full bg-gradient-to-b from-amber-400 via-orange-500 to-amber-600 shadow-md" 
+                    aria-hidden 
+                  />
                 )}
               </Link>
             );
