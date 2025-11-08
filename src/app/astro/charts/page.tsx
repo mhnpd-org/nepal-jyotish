@@ -124,7 +124,7 @@ export default function ChartsPage() {
           {/* Chart Display - Takes up 2 columns */}
           <div className="lg:col-span-2">
             <div className="sticky top-6">
-              <div className="text-center mb-4">
+              <div className="text-center mb-6">
                 <h2 className="text-2xl font-bold text-red-700 mb-1">
                   {explanation?.name || `D${selectedVarga}`}
                 </h2>
@@ -148,7 +148,7 @@ export default function ChartsPage() {
               </div>
 
               {chartData.length > 0 ? (
-                <div className="flex justify-center bg-white/60 backdrop-blur rounded-2xl p-6 shadow-lg">
+                <div className="flex justify-center">
                   <NorthDrekkanaChart
                     houses={chartData}
                     size={400}
@@ -157,8 +157,8 @@ export default function ChartsPage() {
                   />
                 </div>
               ) : (
-                <div className="bg-white/60 backdrop-blur rounded-2xl p-12 shadow-lg">
-                  <div className="text-center text-gray-500">
+                <div className="text-center py-12">
+                  <div className="text-gray-500">
                     <p className="text-lg mb-2">यो वर्ग चार्ट उपलब्ध छैन</p>
                     <p className="text-sm">This divisional chart is not available</p>
                   </div>
@@ -169,30 +169,30 @@ export default function ChartsPage() {
 
           {/* Explanation Panel - Takes up 3 columns */}
           {explanation && (
-            <div className="lg:col-span-3 space-y-6">
+            <div className="lg:col-span-3 space-y-8">
               {/* Significations */}
-              <div className="bg-white/60 backdrop-blur rounded-2xl p-6 shadow-lg border border-red-100/50">
-                <h4 className="text-lg font-bold text-red-700 mb-4 flex items-center">
+              <div>
+                <h4 className="text-lg font-bold text-red-700 mb-4 flex items-center border-b border-red-200 pb-2">
                   <span className="mr-2">●</span>
                   मुख्य विषयहरू (Primary Significations)
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {explanation.significations.map((sig, idx) => (
-                    <div key={idx} className="flex items-start bg-red-50/50 rounded-lg p-3">
+                    <div key={idx} className="flex items-start">
                       <span className="text-red-500 mr-2 mt-0.5 flex-shrink-0">▸</span>
-                      <span className="text-gray-700 text-sm">{sig}</span>
+                      <span className="text-gray-700">{sig}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* Areas of Life */}
-              <div className="bg-white/60 backdrop-blur rounded-2xl p-6 shadow-lg border border-orange-100/50">
-                <h4 className="text-lg font-bold text-red-700 mb-4 flex items-center">
+              <div>
+                <h4 className="text-lg font-bold text-red-700 mb-4 flex items-center border-b border-red-200 pb-2">
                   <span className="mr-2">●</span>
                   जीवन क्षेत्रहरू (Areas of Life)
                 </h4>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {explanation.areasOfLife.map((area, idx) => (
                     <div key={idx} className="flex items-start">
                       <span className="text-orange-500 mr-2 mt-1 flex-shrink-0">▸</span>
@@ -203,19 +203,19 @@ export default function ChartsPage() {
               </div>
 
               {/* Traditional Interpretation */}
-              <div className="bg-gradient-to-br from-orange-50/80 to-red-50/80 backdrop-blur rounded-2xl p-6 shadow-lg border-l-4 border-red-500">
-                <h4 className="text-lg font-bold text-red-700 mb-4 flex items-center">
+              <div>
+                <h4 className="text-lg font-bold text-red-700 mb-4 flex items-center border-b border-red-200 pb-2">
                   <span className="mr-2">●</span>
                   परम्परागत व्याख्या (Traditional Interpretation)
                 </h4>
-                <p className="text-gray-800 leading-relaxed">
+                <p className="text-gray-800 leading-relaxed bg-gradient-to-r from-orange-50/50 to-red-50/50 p-4 rounded-lg border-l-4 border-red-400">
                   {explanation.interpretation}
                 </p>
               </div>
 
               {/* Additional Note for important charts */}
               {explanation.importance >= 4 && (
-                <div className="bg-yellow-50/80 backdrop-blur rounded-2xl p-5 shadow-lg border-l-4 border-yellow-500">
+                <div className="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-400">
                   <p className="text-sm text-gray-700">
                     <span className="font-bold text-yellow-700">विशेष नोट:</span> यो अत्यन्त महत्त्वपूर्ण वर्ग कुण्डली हो र यसको विस्तृत विश्लेषण अनिवार्य मानिन्छ।
                   </p>
@@ -270,19 +270,19 @@ export default function ChartsPage() {
         </div>
 
         {/* General Information */}
-        <div className="mt-8 bg-gradient-to-br from-red-50/60 to-orange-50/60 backdrop-blur rounded-2xl p-8 border border-red-100/50">
-          <h3 className="text-xl font-bold text-red-700 mb-5 flex items-center justify-center">
+        <div className="mt-12 text-center">
+          <h3 className="text-xl font-bold text-red-700 mb-6 flex items-center justify-center">
             <span className="mr-2">📖</span>
             वर्ग कुण्डली परिचय (About Divisional Charts)
           </h3>
-          <div className="space-y-4 text-gray-700 max-w-4xl mx-auto">
-            <p className="leading-relaxed text-center">
+          <div className="space-y-4 text-gray-700 max-w-4xl mx-auto leading-relaxed">
+            <p>
               <strong>वर्ग कुण्डली (Varga Kundali)</strong> वैदिक ज्योतिषको अत्यन्त महत्त्वपूर्ण भाग हो। मुख्य राशि कुण्डली (D1) बाहेक, विभिन्न वर्ग कुण्डलीहरू जीवनका विशिष्ट क्षेत्रहरूको गहन विश्लेषण प्रदान गर्दछन्।
             </p>
-            <p className="leading-relaxed text-center">
+            <p>
               प्रत्येक राशिलाई विभिन्न भागमा विभाजन गरेर बनाइएका यी कुण्डलीहरूले जन्म कुण्डलीको सूक्ष्म विवरण प्रकट गर्दछन्। <strong>D1 देखि D60 सम्म</strong> कुल ६० वर्ग कुण्डलीहरू छन्, तर तीमध्ये केही विशेष महत्त्वपूर्ण मानिन्छन्।
             </p>
-            <p className="leading-relaxed text-center">
+            <p>
               <strong>षोडश वर्ग (Shodasavarga - 16 divisions)</strong> र <strong>षड्वर्ग (Shadvarga - 6 divisions)</strong> परम्परागत ज्योतिषमा विशेष प्रचलित छन्। नवमांश (D9) र दशमांश (D10) सबैभन्दा महत्त्वपूर्ण मानिन्छन्।
             </p>
           </div>
