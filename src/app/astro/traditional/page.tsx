@@ -63,8 +63,8 @@ export default function TraditionalPage() {
   /* Traditional Kundali rendering logic goes here */
   return (
     <div className="w-full min-h-screen">
-      <div className="container mx-auto px-4 py-6 max-w-7xl">
-        <ChhinaFrame className="bg-white min-h-screen w-full sm:w-full md:max-w-3xl lg:max-w-4xl">
+      <div className="container mx-auto px-1 sm:px-4 md:px-6 py-2 sm:py-6 max-w-7xl">
+        <ChhinaFrame className="bg-white min-h-screen w-full mx-auto md:max-w-3xl lg:max-w-4xl">
           {/* Ganesh image centered near the top with slight spacing */}
           <div className="flex justify-center mt-6">
           <Image
