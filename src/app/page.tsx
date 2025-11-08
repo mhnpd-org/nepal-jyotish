@@ -56,8 +56,8 @@ export const metadata: Metadata = {
 };
 
 export default function LandingPage() {
-  // Get 8 recent blog posts from MDX files
-  const blogs = getRecentBlogPosts(8);
+  // Get 8 recent blog posts from MDX files (Nepali only)
+  const blogs = getRecentBlogPosts(8, 'np');
 
 
   return (
