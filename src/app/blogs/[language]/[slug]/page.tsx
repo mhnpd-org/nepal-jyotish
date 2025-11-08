@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Logo from "@internal/layouts/logo";
 import Footer from "@internal/layouts/footer";
-import { getBlogPost, getAllBlogSlugs } from "@internal/lib/blogs";
+import { getBlogPost, getAllBlogSlugs, hasTranslation } from "@internal/lib/blogs";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
@@ -119,6 +119,9 @@ export default async function BlogPage({ params }: BlogPageProps) {
     notFound();
   }
 
+  // Check if translation exists
+  const translationExists = hasTranslation(slug, language as 'np' | 'en');
+
   // Determine text based on language
   const isNepali = language === 'np';
   const text = {
@@ -130,6 +133,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
     viewAllBlogs: isNepali ? 'सबै लेखहरू हेर्नुहोस्' : 'View All Blogs',
     likedArticle: isNepali ? 'लेख मन पर्यो?' : 'Liked this article?',
     useService: isNepali ? 'ज्योतिष सेवा प्रयोग गर्नुहोस्' : 'Use Jyotish Service',
+    readInOtherLang: isNepali ? 'Read in English' : 'नेपालीमा पढ्नुहोस्',
   };
 
   return (
@@ -196,6 +200,19 @@ export default async function BlogPage({ params }: BlogPageProps) {
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             {post.title}
           </h1>
+
+          {/* Language Toggle - Only show if translation exists */}
+          {translationExists && (
+            <Link
+              href={`/blogs/${isNepali ? 'en' : 'np'}/${slug}`}
+              className="inline-flex items-center gap-2 px-4 py-2 mb-6 bg-white border-2 border-rose-600 text-rose-600 font-medium rounded-lg hover:bg-rose-600 hover:text-white transition-all duration-200 shadow-sm hover:shadow-md group"
+            >
+              <svg className="w-4 h-4 transition-transform group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+              </svg>
+              <span>{text.readInOtherLang}</span>
+            </Link>
+          )}
 
           {/* Excerpt */}
           {post.excerpt && (

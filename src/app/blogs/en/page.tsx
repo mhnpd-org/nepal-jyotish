@@ -38,20 +38,21 @@ export default function EnglishArticlesPage() {
           </div>
           
           <div className="py-8">
-            <div className="flex items-center justify-between mb-4">
-              <h1 className="text-4xl md:text-5xl font-bold">Articles</h1>
-              
-              {/* Language Toggle */}
-              <Link
-                href="/blogs/np"
-                className="px-4 py-2 bg-white text-rose-700 font-medium rounded-lg hover:bg-white/95 transition-colors shadow-sm text-sm whitespace-nowrap"
-              >
-                नेपालीमा पढ्नुहोस्
-              </Link>
-            </div>
-            <p className="text-xl text-white/90 max-w-2xl">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Articles</h1>
+            <p className="text-xl text-white/90 mb-3">
               Knowledge and Information about Nepali Jyotish
             </p>
+            
+            {/* Language Toggle */}
+            <Link
+              href="/blogs/np"
+              className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-transparent border-2 border-white text-white font-medium rounded-lg hover:bg-white hover:text-rose-700 transition-all duration-200 group text-sm w-fit"
+            >
+              <svg className="w-4 h-4 transition-transform group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+              </svg>
+              <span>नेपालीमा पढ्नुहोस्</span>
+            </Link>
           </div>
         </div>
       </header>

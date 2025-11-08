@@ -163,3 +163,15 @@ export function getRecentBlogPosts(limit: number = 8, language?: 'np' | 'en'): B
     language: post.language,
   }));
 }
+
+/**
+ * Check if a blog post has a translation in the other language
+ * @param slug - The blog post slug
+ * @param currentLanguage - Current language of the blog ('np' or 'en')
+ * @returns true if translation exists, false otherwise
+ */
+export function hasTranslation(slug: string, currentLanguage: 'np' | 'en'): boolean {
+  const targetLanguage = currentLanguage === 'np' ? 'en' : 'np';
+  const targetPath = path.join(blogsDirectory, targetLanguage, `${slug}.mdx`);
+  return fs.existsSync(targetPath);
+}
