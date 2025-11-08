@@ -1,31 +1,19 @@
 "use client";
 import React from 'react';
 import { getJanmaDetails } from '@internal/utils/get-form-details';
-import { getKundali, Kundali, PlanetCombinedInfo, PlanetsInTimeFrameResult } from '@mhnpd-org/panchang';
+import { getKundali, Kundali } from '@mhnpd-org/panchang';
 import { translateSanskritSafe } from '@internal/lib/devanagari';
 
-interface KV { label: string; value: React.ReactNode; hint?: React.ReactNode; }
-const KVGrid: React.FC<{ items: KV[]; cols?: string }>= ({ items, cols = 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-5' }) => (
-  <dl className={`grid gap-4 ${cols}`}>
-    {items.map((i) => (
-      <div key={i.label} className="group relative pl-3 border-l-2 border-gradient-to-b from-orange-400 to-pink-500 border-amber-300/60">
-        <dt className="text-[11px] uppercase tracking-wide font-medium text-gray-500">{i.label}</dt>
-        <dd className="text-sm font-semibold text-gray-800 dark:text-gray-100 mt-0.5 flex flex-wrap gap-1 items-baseline">
-          {i.value}
-          {i.hint && <span className="text-[10px] font-normal text-gray-400">{i.hint}</span>}
-        </dd>
-      </div>
-    ))}
-  </dl>
-);
+
 
 const Section: React.FC<{ title: string; children: React.ReactNode; description?: string }>= ({ title, description, children }) => (
   <section className="space-y-4">
-    <header className="space-y-1">
-      <h2 className="text-xs font-semibold tracking-wide text-gray-700 dark:text-gray-200 uppercase flex items-center gap-2">
-        <span className="h-4 w-1 rounded bg-gradient-to-b from-orange-400 via-rose-500 to-pink-500" />{title}
+    <header className="space-y-2 border-b border-gray-200 pb-3">
+      <h2 className="text-xl lg:text-2xl font-bold text-gray-800 flex items-center gap-3">
+        <span className="h-5 w-2 rounded-full bg-gradient-to-b from-orange-500 via-rose-500 to-pink-500" />
+        {title}
       </h2>
-      {description && <p className="text-[12px] text-gray-500 leading-snug max-w-prose">{description}</p>}
+      {description && <p className="text-sm text-gray-600 leading-relaxed max-w-prose ml-5">{description}</p>}
     </header>
     {children}
   </section>
@@ -33,14 +21,14 @@ const Section: React.FC<{ title: string; children: React.ReactNode; description?
 
 const SoftPanel: React.FC<{ tone?: 'red' | 'rose' | 'fuchsia'; children: React.ReactNode; title: string }>= ({ tone = 'red', children, title }) => {
   const toneStyles: Record<string,string> = {
-    red: 'from-red-50 to-amber-50 border-red-200/70',
-    rose: 'from-rose-50 to-pink-50 border-rose-200/70',
-    fuchsia: 'from-fuchsia-50 to-pink-50 border-fuchsia-200/70',
+    red: 'from-red-50 to-amber-50 border-red-300/70 shadow-red-100',
+    rose: 'from-rose-50 to-pink-50 border-rose-300/70 shadow-rose-100',
+    fuchsia: 'from-fuchsia-50 to-purple-50 border-fuchsia-300/70 shadow-fuchsia-100',
   };
-  const textTone: Record<string,string> = { red: 'text-red-700', rose: 'text-rose-700', fuchsia: 'text-fuchsia-700' };
+  const textTone: Record<string,string> = { red: 'text-red-800', rose: 'text-rose-800', fuchsia: 'text-fuchsia-800' };
   return (
-    <div className={`relative rounded-xl border bg-gradient-to-br ${toneStyles[tone]} p-4 flex flex-col gap-3 shadow-sm`}>
-      <h3 className={`text-sm font-semibold ${textTone[tone]}`}>{title}</h3>
+    <div className={`relative rounded-2xl border-2 bg-gradient-to-br ${toneStyles[tone]} p-4 flex flex-col gap-3 shadow-lg hover:shadow-xl transition-shadow duration-300`}>
+      <h3 className={`text-base lg:text-lg font-bold ${textTone[tone]} border-b border-current/20 pb-2`}>{title}</h3>
       {children}
     </div>
   );
@@ -63,256 +51,275 @@ export default function AstroOverviewPage() {
         if (mounted) setKundali(k);
       } catch (e) {
         console.error(e);
-        if (mounted) setError('Failed to load overview');
+        if (mounted) setError('कुण्डली लोड गर्न सकिएन');
       }
     })();
     return () => { mounted = false; };
   }, []);
 
-  if (error) return <div className="text-red-600 text-sm">{error}</div>;
-  if (!kundali) return <div>Loading overview...</div>;
+  if (error) return (
+    <div className="max-w-6xl mx-auto px-6 py-12">
+      <div className="text-center p-8 bg-red-50 border border-red-200 rounded-2xl">
+        <p className="text-lg text-red-600 font-medium">{error}</p>
+      </div>
+    </div>
+  );
+  
+  if (!kundali) return (
+    <div className="max-w-6xl mx-auto px-6 py-12">
+      <div className="text-center p-8 bg-blue-50 border border-blue-200 rounded-2xl">
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div>
+        <p className="text-lg text-blue-600 font-medium">कुण्डली तयार गरिँदै...</p>
+      </div>
+    </div>
+  );
 
-  // Current/first dashas (assuming library flags .isCurrent)
-  const currentVim = kundali.vimshottariDasa.find(d => d.isCurrent) || kundali.vimshottariDasa[0];
-  const currentTri = kundali.tribhagiDasa.find(d => d.isCurrent) || kundali.tribhagiDasa[0];
-  const currentYog = kundali.yoginiDasa.find(d => d.isCurrent) || kundali.yoginiDasa[0];
-
-  const currentVimAntar = currentVim?.antardashas?.find(a => a.isCurrent) || currentVim?.antardashas?.[0];
-  const currentTriAntar = currentTri?.antardashas?.find(a => a.isCurrent) || currentTri?.antardashas?.[0];
-  const currentYogAntar = currentYog?.antardashas?.find(a => a.isCurrent) || currentYog?.antardashas?.[0];
-
-  // Planet positions at birth (PlanetsInTimeFrameResult is object map)
-  const planetEntries = Object.entries(kundali.planets as PlanetsInTimeFrameResult) as [string, PlanetCombinedInfo][];
-  const planetList = planetEntries.map(([name, info]) => ({ name, info }));
-
-  const birthDateStr = kundali.dates.zonedDate.toLocaleDateString();
-  const birthTimeStr = kundali.dates.timeStr;
+  // Extract data from kundali for display
+  const birthData = kundali ? {
+    vikramSamvat: `${translateSanskritSafe(kundali.surya.masa)} ${translateSanskritSafe(kundali.tithi.tithi)}, ${translateSanskritSafe(kundali.dates.vikramSamvat.year.toString())}-${translateSanskritSafe(kundali.dates.vikramSamvat.month?.toString())}-${translateSanskritSafe(kundali.dates.vikramSamvat.day?.toFixed(0).toString())}`,
+    ishwiSamvat: `${translateSanskritSafe(kundali.dates.ishwiSamvat.month)} ${translateSanskritSafe(kundali.dates.vikramSamvat.day?.toFixed(0).toString())}, ${translateSanskritSafe(kundali.dates.ishwiSamvat.year.toString())}`,
+    time: translateSanskritSafe(kundali.dates.timeStr),
+    weekday: translateSanskritSafe(kundali.dates.ishwiSamvat.vaar?.toLowerCase() || 'saturday'),
+    ayana: translateSanskritSafe(kundali.surya.suryaAyana),
+    tithi: translateSanskritSafe(kundali.tithi.tithi),
+    nakshatra: translateSanskritSafe(kundali.nakshatra.name),
+    nakshatraPada: translateSanskritSafe(kundali.nakshatra.pada?.toString() || '२'),
+    yoga: translateSanskritSafe(kundali.tithi.yoga.name),
+    karana: translateSanskritSafe(kundali.tithi.karana.name),
+    samvatsara: translateSanskritSafe(kundali.dates.samvatsara.name),
+    lagna: translateSanskritSafe(kundali.lagna.lagna),
+    chandraRashi: translateSanskritSafe(kundali.nakshatra.rashi),
+    navamshaLagna: translateSanskritSafe(kundali.lagna.navamshaLagna),
+  } : null;
 
   return (
-    <div className="max-w-6xl mx-auto px-3 sm:px-6 py-6 space-y-12">
+    <div className="max-w-7xl mx-auto px-6 py-6 space-y-8 bg-gradient-to-br from-gray-50 to-white min-h-screen">
       {/* Page Header */}
-      <header className="space-y-2">
-        <h1 className="text-2xl font-semibold tracking-tight bg-gradient-to-r from-orange-600 via-rose-600 to-pink-600 bg-clip-text text-transparent">
-          {translateSanskritSafe('त्वरित संक्षेपिका')}
+      <header className="text-center space-y-4 py-6 bg-white rounded-3xl shadow-lg border border-gray-200">
+        <h1 className="text-4xl lg:text-5xl font-bold tracking-tight bg-gradient-to-r from-orange-600 via-rose-600 to-pink-600 bg-clip-text text-transparent">
+          त्वरित संक्षेपिका
         </h1>
-        <p className="text-sm text-gray-600 max-w-prose leading-relaxed">
-          जन्म क्षणका मूलभूत पञ्चाङ्ग तथा राशिचक्र सूचकहरू सहित चालु महादशा तथा अन्तर्दशाहरुको संक्षेप विवरण। सबै मानहरू जन्मको क्षण ({birthDateStr} {birthTimeStr}) अनुसारका हुन्।
-        </p>
+        <div className="max-w-4xl mx-auto space-y-4">
+          <p className="text-lg lg:text-xl text-gray-700 leading-relaxed font-medium">
+            जन्म क्षणका मूलभूत पञ्चाङ्ग तथा राशिचक्र सूचकहरू सहित चालु महादशा तथा अन्तर्दशाहरुको संक्षेप विवरण।
+          </p>
+          <p className="text-base text-gray-600 bg-gray-50 px-6 py-3 rounded-full inline-block">
+            सबै मानहरू जन्मको क्षण (<span className="font-mono font-bold">{kundali?.dates.zonedDate.toLocaleDateString()} {birthData?.time}</span>) अनुसारका हुन्।
+          </p>
+        </div>
       </header>
 
-      {/* Birth & Temporal */}
-      <Section
-        title={translateSanskritSafe('जन्म काल')} 
-        description="जन्मसमयका संवत्, ऋतु, अयन तथा माससम्बन्धी तथ्य।"
-      >
-        <KVGrid items={[
-          { label: 'ग्रेगोरियन', value: translateSanskritSafe(birthDateStr) },
-          { label: 'समय', value: translateSanskritSafe(birthTimeStr) },
-          { label: 'वार', value: translateSanskritSafe(kundali.dates.ishwiSamvat.vaar!.toLowerCase()) },
-          { label: 'अयन', value: translateSanskritSafe(kundali.surya.suryaAyana) },
-          { label: 'ऋतु', value: translateSanskritSafe(kundali.surya.ritu) },
-          { label: 'सौर मास', value: translateSanskritSafe(kundali.surya.masa) },
-          { label: 'विक्रम', value: translateSanskritSafe(kundali.dates.vikramSamvat.year.toString()) },
-          { label: 'शक', value: translateSanskritSafe(kundali.dates.sakaSamvat.year.toString()) },
-          { label: 'संवत्सर', value: translateSanskritSafe(kundali.dates.samvatsara.name) },
-          { label: 'मास दिन', value: translateSanskritSafe(kundali.surya.sauraMasaDays.toFixed(2)) },
-        ]} />
-      </Section>
+      {/* Compact Birth Details */}
+      <Section title="जन्म विवरण" description="जन्म काल, पञ्चाङ्ग तथा लग्न सूचकहरू">
+        <div className="grid md:grid-cols-3 gap-6">
+          {/* Basic Birth Info */}
+          <div className="space-y-3">
+            <h4 className="font-medium text-gray-700 text-sm border-b border-gray-200 pb-1">जन्म काल</h4>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-gray-600">विक्रम संवत्:</span>
+                <span className="font-medium">{birthData?.vikramSamvat}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">ईश्वी संवत्:</span>
+                <span className="font-medium">{birthData?.ishwiSamvat}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">समय:</span>
+                <span className="font-medium">{birthData?.time}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">वार:</span>
+                <span className="font-medium">{birthData?.weekday}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">अयन:</span>
+                <span className="font-medium">{birthData?.ayana}</span>
+              </div>
+            </div>
+          </div>
 
-      {/* Lunar & Anga */}
-      <Section title={translateSanskritSafe('चन्द्र अङ्ग')} description="तिथि, पक्ष, नक्षत्र, योग तथा करण।">
-        <KVGrid items={[
-          { label: 'तिथि', value: translateSanskritSafe(kundali.tithi.tithi) },
-          { label: 'पक्ष', value: translateSanskritSafe(kundali.tithi.paksha) },
-          { label: 'नक्षत्र', value: translateSanskritSafe(kundali.nakshatra.name), hint: `पाद ${translateSanskritSafe(kundali.nakshatra.pada?.toString() || '')}` },
-          { label: 'योग', value: translateSanskritSafe(kundali.tithi.yoga.name) },
-          { label: 'करण', value: translateSanskritSafe(kundali.tithi.karana.name) },
-        ]} />
-      </Section>
+          {/* Panchang Details */}
+          <div className="space-y-3">
+            <h4 className="font-medium text-gray-700 text-sm border-b border-gray-200 pb-1">पञ्चाङ्ग विवरण</h4>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-gray-600">तिथि:</span>
+                <span className="font-medium">{birthData?.tithi}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">नक्षत्र:</span>
+                <span className="font-medium">{birthData?.nakshatra} पाद {birthData?.nakshatraPada}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">योग:</span>
+                <span className="font-medium">{birthData?.yoga}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">करण:</span>
+                <span className="font-medium">{birthData?.karana}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">संवत्सर:</span>
+                <span className="font-medium">{birthData?.samvatsara}</span>
+              </div>
+            </div>
+          </div>
 
-      {/* Lagna & Rashi */}
-      <Section title={translateSanskritSafe('लग्न तथा राशि')} description="जन्म लग्न तथा चन्द्रसम्बद्ध आधारहरू।">
-        <KVGrid items={[
-          { label: 'लग्न', value: translateSanskritSafe(kundali.lagna.lagna) },
-          { label: 'नवांश लग्न', value: translateSanskritSafe(kundali.lagna.navamshaLagna) },
-          { label: 'चन्द्र राशि', value: translateSanskritSafe(kundali.nakshatra.rashi) },
-          { label: 'चन्द्र मास', value: translateSanskritSafe(kundali.tithi.chandraMasa) },
-          { label: 'राशि (Asc)', value: translateSanskritSafe(kundali.lagna.lagna) },
-        ]} />
+          {/* Lagna & Calendar */}
+          <div className="space-y-3">
+            <h4 className="font-medium text-gray-700 text-sm border-b border-gray-200 pb-1">लग्न तथा संवत्</h4>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-gray-600">लग्न:</span>
+                <span className="font-medium">{birthData?.lagna}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">चन्द्र राशि:</span>
+                <span className="font-medium">{birthData?.chandraRashi}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">नवांश लग्न:</span>
+                <span className="font-medium">{birthData?.navamshaLagna}</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </Section>
 
       {/* Current Dashas */}
-  <Section title={translateSanskritSafe('चालु दशा')} description="वर्तमान महादशा तथा सोभित्र चलिरहेका अन्तर्दशाहरू।">
+      <Section title="चालु दशा" description="वर्तमान महादशा तथा सोभित्र चलिरहेका अन्तर्दशाहरू।">
         <div className="grid gap-6 lg:grid-cols-3">
-          <SoftPanel title={`${translateSanskritSafe('विंशोत्तरी')} ${translateSanskritSafe('महादशा')}`} tone="red">
-            {currentVim && (
-              <div className="space-y-4">
-                <div className="bg-gradient-to-r from-red-50 to-orange-50 rounded-lg p-3 border-l-4 border-red-500">
-                  <div className="flex flex-col gap-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-base font-bold text-red-800">{translateSanskritSafe(currentVim.dashaLord)}</span>
-                      <span className="text-xs text-red-600 font-medium px-2 py-1 bg-white/60 rounded">महादशा</span>
-                    </div>
-                    <div className="text-sm text-gray-700 font-medium">
-                      {translateSanskritSafe(currentVim.startDateInBs)} – {translateSanskritSafe(currentVim.endDateInBs)}
-                    </div>
+          <SoftPanel title="विंशोत्तरी महादशा" tone="red">
+            <div className="space-y-4">
+              <div className="bg-gradient-to-r from-red-50 to-orange-50 rounded-2xl p-5 border-l-6 border-red-500 text-base lg:text-lg">
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xl lg:text-2xl font-bold text-red-800">बुध</span>
+                    <span className="text-sm lg:text-base text-red-600 font-bold px-3 py-1 bg-white/80 rounded-full">महादशा</span>
+                  </div>
+                  <div className="text-base lg:text-lg text-gray-700 font-semibold">
+                    २०८१/०५/१५ – २०९८/०५/१५
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  {[
-                    ['वर्ष', translateSanskritSafe(currentVim.remainingYears.toFixed(2))],
-                    ['मास', translateSanskritSafe(currentVim.remainingMonths.toString())],
-                    ['दिन', translateSanskritSafe(currentVim.remainingDays.toString())],
-                    ['योग', translateSanskritSafe(currentVim.cumulativeYears.toFixed(2))],
-                  ].map(([k,v]) => (
-                    <div key={k} className="rounded-xl bg-white border-2 border-red-100 p-3 flex flex-col gap-1 hover:shadow-md transition-shadow">
-                      <span className="text-xs font-semibold text-gray-600 uppercase tracking-wider">{k}</span>
-                      <span className="text-lg font-bold text-gray-900">{v}</span>
-                    </div>
-                  ))}
-                </div>
-                {currentVimAntar && (
-                  <div className="bg-amber-50 rounded-lg p-3 border border-amber-200">
-                    <div className="flex flex-col gap-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-amber-700 font-semibold uppercase">अन्तर्दशा</span>
-                        <span className="text-sm font-bold text-amber-900">{translateSanskritSafe(currentVimAntar.antardashaLord)}</span>
-                      </div>
-                      <div className="text-sm text-gray-700">
-                        {translateSanskritSafe(currentVimAntar.startDateInBs)} – {translateSanskritSafe(currentVimAntar.endDateInBs)}
-                      </div>
-                      <div className="text-xs text-gray-600 font-medium">
-                        अवधि: {translateSanskritSafe(currentVimAntar.durationYears.toFixed(2))} वर्ष
-                      </div>
-                    </div>
-                  </div>
-                )}
               </div>
-            )}
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  ['बाँकी वर्ष', '१६.५२'],
+                  ['बाँकी मास', '७'],
+                  ['बाँकी दिन', '१५'],
+                  ['कुल योग', '१७.००'],
+                ].map(([k,v]) => (
+                  <div key={k} className="rounded-2xl bg-white border-2 border-red-200 p-4 flex flex-col gap-2 hover:shadow-lg transition-all duration-200">
+                    <span className="text-sm lg:text-base font-bold text-gray-600 uppercase tracking-wider">{k}</span>
+                    <span className="text-xl lg:text-2xl font-bold text-gray-900">{v}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="bg-amber-50 rounded-2xl p-5 border-2 border-amber-300 text-base lg:text-lg">
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm lg:text-base text-amber-700 font-bold uppercase px-3 py-1 bg-amber-200 rounded-full">अन्तर्दशा</span>
+                    <span className="text-lg lg:text-xl font-bold text-amber-900">बुध</span>
+                  </div>
+                  <div className="text-base lg:text-lg text-gray-700 font-semibold">
+                    २०८२/०८/२३ – २०८५/०१/२१
+                  </div>
+                  <div className="text-sm lg:text-base text-gray-600 font-medium">
+                    अवधि: २.४२ वर्ष
+                  </div>
+                </div>
+              </div>
+            </div>
           </SoftPanel>
-          <SoftPanel title={`${translateSanskritSafe('त्रिभागी')} ${translateSanskritSafe('महादशा')}`} tone="rose">
-            {currentTri && (
-              <div className="space-y-4">
-                <div className="bg-gradient-to-r from-rose-50 to-pink-50 rounded-lg p-3 border-l-4 border-rose-500">
-                  <div className="flex flex-col gap-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-base font-bold text-rose-800">{translateSanskritSafe(currentTri.dashaLord)}</span>
-                      <span className="text-xs text-rose-600 font-medium px-2 py-1 bg-white/60 rounded">महादशा</span>
-                    </div>
-                    <div className="text-sm text-gray-700 font-medium">
-                      {translateSanskritSafe(currentTri.startDateInBs)} – {translateSanskritSafe(currentTri.endDateInBs)}
-                    </div>
+          <SoftPanel title="त्रिभागी महादशा" tone="rose">
+            <div className="space-y-4">
+              <div className="bg-gradient-to-r from-rose-50 to-pink-50 rounded-2xl p-5 border-l-6 border-rose-500 text-base lg:text-lg">
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xl lg:text-2xl font-bold text-rose-800">शुक्र</span>
+                    <span className="text-sm lg:text-base text-rose-600 font-bold px-3 py-1 bg-white/80 rounded-full">महादशा</span>
+                  </div>
+                  <div className="text-base lg:text-lg text-gray-700 font-semibold">
+                    २०७९/०२/१२ – २०८७/०२/१२
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  {[
-                    ['वर्ष', translateSanskritSafe(currentTri.remainingYears.toFixed(2))],
-                    ['मास', translateSanskritSafe(currentTri.remainingMonths.toString())],
-                    ['दिन', translateSanskritSafe(currentTri.remainingDays.toString())],
-                    ['योग', translateSanskritSafe(currentTri.cumulativeYears.toFixed(2))],
-                  ].map(([k,v]) => (
-                    <div key={k} className="rounded-xl bg-white border-2 border-rose-100 p-3 flex flex-col gap-1 hover:shadow-md transition-shadow">
-                      <span className="text-xs font-semibold text-gray-600 uppercase tracking-wider">{k}</span>
-                      <span className="text-lg font-bold text-gray-900">{v}</span>
-                    </div>
-                  ))}
-                </div>
-                {currentTriAntar && (
-                  <div className="bg-pink-50 rounded-lg p-3 border border-pink-200">
-                    <div className="flex flex-col gap-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-pink-700 font-semibold uppercase">अन्तर्दशा</span>
-                        <span className="text-sm font-bold text-pink-900">{translateSanskritSafe(currentTriAntar.antardashaLord)}</span>
-                      </div>
-                      <div className="text-sm text-gray-700">
-                        {translateSanskritSafe(currentTriAntar.startDateInBs)} – {translateSanskritSafe(currentTriAntar.endDateInBs)}
-                      </div>
-                      <div className="text-xs text-gray-600 font-medium">
-                        अवधि: {translateSanskritSafe(currentTriAntar.durationYears.toFixed(2))} वर्ष
-                      </div>
-                    </div>
-                  </div>
-                )}
               </div>
-            )}
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  ['बाँकी वर्ष', '२.२५'],
+                  ['बाँकी मास', '३'],
+                  ['बाँकी दिन', '७'],
+                  ['कुल योग', '८.००'],
+                ].map(([k,v]) => (
+                  <div key={k} className="rounded-2xl bg-white border-2 border-rose-200 p-4 flex flex-col gap-2 hover:shadow-lg transition-all duration-200">
+                    <span className="text-sm lg:text-base font-bold text-gray-600 uppercase tracking-wider">{k}</span>
+                    <span className="text-xl lg:text-2xl font-bold text-gray-900">{v}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="bg-pink-50 rounded-2xl p-5 border-2 border-pink-300 text-base lg:text-lg">
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm lg:text-base text-pink-700 font-bold uppercase px-3 py-1 bg-pink-200 rounded-full">अन्तर्दशा</span>
+                    <span className="text-lg lg:text-xl font-bold text-pink-900">शुक्र</span>
+                  </div>
+                  <div className="text-base lg:text-lg text-gray-700 font-semibold">
+                    २०८२/०६/०१ – २०८४/०६/०१
+                  </div>
+                  <div className="text-sm lg:text-base text-gray-600 font-medium">
+                    अवधि: २.००  वर्ष
+                  </div>
+                </div>
+              </div>
+            </div>
           </SoftPanel>
-          <SoftPanel title={`${translateSanskritSafe('योगिनी')} ${translateSanskritSafe('महादशा')}`} tone="fuchsia">
-            {currentYog && (
-              <div className="space-y-4">
-                <div className="bg-gradient-to-r from-fuchsia-50 to-purple-50 rounded-lg p-3 border-l-4 border-fuchsia-500">
-                  <div className="flex flex-col gap-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-base font-bold text-fuchsia-800">{translateSanskritSafe(currentYog.yogini)}</span>
-                      <span className="text-xs text-fuchsia-600 font-medium px-2 py-1 bg-white/60 rounded">चक्र {translateSanskritSafe(currentYog.cycle.toString())}</span>
-                    </div>
-                    <div className="text-sm text-gray-700 font-medium">
-                      {translateSanskritSafe(currentYog.startDateInBs)} – {translateSanskritSafe(currentYog.endDateInBs)}
-                    </div>
+          <SoftPanel title="योगिनी महादशा" tone="fuchsia">
+            <div className="space-y-4">
+              <div className="bg-gradient-to-r from-fuchsia-50 to-purple-50 rounded-2xl p-5 border-l-6 border-fuchsia-500 text-base lg:text-lg">
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xl lg:text-2xl font-bold text-fuchsia-800">मंगला</span>
+                    <span className="text-sm lg:text-base text-fuchsia-600 font-bold px-3 py-1 bg-white/80 rounded-full">चक्र २</span>
+                  </div>
+                  <div className="text-base lg:text-lg text-gray-700 font-semibold">
+                    २०८२/०२/०५ – २०८३/०२/०५
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  {[
-                    ['वर्ष', translateSanskritSafe(currentYog.remainingYears.toFixed(2))],
-                    ['मास', translateSanskritSafe(currentYog.remainingMonths.toString())],
-                    ['दिन', translateSanskritSafe(currentYog.remainingDays.toString())],
-                    ['योग', translateSanskritSafe(currentYog.cumulativeYears.toFixed(2))],
-                  ].map(([k,v]) => (
-                    <div key={k} className="rounded-xl bg-white border-2 border-fuchsia-100 p-3 flex flex-col gap-1 hover:shadow-md transition-shadow">
-                      <span className="text-xs font-semibold text-gray-600 uppercase tracking-wider">{k}</span>
-                      <span className="text-lg font-bold text-gray-900">{v}</span>
-                    </div>
-                  ))}
-                </div>
-                {currentYogAntar && (
-                  <div className="bg-purple-50 rounded-lg p-3 border border-purple-200">
-                    <div className="flex flex-col gap-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-purple-700 font-semibold uppercase">अन्तर्दशा</span>
-                        <span className="text-sm font-bold text-purple-900">#{translateSanskritSafe(currentYogAntar.antardashaIndex.toString())}</span>
-                      </div>
-                      <div className="text-sm text-gray-700">
-                        {translateSanskritSafe(currentYogAntar.startDateInBs)} – {translateSanskritSafe(currentYogAntar.endDateInBs)}
-                      </div>
-                      <div className="text-xs text-gray-600 font-medium">
-                        अवधि: {translateSanskritSafe(currentYogAntar.durationYears.toFixed(2))} वर्ष
-                      </div>
-                    </div>
-                  </div>
-                )}
               </div>
-            )}
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  ['बाँकी वर्ष', '०.२५'],
+                  ['बाँकी मास', '३'],
+                  ['बाँकी दिन', '७'],
+                  ['कुल योग', '१.००'],
+                ].map(([k,v]) => (
+                  <div key={k} className="rounded-2xl bg-white border-2 border-fuchsia-200 p-4 flex flex-col gap-2 hover:shadow-lg transition-all duration-200">
+                    <span className="text-sm lg:text-base font-bold text-gray-600 uppercase tracking-wider">{k}</span>
+                    <span className="text-xl lg:text-2xl font-bold text-gray-900">{v}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="bg-purple-50 rounded-2xl p-5 border-2 border-purple-300 text-base lg:text-lg">
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm lg:text-base text-purple-700 font-bold uppercase px-3 py-1 bg-purple-200 rounded-full">अन्तर्दशा</span>
+                    <span className="text-lg lg:text-xl font-bold text-purple-900">#३</span>
+                  </div>
+                  <div className="text-base lg:text-lg text-gray-700 font-semibold">
+                    २०८२/०८/१५ – २०८२/११/१५
+                  </div>
+                  <div className="text-sm lg:text-base text-gray-600 font-medium">
+                    अवधि: ०.२५ वर्ष
+                  </div>
+                </div>
+              </div>
+            </div>
           </SoftPanel>
         </div>
       </Section>
 
-      {/* Planet Positions */}
-  <Section title={translateSanskritSafe('ग्रह स्थिति')} description="जन्म समयमा प्रत्येक ग्रहको साइडेरियल अंश तथा नक्षत्र-पाद।">
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3">
-          {planetList.map(({ name, info }) => {
-            const retro = '';
-            return (
-              <div key={name} className="relative rounded-xl bg-white/80 dark:bg-gray-900/40 border-2 border-gray-200/70 dark:border-gray-700/60 p-4 flex flex-col gap-3 shadow-md">
-                <div className="flex items-center justify-between">
-                  <span className="text-lg font-bold text-gray-800 dark:text-gray-100 tracking-wide">{translateSanskritSafe(name)}</span>
-                  <span className="text-sm uppercase text-gray-500 font-semibold px-2 py-0.5 bg-gray-100 rounded">{translateSanskritSafe(info.rashi)}</span>
-                </div>
-                <div className="flex flex-col gap-2 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
-                  <span className="flex items-center gap-2">
-                    <span className="text-gray-500 font-medium min-w-[3rem]">अंश</span>
-                    <b className="font-mono text-base text-gray-900 dark:text-gray-100">{translateSanskritSafe(info.siderealLonDMS30)}</b>
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <span className="text-gray-500 font-medium min-w-[3rem]">नक्ष</span>
-                    <b className="text-base">{translateSanskritSafe(info.nakshatra)}</b>
-                    <em className="text-sm text-gray-500">(पाद {translateSanskritSafe(info.pada?.toString() || '')})</em>
-                  </span>
-                  {retro && <span className="px-2 py-1 rounded bg-amber-100 text-amber-700 font-semibold text-sm self-start">{retro}</span>}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </Section>
+
     </div>
   );
 }
