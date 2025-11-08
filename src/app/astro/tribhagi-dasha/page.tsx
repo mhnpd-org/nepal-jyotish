@@ -3,6 +3,8 @@ import React from "react";
 import { getJanmaDetails } from "@internal/utils/get-form-details";
 import { getKundali, Kundali, TribhagiDasha } from "@mhnpd-org/panchang";
 import { translateSanskritSafe } from "@internal/lib/devanagari";
+import { ErrorState } from "@internal/layouts/error-state";
+import { LoadingState } from "@internal/layouts/loading-state";
 
 interface DashaItemProps { item: TribhagiDasha; index: number; }
 
@@ -107,7 +109,10 @@ export default function TribhagiDashaVerticalPage() {
     let mounted = true;
     const details = getJanmaDetails();
     if (!details) {
-      window.location.replace("/astro/janma");
+      if (mounted) {
+        setError("जन्म विवरण छैन। कृपया जन्म विवरण भर्नुहोस्।");
+        setTimeout(() => window.location.replace("/astro/janma"), 2000);
+      }
       return;
     }
     (async () => {
@@ -116,14 +121,17 @@ export default function TribhagiDashaVerticalPage() {
         if (mounted) setKundali(k);
       } catch (e) {
         console.error(e);
-        if (mounted) setError("Failed to load dasha");
+        if (mounted) {
+          setError("त्रिभागी दशा लोड गर्न सकिएन। कृपया जन्म विवरण पुनः जाँच गर्नुहोस्।");
+          setTimeout(() => window.location.replace("/astro/janma"), 3000);
+        }
       }
     })();
     return () => { mounted = false; };
   }, []);
 
-  if (error) return <div className="text-red-600 text-sm">{error}</div>;
-  if (!kundali) return <div>Loading Tribhagi Dasha...</div>;
+  if (error) return <ErrorState message={error} />;
+  if (!kundali) return <LoadingState message="त्रिभागी दशा तयार गरिँदै..." />;
 
   const list: TribhagiDasha[] = kundali.tribhagiDasa;
 

@@ -3,6 +3,8 @@ import React from "react";
 import { getJanmaDetails } from "@internal/utils/get-form-details";
 import { getKundali, Kundali, PlanetCombinedInfo, PlanetsInTimeFrameResult } from "@mhnpd-org/panchang";
 import { translateSanskritSafe } from "@internal/lib/devanagari";
+import { ErrorState } from "@internal/layouts/error-state";
+import { LoadingState } from "@internal/layouts/loading-state";
 
 // Helper to render a vedic styled cell (sanskrit focus)
 const SanskritCell: React.FC<{ value: string | number | undefined | null }> = ({ value }) => (
@@ -19,8 +21,10 @@ export default function PlanetPositionsPage() {
     const load = async () => {
       const details = getJanmaDetails();
       if (!details) {
-        setError("Missing birth details. Redirecting...");
-        window.location.replace("/astro/janma");
+        if (mounted) {
+          setError("जन्म विवरण छैन। कृपया जन्म विवरण भर्नुहोस्।");
+          setTimeout(() => window.location.replace("/astro/janma"), 2000);
+        }
         return;
       }
       try {
@@ -28,15 +32,18 @@ export default function PlanetPositionsPage() {
         if (mounted) setKundali(k);
       } catch (e) {
         console.error(e);
-        if (mounted) setError("Failed to load planetary data");
+        if (mounted) {
+          setError("ग्रह स्थिति लोड गर्न सकिएन। कृपया जन्म विवरण पुनः जाँच गर्नुहोस्।");
+          setTimeout(() => window.location.replace("/astro/janma"), 3000);
+        }
       }
     };
     load();
     return () => { mounted = false; };
   }, []);
 
-  if (error) return <div className="text-red-600 text-sm">{error}</div>;
-  if (!kundali) return <div>Loading planetary positions...</div>;
+  if (error) return <ErrorState message={error} />;
+  if (!kundali) return <LoadingState message="ग्रह स्थिति तयार गरिँदै..." />;
 
   const planets: PlanetsInTimeFrameResult = kundali.planets;
 

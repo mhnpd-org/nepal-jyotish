@@ -11,9 +11,12 @@ import { VimshottariDashaTable } from "@internal/components/vimshottari-dasha-ta
 import { TribhagiDashaTable } from "@internal/components/tribhaagi-dasha-table";
 import { YoginiDashaTable } from "@internal/components/yogini-dasha-table";
 import { ChhinaFrame } from "@internal/components/chhina-frame";
+import { ErrorState } from "@internal/layouts/error-state";
+import { LoadingState } from "@internal/layouts/loading-state";
 
 export default function TraditionalPage() {
   const [kundali, setKundali] = React.useState<Kundali | null>(null);
+  const [error, setError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     let mounted = true;
@@ -28,7 +31,10 @@ export default function TraditionalPage() {
       }
 
       if (!details) {
-        if (mounted) window.location.replace("/astro/janma");
+        if (mounted) {
+          setError("जन्म विवरण छैन। कृपया जन्म विवरण भर्नुहोस्।");
+          setTimeout(() => window.location.replace("/astro/janma"), 2000);
+        }
         return;
       }
 
@@ -37,7 +43,10 @@ export default function TraditionalPage() {
         if (mounted) setKundali(result);
       } catch (error) {
         console.error("Failed to fetch kundali:", error);
-        if (mounted) window.location.replace("/astro/janma");
+        if (mounted) {
+          setError("कुण्डली तयार गर्न सकिएन। कृपया जन्म विवरण पुनः जाँच गर्नुहोस्।");
+          setTimeout(() => window.location.replace("/astro/janma"), 3000);
+        }
       }
     };
 
@@ -48,9 +57,8 @@ export default function TraditionalPage() {
     };
   }, []);
 
-  if (!kundali) {
-    return <div>Loading...</div>;
-  }
+  if (error) return <ErrorState message={error} />;
+  if (!kundali) return <LoadingState message="पारम्परिक कुण्डली तयार गरिँदै..." />;
 
   /* Traditional Kundali rendering logic goes here */
   return (

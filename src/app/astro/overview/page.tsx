@@ -3,6 +3,8 @@ import React from 'react';
 import { getJanmaDetails } from '@internal/utils/get-form-details';
 import { getKundali, Kundali } from '@mhnpd-org/panchang';
 import { translateSanskritSafe } from '@internal/lib/devanagari';
+import { ErrorState } from '@internal/layouts/error-state';
+import { LoadingState } from '@internal/layouts/loading-state';
 
 
 
@@ -57,22 +59,9 @@ export default function AstroOverviewPage() {
     return () => { mounted = false; };
   }, []);
 
-  if (error) return (
-    <div className="max-w-6xl mx-auto px-6 py-12">
-      <div className="text-center p-8 bg-red-50 border border-red-200 rounded-2xl">
-        <p className="text-lg text-red-600 font-medium">{error}</p>
-      </div>
-    </div>
-  );
+  if (error) return <ErrorState message={error} />;
   
-  if (!kundali) return (
-    <div className="max-w-6xl mx-auto px-6 py-12">
-      <div className="text-center p-8 bg-blue-50 border border-blue-200 rounded-2xl">
-        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div>
-        <p className="text-lg text-blue-600 font-medium">कुण्डली तयार गरिँदै...</p>
-      </div>
-    </div>
-  );
+  if (!kundali) return <LoadingState />;
 
   // Extract data from kundali for display
   const birthData = kundali ? {

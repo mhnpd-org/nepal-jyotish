@@ -8,9 +8,12 @@ import {
   getVargaExplanation, 
   STANDARD_VARGAS
 } from "@internal/lib/varga-explanations";
+import { ErrorState } from "@internal/layouts/error-state";
+import { LoadingState } from "@internal/layouts/loading-state";
 
 export default function ChartsPage() {
   const [kundali, setKundali] = React.useState<Kundali | null>(null);
+  const [error, setError] = React.useState<string | null>(null);
   const [selectedVarga, setSelectedVarga] = React.useState<number>(1); // Default to D1 (Rashi)
   const [availableVargas, setAvailableVargas] = React.useState<number[]>([]);
 
@@ -26,7 +29,10 @@ export default function ChartsPage() {
       }
 
       if (!details) {
-        if (mounted) window.location.replace("/astro/janma");
+        if (mounted) {
+          setError("जन्म विवरण छैन। कृपया जन्म विवरण भर्नुहोस्।");
+          setTimeout(() => window.location.replace("/astro/janma"), 2000);
+        }
         return;
       }
 
@@ -52,7 +58,10 @@ export default function ChartsPage() {
         }
       } catch (error) {
         console.error("Failed to fetch kundali:", error);
-        if (mounted) window.location.replace("/astro/janma");
+        if (mounted) {
+          setError("चार्ट लोड गर्न सकिएन। कृपया जन्म विवरण पुनः जाँच गर्नुहोस्।");
+          setTimeout(() => window.location.replace("/astro/janma"), 3000);
+        }
       }
     };
 
@@ -63,16 +72,8 @@ export default function ChartsPage() {
     };
   }, []);
 
-  if (!kundali) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mb-4"></div>
-          <p className="text-lg text-gray-600">कुण्डली लोड हुँदैछ...</p>
-        </div>
-      </div>
-    );
-  }
+  if (error) return <ErrorState message={error} />;
+  if (!kundali) return <LoadingState message="चार्टहरू तयार गरिँदै..." />;
 
   // Get the currently selected chart data
   const getChartData = () => {
