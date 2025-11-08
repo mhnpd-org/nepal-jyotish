@@ -13,6 +13,7 @@ import "highlight.js/styles/github-dark.css";
 
 interface BlogPageProps {
   params: Promise<{
+    language: string;
     slug: string;
   }>;
 }
@@ -20,15 +21,16 @@ interface BlogPageProps {
 // Generate static params for all blog posts
 export async function generateStaticParams() {
   const slugs = getAllBlogSlugs();
-  return slugs.map((slug) => ({
-    slug,
+  return slugs.map((item) => ({
+    language: item.language,
+    slug: item.slug,
   }));
 }
 
 // Generate metadata for each blog post
 export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const post = getBlogPost(slug);
+  const { language, slug } = await params;
+  const post = getBlogPost(slug, language as 'np' | 'en');
 
   if (!post) {
     return {
@@ -110,12 +112,25 @@ const components = {
 };
 
 export default async function BlogPage({ params }: BlogPageProps) {
-  const { slug } = await params;
-  const post = getBlogPost(slug);
+  const { language, slug } = await params;
+  const post = getBlogPost(slug, language as 'np' | 'en');
 
   if (!post) {
     notFound();
   }
+
+  // Determine text based on language
+  const isNepali = language === 'np';
+  const text = {
+    home: isNepali ? 'मुख्य पृष्ठ' : 'Home',
+    blogs: isNepali ? 'लेखहरू' : 'Blogs',
+    openApp: isNepali ? 'एप खोल्नुहोस्' : 'Open App',
+    allBlogs: isNepali ? 'सबै लेखहरू' : 'All Blogs',
+    readTime: isNepali ? 'मिनेट पठन' : 'min read',
+    viewAllBlogs: isNepali ? 'सबै लेखहरू हेर्नुहोस्' : 'View All Blogs',
+    likedArticle: isNepali ? 'लेख मन पर्यो?' : 'Liked this article?',
+    useService: isNepali ? 'ज्योतिष सेवा प्रयोग गर्नुहोस्' : 'Use Jyotish Service',
+  };
 
   return (
     <main className="min-h-screen bg-white">
@@ -130,19 +145,19 @@ export default async function BlogPage({ params }: BlogPageProps) {
                 href="/" 
                 className="text-xs sm:text-sm text-gray-600 hover:text-gray-900 transition-colors whitespace-nowrap"
               >
-                मुख्य पृष्ठ
+                {text.home}
               </Link>
               <Link 
                 href="/blogs" 
                 className="text-xs sm:text-sm text-gray-900 font-semibold whitespace-nowrap"
               >
-                लेखहरू
+                {text.blogs}
               </Link>
               <Link 
                 href="/astro/janma" 
                 className="px-3 sm:px-4 py-2 bg-rose-600 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-rose-700 transition-colors whitespace-nowrap"
               >
-                एप खोल्नुहोस्
+                {text.openApp}
               </Link>
             </nav>
           </div>
@@ -160,7 +175,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
             <svg className="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            <span className="text-sm font-medium">सबै लेखहरू</span>
+            <span className="text-sm font-medium">{text.allBlogs}</span>
           </Link>
 
           {/* Tags */}
@@ -201,14 +216,14 @@ export default async function BlogPage({ params }: BlogPageProps) {
             )}
             <span className="text-gray-300">•</span>
             <time dateTime={post.date} className="font-medium">
-              {new Date(post.date).toLocaleDateString('ne-NP', {
+              {new Date(post.date).toLocaleDateString(isNepali ? 'ne-NP' : 'en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
               })}
             </time>
             <span className="text-gray-300">•</span>
-            <span>{Math.ceil(post.content.split(' ').length / 200)} मिनेट पठन</span>
+            <span>{Math.ceil(post.content.split(' ').length / 200)} {text.readTime}</span>
           </div>
         </div>
       </div>
@@ -239,16 +254,16 @@ export default async function BlogPage({ params }: BlogPageProps) {
               <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
-              <span>सबै लेखहरू हेर्नुहोस्</span>
+              <span>{text.viewAllBlogs}</span>
             </Link>
 
             <div className="flex flex-col sm:flex-row items-center gap-3 bg-gradient-to-r from-rose-50 to-orange-50 p-4 sm:px-6 sm:py-4 rounded-lg">
-              <span className="text-xs sm:text-sm text-gray-700 font-medium">लेख मन पर्यो?</span>
+              <span className="text-xs sm:text-sm text-gray-700 font-medium">{text.likedArticle}</span>
               <Link
                 href="/astro/janma"
                 className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 bg-rose-600 text-white font-medium rounded-lg hover:bg-rose-700 transition-colors text-sm sm:text-base whitespace-nowrap w-full sm:w-auto"
               >
-                <span>ज्योतिष सेवा प्रयोग गर्नुहोस्</span>
+                <span>{text.useService}</span>
                 <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
