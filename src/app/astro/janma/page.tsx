@@ -98,14 +98,14 @@ export default function JanmaPage() {
     submit: 'पेश गर्नुहोस्'
   } as const;
   return (
-    <main className="w-full">
+    <main className="w-full px-4 sm:px-6 lg:px-8">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-3xl mx-auto"
+        className="w-full max-w-2xl lg:max-w-3xl mx-auto"
       >
         {/* Header - clean and simple */}
-        <header className="mb-8 text-center sm:text-left">
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+        <header className="mb-6 sm:mb-8 text-center sm:text-left">
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
             {labels.title}
           </h1>
           <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-2 leading-relaxed">
@@ -114,22 +114,22 @@ export default function JanmaPage() {
         </header>
 
         {/* Simple form without card wrapper */}
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4 sm:gap-6">
             {/* Name (optional) */}
             <div className="flex flex-col gap-2 w-full">
-              <label htmlFor="name" className="text-sm font-semibold text-gray-800 dark:text-gray-200">{labels.name}</label>
+              <label htmlFor="name" className="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200">{labels.name}</label>
               <input
                 id="name"
                 type="text"
                 placeholder={labels.name}
-                className="rounded-lg border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-2.5 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:border-orange-500 transition-all"
+                className="rounded-lg border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 sm:px-4 py-2.5 text-sm sm:text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:border-orange-500 transition-all"
                 {...register("name")}
               />
             </div>
 
             {/* Date of Birth (required) */}
             <div className="flex flex-col gap-2 w-full">
-              <label className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+              <label className="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200">
                 {labels.date_of_birth} <span className="text-red-500">*</span>
               </label>
               
@@ -192,11 +192,11 @@ export default function JanmaPage() {
           </div>
 
           {/* Submit button */}
-          <div className="mt-8">
+          <div className="mt-6 sm:mt-8">
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 via-rose-500 to-pink-500 hover:from-orange-600 hover:via-rose-600 hover:to-pink-600 disabled:opacity-60 disabled:cursor-not-allowed text-white px-8 py-3 text-base font-semibold shadow-lg shadow-orange-300/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-all"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 via-rose-500 to-pink-500 hover:from-orange-600 hover:via-rose-600 hover:to-pink-600 disabled:opacity-60 disabled:cursor-not-allowed text-white px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-semibold shadow-lg shadow-orange-300/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-all"
             >
               {isSubmitting ? 'पेश गर्दै...' : labels.submit}
             </button>

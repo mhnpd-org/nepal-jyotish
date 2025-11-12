@@ -39,12 +39,10 @@
 
 ##### Additional Tools:
 
-- Add online geeta book.
 - Add nepali data converter page.
 - Add Nepali Dictionary page.
 
 #### Main jyotish software:
 
 - Support location worldwide (currently only Nepal is supported)
-- Translate the main form into nepali language.
 - Translate the side bar into nepali language.

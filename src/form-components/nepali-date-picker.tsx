@@ -51,7 +51,7 @@ export function NepaliDatePickerComponent<TFieldValues extends FieldValues>({
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
       {label && (
-        <label className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+        <label className="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200">
           {label} {required && <span className="text-red-500">*</span>}
         </label>
       )}
@@ -77,7 +77,7 @@ export function NepaliDatePickerComponent<TFieldValues extends FieldValues>({
             <div className="flex flex-col">
               <div className="[&_.nepali-datepicker-reactjs]:w-full [&_.nepali-datepicker-reactjs_input]:w-full">
                 <NepaliDatePicker
-                  inputClassName="w-full px-4 py-2.5 text-base border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all cursor-pointer"
+                  inputClassName="w-full px-3 sm:px-4 py-2.5 text-sm sm:text-base border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all cursor-pointer"
                   className=""
                   value={displayValue}
                   onChange={handleDateChange}
@@ -90,7 +90,7 @@ export function NepaliDatePickerComponent<TFieldValues extends FieldValues>({
               </div>
               
               {error && (
-                <span className="text-red-500 text-sm mt-1">{error.message}</span>
+                <span className="text-red-500 text-xs sm:text-sm mt-1">{error.message}</span>
               )}
             </div>
           );

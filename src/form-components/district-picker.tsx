@@ -64,26 +64,86 @@ export function DistrictPicker<TFieldValues extends FieldValues>(props: District
 	const customStyles: StylesConfig<OptionType, false, GroupBase<OptionType>> = {
 		control: (base: CSSObjectWithLabel, state: ControlProps<OptionType, false>) => ({
 			...base,
-			borderColor: state.isFocused ? '#3b82f6' : '#d1d5db',
-			boxShadow: state.isFocused ? '0 0 0 2px rgba(59,130,246,0.35)' : 'none',
-			'&:hover': { borderColor: '#3b82f6' },
-			fontSize: '0.875rem',
-			minHeight: '38px'
+			borderColor: state.isFocused ? '#f97316' : '#d1d5db', // Orange focus like other inputs
+			borderWidth: '2px', // Match our border-2
+			borderRadius: '0.5rem', // Match rounded-lg
+			boxShadow: state.isFocused ? '0 0 0 2px rgba(249, 115, 22, 0.2)' : 'none', // Orange ring
+			'&:hover': { borderColor: '#f97316' }, // Orange hover
+			backgroundColor: 'white', // Will be handled by CSS classes for dark mode
+			minHeight: '44px', // Match py-2.5 height
+			fontSize: '0.875rem', // text-sm for mobile, will be overridden by media query
+			paddingLeft: '0.75rem', // px-3 on mobile, will be overridden by media query
+			paddingRight: '0.75rem',
+			'@media (min-width: 640px)': {
+				fontSize: '1rem', // text-base for desktop
+				paddingLeft: '1rem', // px-4 on desktop
+				paddingRight: '1rem'
+			}
 		}),
 		menu: (base: CSSObjectWithLabel) => ({
 			...base,
 			zIndex: 60,
-			fontSize: '0.875rem'
+			fontSize: '0.875rem',
+			borderRadius: '0.5rem',
+			border: '2px solid #d1d5db',
+			backgroundColor: 'white',
+			boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+			'@media (min-width: 640px)': {
+				fontSize: '1rem'
+			}
 		}),
 		option: (base: CSSObjectWithLabel, state: OptionProps<OptionType, false>) => ({
 			...base,
-			backgroundColor: state.isSelected ? '#2563eb' : state.isFocused ? '#eff6ff' : 'white',
+			backgroundColor: state.isSelected 
+				? '#f97316' // Orange selected
+				: state.isFocused 
+					? '#fed7aa' // Orange-100 focused
+					: 'white',
 			color: state.isSelected ? 'white' : '#111827',
-			cursor: 'pointer'
+			cursor: 'pointer',
+			fontSize: '0.875rem',
+			'@media (min-width: 640px)': {
+				fontSize: '1rem'
+			},
+			'&:active': {
+				backgroundColor: state.isSelected ? '#ea580c' : '#fdba74' // Orange-600 active
+			}
 		}),
-		input: (base: CSSObjectWithLabel) => ({ ...base, fontSize: '0.875rem' }),
-		singleValue: (base: CSSObjectWithLabel) => ({ ...base, fontSize: '0.875rem' }),
-		placeholder: (base: CSSObjectWithLabel) => ({ ...base, fontSize: '0.875rem', color: '#6b7280' })
+		input: (base: CSSObjectWithLabel) => ({ 
+			...base, 
+			fontSize: '0.875rem',
+			color: '#111827', // text-gray-900
+			'@media (min-width: 640px)': {
+				fontSize: '1rem'
+			}
+		}),
+		singleValue: (base: CSSObjectWithLabel) => ({ 
+			...base, 
+			fontSize: '0.875rem',
+			color: '#111827', // text-gray-900
+			'@media (min-width: 640px)': {
+				fontSize: '1rem'
+			}
+		}),
+		placeholder: (base: CSSObjectWithLabel) => ({ 
+			...base, 
+			fontSize: '0.875rem', 
+			color: '#6b7280', // text-gray-500
+			'@media (min-width: 640px)': {
+				fontSize: '1rem'
+			}
+		}),
+		indicatorSeparator: (base: CSSObjectWithLabel) => ({
+			...base,
+			backgroundColor: '#d1d5db'
+		}),
+		dropdownIndicator: (base: CSSObjectWithLabel) => ({
+			...base,
+			color: '#6b7280',
+			'&:hover': {
+				color: '#f97316'
+			}
+		})
 	};
 
 		return (
@@ -104,27 +164,29 @@ export function DistrictPicker<TFieldValues extends FieldValues>(props: District
 
 					return (
 						<div className={`w-full ${className}`}>
-							<label className="block text-sm font-medium text-gray-700 mb-1">
-								{label}{required && <span className="text-red-500">*</span>}
+							<label className="block text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200 mb-2">
+								{label}{required && <span className="text-red-500 ml-1">*</span>}
 							</label>
-							<Select
-								instanceId={`${name}-district-select`}
-								isDisabled={disabled}
-								options={options}
+							<div className="[&_.district-select__control]:!bg-white dark:[&_.district-select__control]:!bg-gray-900 [&_.district-select__control]:!border-gray-200 dark:[&_.district-select__control]:!border-gray-700 [&_.district-select__single-value]:!text-gray-900 dark:[&_.district-select__single-value]:!text-gray-100 [&_.district-select__input]:!text-gray-900 dark:[&_.district-select__input]:!text-gray-100">
+								<Select
+									instanceId={`${name}-district-select`}
+									isDisabled={disabled}
+									options={options}
 									menuPortalTarget={portalTarget}
-								menuPosition="absolute"
-								placeholder={searchPlaceholder}
-								defaultValue={options.find(o => o.value === (kathmandu?.district_en))}
-								value={current ? options.find(o => o.value === current.district_en) : undefined}
-								styles={customStyles}
-								onChange={(val: SingleValue<{ value: string; label: string; data: DistrictOfNepal }>) => {
-									if (val) field.onChange(val.data);
-								}}
-								classNamePrefix="district-select"
-								noOptionsMessage={() => "No matches"}
-							/>
+									menuPosition="absolute"
+									placeholder={searchPlaceholder}
+									defaultValue={options.find(o => o.value === (kathmandu?.district_en))}
+									value={current ? options.find(o => o.value === current.district_en) : undefined}
+									styles={customStyles}
+									onChange={(val: SingleValue<{ value: string; label: string; data: DistrictOfNepal }>) => {
+										if (val) field.onChange(val.data);
+									}}
+									classNamePrefix="district-select"
+									noOptionsMessage={() => "No matches"}
+								/>
+							</div>
 							{fieldState.error && (
-								<p className="text-xs text-red-600 mt-2">{fieldState.error.message}</p>
+								<span className="text-red-500 text-xs sm:text-sm mt-1">{fieldState.error.message}</span>
 							)}
 						</div>
 					);
