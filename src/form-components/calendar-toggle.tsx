@@ -29,14 +29,14 @@ export function CalendarToggle({
               onChange(cal);
             }
           }}
-          className={`h-10 px-3 sm:px-4 text-sm sm:text-base font-semibold flex items-center justify-center transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 min-w-0 flex-1 sm:flex-none ${
+          className={`h-10 px-4 sm:px-5 text-sm sm:text-base font-semibold flex items-center justify-center transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 whitespace-nowrap ${
             value === cal
               ? "bg-gradient-to-r from-orange-500 to-rose-500 text-white shadow-md"
               : "bg-transparent text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
           }`}
           aria-pressed={value === cal}
         >
-          <span className="truncate">{cal === 'AD' ? labels.ad : labels.bs}</span>
+          {cal === 'AD' ? labels.ad : labels.bs}
         </button>
       ))}
     </div>
