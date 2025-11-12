@@ -66,7 +66,7 @@ export default function AstroOverviewPage() {
   // Extract data from kundali for display
   const birthData = kundali ? {
     vikramSamvat: `${translateSanskritSafe(kundali.surya.masa)} ${translateSanskritSafe(kundali.tithi.tithi)}, ${translateSanskritSafe(kundali.dates.vikramSamvat.year.toString())}-${translateSanskritSafe(kundali.dates.vikramSamvat.month?.toString())}-${translateSanskritSafe(kundali.dates.vikramSamvat.day?.toFixed(0).toString())}`,
-    ishwiSamvat: `${translateSanskritSafe(kundali.dates.ishwiSamvat.month)} ${translateSanskritSafe(kundali.dates.vikramSamvat.day?.toFixed(0).toString())}, ${translateSanskritSafe(kundali.dates.ishwiSamvat.year.toString())}`,
+    ishwiSamvat: `${translateSanskritSafe(kundali.dates.ishwiSamvat.month?.toString())} ${translateSanskritSafe(kundali.dates.ishwiSamvat.day?.toFixed(0).toString())}, ${translateSanskritSafe(kundali.dates.ishwiSamvat.year.toString())}`,
     time: translateSanskritSafe(kundali.dates.timeStr),
     weekday: translateSanskritSafe(kundali.dates.ishwiSamvat.vaar?.toLowerCase() || 'saturday'),
     ayana: translateSanskritSafe(kundali.surya.suryaAyana),
