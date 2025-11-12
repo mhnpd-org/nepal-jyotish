@@ -246,7 +246,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
       </div>
 
       {/* Content - Professional article layout */}
-      <article className="max-w-4xl mx-auto px-6 py-16">
+      <article className="max-w-4xl mx-auto px-6">
         {/* Main content with enhanced typography */}
         <div className="prose-article">
           <MDXRemote
