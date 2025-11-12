@@ -4,9 +4,9 @@ import React, { useMemo, useState, useEffect } from "react";
 import { Controller, Control, FieldValues, Path } from "react-hook-form";
 import Select, { SingleValue, StylesConfig, GroupBase, CSSObjectWithLabel } from "react-select";
 import type { ControlProps, OptionProps } from "react-select";
-import { districtOfNepal, type DistrictOfNepal } from "./district";
+import { districtOfNepal, type DistrictOfNepal } from "./nepal-districts";
 
-export interface PickDistrictProps<TFieldValues extends FieldValues> {
+export interface DistrictPickerProps<TFieldValues extends FieldValues> {
 	/** react-hook-form control */
 	control: Control<TFieldValues>;
 	/** Name of the form field */
@@ -32,7 +32,7 @@ export interface PickDistrictProps<TFieldValues extends FieldValues> {
  * - Default selection: Kathmandu (always enforced on mount if empty)
  * - Search filters by zone, english or nepali district names (case-insensitive)
  */
-export function PickDistrict<TFieldValues extends FieldValues>(props: PickDistrictProps<TFieldValues>) {
+export function DistrictPicker<TFieldValues extends FieldValues>(props: DistrictPickerProps<TFieldValues>) {
 	const {
 		control,
 		name,
@@ -133,5 +133,5 @@ export function PickDistrict<TFieldValues extends FieldValues>(props: PickDistri
 		);
 }
 
-export default PickDistrict;
+export default DistrictPicker;
 

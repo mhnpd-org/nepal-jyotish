@@ -3,18 +3,16 @@ import React, { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { ADDatePicker, BSDatePicker } from "@internal/form-elements/date-picker";
-// NepaliDate for AD -> BS conversion when switching calendars
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import NepaliDate from "nepali-date-converter";
-import { TimePicker } from "@internal/form-elements/time-picker";
-import { PickDistrict } from "@internal/form-elements/pick-district";
+import { EnglishDatePicker } from "@internal/form-components/english-date-picker";
+import { NepaliDatePickerComponent } from "@internal/form-components/nepali-date-picker";
+import { TimePicker } from "@internal/form-components/time-picker";
+import { CalendarToggle } from "@internal/form-components/calendar-toggle";
+import { DistrictPicker } from "@internal/form-components/district-picker";
 // translations removed — using static English labels
 import {
   districtOfNepal,
   type DistrictOfNepal
-} from "@internal/form-elements/district";
+} from "@internal/form-components/nepal-districts";
 import {
   getFormDetails,
   setFormDetails
@@ -86,22 +84,6 @@ export default function JanmaPage() {
   const dateValue = watch("dateOfBirth");
   const calendarValue = watch("calendarType");
 
-  // Helper: convert stored AD date (YYYY-MM-DD) to BS date string for initializing BS picker
-  const adToBs = (ad: string | undefined): string | undefined => {
-    if (!ad || !/^\d{4}-\d{2}-\d{2}$/.test(ad)) return undefined;
-    try {
-      const [y, m, d] = ad.split("-").map(Number);
-      const nd = new NepaliDate(new Date(y, m - 1, d));
-      if (nd.format) {
-        return nd.format("YYYY-MM-DD") as string;
-      }
-      // Fallback if format not present; approximate using getters
-      return `${nd.getYear()}-${String(nd.getMonth() + 1).padStart(2, "0")}-${String(nd.getDate()).padStart(2, "0")}`;
-    } catch {
-      return undefined;
-    }
-  };
-
   // static English labels (previously in en.json)
   const labels = {
     title: 'जन्म विवरण',
@@ -150,76 +132,59 @@ export default function JanmaPage() {
               <label className="text-sm font-semibold text-gray-800 dark:text-gray-200">
                 {labels.date_of_birth} <span className="text-red-500">*</span>
               </label>
-              <div className="flex flex-col sm:flex-row sm:items-start gap-3 w-full">
-                {/* Calendar toggle */}
-                <div className="inline-flex self-start rounded-lg border-2 border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm bg-white dark:bg-gray-900">
-                  {(["AD", "BS"] as const).map((cal) => (
-                    <button
-                      key={cal}
-                      type="button"
-                      onClick={() => {
-                        if (calendarValue !== cal) {
-                          setValue("calendarType", cal, { shouldDirty: true });
-                        }
-                      }}
-                      className={`h-11 px-6 text-sm sm:text-base font-semibold flex items-center justify-center transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 ${
-                        calendarValue === cal
-                          ? "bg-gradient-to-r from-orange-500 to-rose-500 text-white shadow-md"
-                          : "bg-transparent text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-                      }`}
-                      aria-pressed={calendarValue === cal}
-                    >
-                      {cal === 'AD' ? labels.ad : labels.bs}
-                    </button>
-                  ))}
-                </div>
-                {/* Date Picker (no internal label now) */}
-                <div className="flex-1 min-w-0 flex flex-col gap-1">
-                  {hydrated ? (
-                    calendarValue === "AD" ? (
-                      <ADDatePicker
-                        required
-                        valueDate={dateValue}
-                        maxYear={2099}
-                        minYear={1900}
-                        {...register("dateOfBirth", {
-                          required: labels.datetime_required
-                        })}
-                      />
-                    ) : (
-                      <BSDatePicker
-                        required
-                        initialDate={adToBs(dateValue)}
-                        maxYear={2090}
-                        minYear={2000}
-                        {...register("dateOfBirth", {
-                          required: labels.datetime_required
-                        })}
-                      />
-                    )
+              
+              {/* Calendar toggle */}
+              <CalendarToggle
+                value={calendarValue}
+                onChange={(cal) => setValue("calendarType", cal, { shouldDirty: true })}
+                labels={{ ad: labels.ad, bs: labels.bs }}
+                className="mb-3"
+              />
+
+              {/* Date Picker */}
+              <div className="relative">
+                {hydrated ? (
+                  calendarValue === "AD" ? (
+                    <EnglishDatePicker
+                      control={control}
+                      name="dateOfBirth"
+                      required={true}
+                      className=""
+                    />
                   ) : (
-                    <div className="h-11 w-full rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse" />
-                  )}
-                </div>
+                    <NepaliDatePickerComponent
+                      control={control}
+                      name="dateOfBirth"
+                      required={true}
+                      className=""
+                    />
+                  )
+                ) : (
+                  <div className="h-11 w-full rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                )}
               </div>
-              {errors.dateOfBirth && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.dateOfBirth.message}
-                </p>
-              )}
             </div>
             {/* Hidden calendar type field for persistence (kept for RHF) */}
             <input type="hidden" {...register("calendarType")} />
 
-            {/* Time of Birth (optional) */}
+            {/* Time of Birth (required) */}
             <div className="flex flex-col gap-2 w-full">
-              <TimePicker control={control} name="timeOfBirth" label={labels.time_of_birth} required={false} showSeconds={false} className="" />
+              {hydrated ? (
+                <TimePicker 
+                  control={control} 
+                  name="timeOfBirth" 
+                  label={labels.time_of_birth} 
+                  required={true}
+                />
+              ) : (
+                <div className="h-11 w-full rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse" />
+              )}
             </div>
 
             {/* Place of Birth (required) */}
             <div className="flex flex-col w-full">
               {hydrated ? (
-                <PickDistrict control={control} name="placeOfBirth" label={labels.place_of_birth} required className="" />
+                <DistrictPicker control={control} name="placeOfBirth" label={labels.place_of_birth} required className="" />
               ) : (
                 <div className="h-11 w-full rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse" />
               )}

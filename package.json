@@ -29,6 +29,7 @@
     "date-fns-tz": "^2.0.1",
     "gray-matter": "^4.0.3",
     "nepali-date-converter": "^3.4.0",
+    "nepali-datepicker-reactjs": "^1.1.9",
     "next": "15.5.3",
     "next-mdx-remote": "^5.0.0",
     "react": "19.2.0",
@@ -39,6 +40,12 @@
     "remark": "^15.0.1",
     "remark-gfm": "^4.0.1",
     "timezone-support": "^2.0.0"
+  },
+  "overrides": {
+    "nepali-datepicker-reactjs": {
+      "react": "19.2.0",
+      "react-dom": "19.2.0"
+    }
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20251111.0",
