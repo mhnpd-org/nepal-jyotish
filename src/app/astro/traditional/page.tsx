@@ -133,7 +133,7 @@ export default function TraditionalPage() {
             localBirthTime: kundali.dates.timeStr,
             pramanikTime: kundali.dates.timeStr,
             sunriseGhatyadi: "", // need sunrise calculation
-            gregorianMonth: kundali.dates.ishwiSamvat.month,
+            gregorianMonth: kundali.dates.ishwiSamvat.month?.toString(),
             gregorianDate: kundali.dates.zonedDate.toLocaleDateString(),
           }}
           yogaKarana={{
