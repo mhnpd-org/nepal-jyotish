@@ -44,7 +44,7 @@ export default function JanmaPage() {
     reset,
     setValue,
     watch,
-    formState: { errors, isSubmitting }
+    formState: { isSubmitting }
   } = useForm<JanmaFormValues>({
     defaultValues: {
       name: "",
@@ -63,7 +63,6 @@ export default function JanmaPage() {
       reset(stored);
     }
     setHydrated(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onSubmit = (data: JanmaFormValues) => {
@@ -81,7 +80,6 @@ export default function JanmaPage() {
     return () => clearTimeout(handle);
   }, [watchedAll, hydrated]);
 
-  const dateValue = watch("dateOfBirth");
   const calendarValue = watch("calendarType");
 
   // static English labels (previously in en.json)

@@ -3,7 +3,6 @@
 import React from "react";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore - external lib types may be implicit
 import NepaliDate from "nepali-date-converter";
 import "nepali-datepicker-reactjs/dist/index.css";

@@ -1,22 +1,22 @@
 "use client";
 
-import { Controller, Control } from "react-hook-form";
+import { Controller, Control, FieldValues, Path } from "react-hook-form";
 
-interface EnglishDatePickerProps {
-  control: Control<any>;
-  name: string;
+interface EnglishDatePickerProps<T extends FieldValues = FieldValues> {
+  control: Control<T>;
+  name: Path<T>;
   required?: boolean;
   className?: string;
   label?: string;
 }
 
-export function EnglishDatePicker({
+export function EnglishDatePicker<T extends FieldValues = FieldValues>({
   control,
   name,
   required = false,
   className = "",
   label
-}: EnglishDatePickerProps) {
+}: EnglishDatePickerProps<T>) {
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
       {label && (
