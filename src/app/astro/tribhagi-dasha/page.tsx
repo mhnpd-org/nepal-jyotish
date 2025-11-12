@@ -1,10 +1,12 @@
 "use client";
 import React from "react";
-import { getJanmaDetails } from "@internal/utils/get-form-details";
+import { getJanmaDetails, getFormDetails } from "@internal/utils/get-form-details";
 import { getKundali, Kundali, TribhagiDasha } from "@mhnpd-org/panchang";
 import { translateSanskritSafe } from "@internal/lib/devanagari";
 import { ErrorState } from "@internal/layouts/error-state";
 import { LoadingState } from "@internal/layouts/loading-state";
+import { BirthDetailsBanner } from "@internal/components/birth-details-banner";
+import type { JanmaFormValues } from '@internal/app/astro/janma/page';
 
 interface DashaItemProps { item: TribhagiDasha; index: number; }
 
@@ -104,6 +106,7 @@ const DashaItem: React.FC<DashaItemProps> = ({ item, index }) => {
 export default function TribhagiDashaVerticalPage() {
   const [kundali, setKundali] = React.useState<Kundali | null>(null);
   const [error, setError] = React.useState<string | null>(null);
+  const [janmaFormValues, setJanmaFormValues] = React.useState<JanmaFormValues | null>(null);
 
   React.useEffect(() => {
     let mounted = true;
@@ -115,6 +118,13 @@ export default function TribhagiDashaVerticalPage() {
       }
       return;
     }
+    
+    // Get form details for birth details banner
+    const formDetails = getFormDetails() as JanmaFormValues | undefined;
+    if (formDetails) {
+      setJanmaFormValues(formDetails);
+    }
+    
     (async () => {
       try {
         const k = await getKundali(details);
@@ -137,6 +147,7 @@ export default function TribhagiDashaVerticalPage() {
 
   return (
   <div className="space-y-4">
+      {janmaFormValues && <BirthDetailsBanner janmaDetails={janmaFormValues} />}
       <header className="space-y-1">
         <h1 className="text-xl sm:text-2xl font-bold tracking-wide text-rose-700">
           {translateSanskritSafe("त्रिभागि महादशा क्रम")}
