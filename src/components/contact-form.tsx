@@ -85,13 +85,8 @@ export default function ContactForm() {
     setSubmitError(null);
 
     try {
-      // Get Cloudflare Worker URL from environment variable
-      // This should be set in your build environment (Cloudflare Pages)
-      const workerUrl = process.env.NEXT_PUBLIC_CONTACT_FORM_WORKER_URL;
-      
-      if (!workerUrl) {
-        throw new Error("Contact form is not configured. Please try again later.");
-      }
+      // Use the custom domain endpoint for the contact form
+      const workerUrl = "https://nepaljyotish.org/api/contact";
 
       // Prepare data for submission to Cloudflare Worker
       const submissionData = {

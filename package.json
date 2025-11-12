@@ -14,7 +14,10 @@
     "type-check": "tsc --noEmit",
     "pages:build": "next build --turbopack",
     "pages:deploy": "wrangler pages deploy out --project-name=vedanga-jotish",
-    "postbuild": "node ./scripts/generate-sitemap.js"
+    "postbuild": "node ./scripts/generate-sitemap.js",
+    "worker:dev": "wrangler dev --config workers/contact-form-wrangler.toml",
+    "worker:deploy": "wrangler deploy --config workers/contact-form-wrangler.toml",
+    "worker:tail": "wrangler tail --config workers/contact-form-wrangler.toml"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
@@ -38,6 +41,7 @@
     "timezone-support": "^2.0.0"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241106.0",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/d3": "^7",
@@ -53,6 +57,6 @@
     "tailwindcss": "^4",
     "ts-jest": "^29",
     "typescript": "^5",
-    "wrangler": "^3"
+    "wrangler": "^4.47.0"
   }
 }
