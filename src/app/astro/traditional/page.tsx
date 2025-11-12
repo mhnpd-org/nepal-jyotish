@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { getJanmaDetails } from "@internal/utils/get-form-details";
+import { getJanmaDetails, getFormDetails } from "@internal/utils/get-form-details";
 import { getKundali, JanmaDetails, Kundali } from "@mhnpd-org/panchang";
 import React from "react";
 import { JanmaPatrikaText } from "@internal/components/janma-patrika-text";
@@ -13,16 +13,25 @@ import { YoginiDashaTable } from "@internal/components/yogini-dasha-table";
 import { ChhinaFrame } from "@internal/components/chhina-frame";
 import { ErrorState } from "@internal/layouts/error-state";
 import { LoadingState } from "@internal/layouts/loading-state";
+import { BirthDetailsBanner } from "@internal/components/birth-details-banner";
+import type { JanmaFormValues } from '@internal/app/astro/janma/page';
 
 export default function TraditionalPage() {
   const [kundali, setKundali] = React.useState<Kundali | null>(null);
   const [error, setError] = React.useState<string | null>(null);
+  const [janmaFormValues, setJanmaFormValues] = React.useState<JanmaFormValues | null>(null);
 
   React.useEffect(() => {
     let mounted = true;
 
     const loadKundali = async () => {
       let details: JanmaDetails | undefined;
+      const formDetails = getFormDetails() as JanmaFormValues | undefined;
+      
+      if (formDetails) {
+        setJanmaFormValues(formDetails);
+      }
+      
       try {
         details = getJanmaDetails();
       } catch (e) {
@@ -64,6 +73,9 @@ export default function TraditionalPage() {
   return (
     <div className="w-full min-h-screen">
       <div className="container mx-auto px-1 sm:px-4 md:px-6 py-2 sm:py-6 max-w-7xl">
+        {/* Birth Details Banner */}
+        {janmaFormValues && <BirthDetailsBanner janmaDetails={janmaFormValues} />}
+        
         <ChhinaFrame className="bg-white min-h-screen w-full mx-auto md:max-w-3xl lg:max-w-4xl">
           {/* Ganesh image centered near the top with slight spacing */}
           <div className="flex justify-center mt-6">

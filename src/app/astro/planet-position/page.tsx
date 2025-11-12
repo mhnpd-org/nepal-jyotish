@@ -1,10 +1,12 @@
 "use client";
 import React from "react";
-import { getJanmaDetails } from "@internal/utils/get-form-details";
+import { getJanmaDetails, getFormDetails } from "@internal/utils/get-form-details";
 import { getKundali, Kundali, PlanetCombinedInfo, PlanetsInTimeFrameResult } from "@mhnpd-org/panchang";
 import { translateSanskritSafe } from "@internal/lib/devanagari";
 import { ErrorState } from "@internal/layouts/error-state";
 import { LoadingState } from "@internal/layouts/loading-state";
+import { BirthDetailsBanner } from "@internal/components/birth-details-banner";
+import type { JanmaFormValues } from '@internal/app/astro/janma/page';
 
 // Helper to render a vedic styled cell (sanskrit focus)
 const SanskritCell: React.FC<{ value: string | number | undefined | null }> = ({ value }) => (
@@ -15,11 +17,18 @@ const TS = translateSanskritSafe;
 export default function PlanetPositionsPage() {
   const [kundali, setKundali] = React.useState<Kundali | null>(null);
   const [error, setError] = React.useState<string | null>(null);
+  const [janmaFormValues, setJanmaFormValues] = React.useState<JanmaFormValues | null>(null);
 
   React.useEffect(() => {
     let mounted = true;
     const load = async () => {
       const details = getJanmaDetails();
+      const formDetails = getFormDetails() as JanmaFormValues | undefined;
+      
+      if (formDetails) {
+        setJanmaFormValues(formDetails);
+      }
+      
       if (!details) {
         if (mounted) {
           setError("जन्म विवरण छैन। कृपया जन्म विवरण भर्नुहोस्।");
@@ -51,6 +60,9 @@ export default function PlanetPositionsPage() {
 
   return (
     <div className="space-y-4">
+      {/* Birth Details Banner */}
+      {janmaFormValues && <BirthDetailsBanner janmaDetails={janmaFormValues} />}
+      
       <header className="space-y-1">
         <h1 className="text-xl sm:text-2xl font-bold tracking-wide text-red-700">
           {TS("ग्रह स्थितिः")}

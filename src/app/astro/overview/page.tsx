@@ -1,10 +1,12 @@
 "use client";
 import React from 'react';
-import { getJanmaDetails } from '@internal/utils/get-form-details';
+import { getJanmaDetails, getFormDetails } from '@internal/utils/get-form-details';
 import { getKundali, Kundali } from '@mhnpd-org/panchang';
 import { translateSanskritSafe } from '@internal/lib/devanagari';
 import { ErrorState } from '@internal/layouts/error-state';
 import { LoadingState } from '@internal/layouts/loading-state';
+import { BirthDetailsBanner } from '@internal/components/birth-details-banner';
+import type { JanmaFormValues } from '@internal/app/astro/janma/page';
 
 
 
@@ -39,14 +41,22 @@ const SoftPanel: React.FC<{ tone?: 'red' | 'rose' | 'fuchsia'; children: React.R
 export default function AstroOverviewPage() {
   const [kundali, setKundali] = React.useState<Kundali | null>(null);
   const [error, setError] = React.useState<string | null>(null);
+  const [janmaFormValues, setJanmaFormValues] = React.useState<JanmaFormValues | null>(null);
 
   React.useEffect(() => {
     let mounted = true;
     const details = getJanmaDetails();
+    const formDetails = getFormDetails() as JanmaFormValues | undefined;
+    
     if (!details) {
       window.location.replace('/astro/janma');
       return;
     }
+
+    if (formDetails) {
+      setJanmaFormValues(formDetails);
+    }
+    
     (async () => {
       try {
         const k = await getKundali(details);
@@ -83,6 +93,9 @@ export default function AstroOverviewPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-6 space-y-8 bg-gradient-to-br from-gray-50 to-white min-h-screen">
+      {/* Birth Details Banner */}
+      {janmaFormValues && <BirthDetailsBanner janmaDetails={janmaFormValues} />}
+
       {/* Page Header */}
       <header className="text-center space-y-6 py-8">
         <h1 className="text-4xl lg:text-5xl font-bold tracking-tight bg-gradient-to-r from-orange-600 via-rose-600 to-pink-600 bg-clip-text text-transparent">

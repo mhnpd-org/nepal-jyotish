@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { getJanmaDetails } from "@internal/utils/get-form-details";
+import { getJanmaDetails, getFormDetails } from "@internal/utils/get-form-details";
 import { getKundali, JanmaDetails, Kundali } from "@mhnpd-org/panchang";
 import { DChart } from "@mhnpd-org/panchang/enum";
 import NorthDrekkanaChart from "@internal/components/north-drekkana-chart";
@@ -10,18 +10,27 @@ import {
 } from "@internal/lib/varga-explanations";
 import { ErrorState } from "@internal/layouts/error-state";
 import { LoadingState } from "@internal/layouts/loading-state";
+import { BirthDetailsBanner } from "@internal/components/birth-details-banner";
+import type { JanmaFormValues } from '@internal/app/astro/janma/page';
 
 export default function ChartsPage() {
   const [kundali, setKundali] = React.useState<Kundali | null>(null);
   const [error, setError] = React.useState<string | null>(null);
   const [selectedVarga, setSelectedVarga] = React.useState<number>(1); // Default to D1 (Rashi)
   const [availableVargas, setAvailableVargas] = React.useState<number[]>([]);
+  const [janmaFormValues, setJanmaFormValues] = React.useState<JanmaFormValues | null>(null);
 
   React.useEffect(() => {
     let mounted = true;
 
     const loadKundali = async () => {
       let details: JanmaDetails | undefined;
+      const formDetails = getFormDetails() as JanmaFormValues | undefined;
+      
+      if (formDetails) {
+        setJanmaFormValues(formDetails);
+      }
+      
       try {
         details = getJanmaDetails();
       } catch (e) {
@@ -89,6 +98,9 @@ export default function ChartsPage() {
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-orange-50/30 via-white to-red-50/30">
       <div className="container mx-auto px-4 py-8 max-w-7xl">
+        {/* Birth Details Banner */}
+        {janmaFormValues && <BirthDetailsBanner janmaDetails={janmaFormValues} />}
+
         {/* Page Header with integrated selector */}
         <div className="mb-8">
           <div className="text-center mb-6">
