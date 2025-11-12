@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { JanmaFormValues } from '@internal/app/astro/janma/page';
 import NepaliDate from "nepali-date-converter";
@@ -28,6 +29,12 @@ const MapPinIcon = ({ className }: { className?: string }) => (
 const EditIcon = ({ className }: { className?: string }) => (
   <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+  </svg>
+);
+
+const SupportIcon = ({ className }: { className?: string }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
   </svg>
 );
 
@@ -136,9 +143,22 @@ export function BirthDetailsBanner({ janmaDetails }: BirthDetailsBannerProps) {
 
       {/* Subtitle */}
       <div className="mt-4 pt-3 border-t border-orange-200 dark:border-orange-800/50">
-        <p className="text-xs text-gray-500 dark:text-gray-400 text-center sm:text-left">
-          यो कुण्डली उपरोक्त जन्म विवरणका आधारमा तयार गरिएको हो।
-        </p>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <p className="text-xs text-gray-500 dark:text-gray-400 text-center sm:text-left">
+            यो कुण्डली उपरोक्त जन्म विवरणका आधारमा तयार गरिएको हो।
+          </p>
+          
+          <div className="flex justify-center sm:justify-end">
+            <Link
+              href="/contact?from=Astro Tools"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 underline underline-offset-2 hover:no-underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500 transition-all"
+              aria-label="समस्या रिपोर्ट गर्नुहोस् वा सहायता माग्नुहोस्"
+            >
+              <SupportIcon className="w-3 h-3" />
+              <span>समस्या रिपोर्ट गर्नुहोस्</span>
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

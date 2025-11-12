@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import AstroSidebar from '@internal/components/astro-sidebar';
 import Logo from '@internal/layouts/logo';
-import { FloatingContactButton } from '@internal/components/contact-button';
 import { SITE_CONFIG, getBreadcrumbSchema } from '@internal/lib/seo-config';
 
 export default function AstroLayout({ children }: { children: React.ReactNode }) {
@@ -66,8 +65,6 @@ export default function AstroLayout({ children }: { children: React.ReactNode })
               {children}
             </div>
           </main>
-          {/* Floating contact button for assistance */}
-          <FloatingContactButton context="Astro Tools" />
         </div>
       </div>
     </>
