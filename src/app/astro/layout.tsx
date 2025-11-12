@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import AstroSidebar from '@internal/components/astro-sidebar';
 import Logo from '@internal/layouts/logo';
+import { FloatingContactButton } from '@internal/components/contact-button';
 import { SITE_CONFIG, getBreadcrumbSchema } from '@internal/lib/seo-config';
 
 export default function AstroLayout({ children }: { children: React.ReactNode }) {
@@ -24,6 +26,22 @@ export default function AstroLayout({ children }: { children: React.ReactNode })
       <div className="min-h-screen flex flex-col bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 w-full overflow-x-hidden">
         <header className="h-16 flex items-center justify-between gap-4 px-4 sm:px-5 md:px-8 bg-gradient-to-r from-amber-600 via-orange-500 to-amber-600 border-b border-amber-700/30 shadow-md w-full">
           <Logo size="md" variant="light" href="/" />
+          
+          {/* Desktop nav */}
+          <nav className="hidden md:flex items-center gap-4">
+            <Link 
+              href="/contact" 
+              className="px-3 py-1.5 text-sm text-white/90 hover:text-white hover:bg-white/10 rounded transition-colors"
+            >
+              सम्पर्क
+            </Link>
+            <Link 
+              href="/blogs" 
+              className="px-3 py-1.5 text-sm text-white/90 hover:text-white hover:bg-white/10 rounded transition-colors"
+            >
+              लेखहरू
+            </Link>
+          </nav>
           
           {/* Mobile menu button */}
           <button
@@ -48,6 +66,8 @@ export default function AstroLayout({ children }: { children: React.ReactNode })
               {children}
             </div>
           </main>
+          {/* Floating contact button for assistance */}
+          <FloatingContactButton context="Astro Tools" />
         </div>
       </div>
     </>

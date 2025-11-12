@@ -69,6 +69,13 @@ export default function LandingPage() {
 
           <nav className="flex items-center gap-6" aria-label="Main navigation">
             <Link 
+              href="/contact" 
+              className="text-sm text-white/90 hover:text-white transition-colors"
+              aria-label="समस्या रिपोर्ट गर्नुहोस्"
+            >
+              सम्पर्क
+            </Link>
+            <Link 
               href="/blogs" 
               className="text-sm text-white/90 hover:text-white transition-colors"
               aria-label="ज्योतिष लेखहरू पढ्नुहोस्"
