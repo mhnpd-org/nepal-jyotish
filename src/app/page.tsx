@@ -7,11 +7,11 @@ import { getRecentBlogPosts } from "@internal/lib/blogs";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "नेपाली कुण्डली निर्माण | परम्परागत नेपाली चाइना मेकर - हाम्रो ज्योतिष",
-  description: "नेपाल ज्योतिष - निःशुल्क परम्परागत नेपाली चाइना मेकर र कुण्डली निर्माण। Vedic Jyotish based on Surya Siddhanta (सूर्य सिद्धान्त)। Create accurate birth charts (जन्म पत्रिका), view planetary motions (ग्रह गति), calculate Vimshottari, Yogini, Tribhagi Dasha. Hamro Jyotish, Mero Jyotish - Traditional kundali maker for all Nepali.",
+  title: "नेपाली कुण्डली निर्माण | परम्परागत नेपाली जन्मकुण्डली निर्माण - हाम्रो ज्योतिष",
+  description: "नेपाल ज्योतिष - निःशुल्क परम्परागत नेपाली जन्मकुण्डली निर्माण र कुण्डली बनाउने उपकरण। Vedic Jyotish based on Surya Siddhanta (सूर्य सिद्धान्त)। Create accurate birth charts (जन्म पत्रिका), view planetary motions (ग्रह गति), calculate Vimshottari, Yogini, Tribhagi Dasha. Hamro Jyotish, Mero Jyotish - Traditional kundali maker for all Nepali.",
   keywords: [
     "Nepali kundali Maker",
-    "नेपाली चाइना मेकर",
+    "नेपाली जन्मकुण्डली निर्माण",
     "Traditional Kundali",
     "परम्परागत कुण्डली",
     "Hamro Jyotish",
@@ -85,7 +85,7 @@ export default function LandingPage() {
             <Link 
               href="/astro/janma" 
               className="px-4 py-2 bg-white text-rose-700 text-sm font-medium rounded-lg hover:bg-white/95 transition-colors shadow-sm"
-              aria-label="नेपाली चाइना मेकर एप खोल्नुहोस्"
+              aria-label="नेपाली जन्मकुण्डली बनाउनुहोस्"
             >
               एप खोल्नुहोस्
             </Link>

@@ -8,7 +8,7 @@ export const SITE_CONFIG = {
   nameNepali: "नेपाल ज्योतिष",
   url: "https://nepaljyotish.org",
   description: "Traditional Nepali kundali Maker and Kundali based on Vedic Jyotish and Surya Siddhanta",
-  descriptionNepali: "परम्परागत नेपाली चाइना मेकर र कुण्डली निर्माण - वैदिक ज्योतिष र सूर्य सिद्धान्तमा आधारित",
+  descriptionNepali: "परम्परागत नेपाली जन्मकुण्डली निर्माण र कुण्डली बनाउने उपकरण - वैदिक ज्योतिष र सूर्य सिद्धान्तमा आधारित",
   locale: "ne_NP",
   alternateNames: [
     "Hamro Jyotish",
@@ -16,7 +16,7 @@ export const SITE_CONFIG = {
     "हाम्रो ज्योतिष",
     "मेरो ज्योतिष",
     "Nepali kundali Maker",
-    "नेपाली चाइना मेकर"
+    "नेपाली जन्मकुण्डली निर्माण"
   ]
 };
 

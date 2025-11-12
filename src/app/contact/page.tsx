@@ -46,7 +46,7 @@ export default function ContactPage() {
             <Link 
               href="/astro/janma" 
               className="px-4 py-2 bg-white text-rose-700 text-sm font-medium rounded-lg hover:bg-white/95 transition-colors shadow-sm"
-              aria-label="नेपाली चाइना मेकर एप खोल्नुहोस्"
+              aria-label="नेपाली जन्मकुण्डली बनाउनुहोस्"
             >
               एप खोल्नुहोस्
             </Link>
