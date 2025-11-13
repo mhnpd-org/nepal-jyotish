@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import BlogCard from "@internal/components/blog-card";
+import AppsSection from "@internal/components/apps-section";
 import Logo from "@internal/layouts/logo";
 import Footer from "@internal/layouts/footer";
 import { getRecentBlogPosts } from "@internal/lib/blogs";
@@ -176,6 +177,9 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* Apps Section */}
+      <AppsSection />
 
       {/* Features section */}
       <section className="bg-[rgba(255,255,250,0.92)] backdrop-blur" aria-labelledby="features-heading">
