@@ -58,7 +58,7 @@ export default function AppsSection() {
             हाम्रा सेवाहरू
           </h2>
           <p className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-            निःशुल्क ज्योतिष उपकरणहरू
+            निशुल्क सेवा
           </p>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             परम्परागत नेपाली ज्योतिष र आधुनिक प्रविधिको संगम
