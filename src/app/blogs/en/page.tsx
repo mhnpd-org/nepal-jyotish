@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Logo from "@internal/layouts/logo";
 import Footer from "@internal/layouts/footer";
-import { getAllBlogPosts } from "@internal/lib/blogs";
+import { getAllBlogPosts, hasTranslation } from "@internal/lib/blogs";
 
 export default function EnglishArticlesPage() {
   const blogs = getAllBlogPosts('en');
@@ -71,53 +71,70 @@ export default function EnglishArticlesPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogs.map((blog) => (
-              <Link
-                key={blog.slug}
-                href={`/blogs/en/${blog.slug}`}
-                className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100"
-              >
-                <div className="p-6">
-                  {/* Tags */}
-                  {blog.tags && blog.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mb-3">
-                      {blog.tags.slice(0, 2).map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-2 py-1 text-xs font-medium bg-rose-100 text-rose-700 rounded"
+            {blogs.map((blog) => {
+              const translationExists = hasTranslation(blog.slug, 'en');
+              return (
+              <div key={blog.slug} className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100">
+                <Link
+                  href={`/blogs/en/${blog.slug}`}
+                  className="group block"
+                >
+                  <div className="p-6">
+                    {/* Tags and Language Toggle */}
+                    <div className="flex items-start justify-between gap-2 mb-3">
+                      {blog.tags && blog.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                          {blog.tags.slice(0, 2).map((tag) => (
+                            <span
+                              key={tag}
+                              className="px-2 py-1 text-xs font-medium bg-rose-100 text-rose-700 rounded"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      {translationExists && (
+                        <Link
+                          href={`/blogs/np/${blog.slug}`}
+                          className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-rose-600 hover:text-rose-700 hover:underline whitespace-nowrap flex-shrink-0 ml-auto"
                         >
-                          {tag}
-                        </span>
-                      ))}
+                          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                          </svg>
+                          <span>In Nepali</span>
+                        </Link>
+                      )}
                     </div>
-                  )}
 
-                  {/* Title */}
-                  <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-rose-700 transition-colors line-clamp-2">
-                    {blog.title}
-                  </h2>
+                    {/* Title */}
+                    <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-rose-700 transition-colors line-clamp-2">
+                      {blog.title}
+                    </h2>
 
-                  {/* Excerpt */}
-                  <p className="text-gray-600 mb-4 line-clamp-3">
-                    {blog.excerpt}
-                  </p>
+                    {/* Excerpt */}
+                    <p className="text-gray-600 mb-4 line-clamp-3">
+                      {blog.excerpt}
+                    </p>
 
-                  {/* Meta */}
-                  <div className="flex items-center justify-between text-sm text-gray-500 pt-4 border-t border-gray-100">
-                    <time dateTime={blog.date}>
-                      {new Date(blog.date).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })}
-                    </time>
-                    <span className="text-rose-600 group-hover:translate-x-1 transition-transform inline-block">
-                      →
-                    </span>
+                    {/* Meta */}
+                    <div className="flex items-center justify-between text-sm text-gray-500 pt-4 border-t border-gray-100">
+                      <time dateTime={blog.date}>
+                        {new Date(blog.date).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                        })}
+                      </time>
+                      <span className="text-rose-600 group-hover:translate-x-1 transition-transform inline-block">
+                        →
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              </div>
+              );
+            })}
           </div>
         )}
       </section>
