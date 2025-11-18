@@ -14,7 +14,7 @@ function PanchangCompactContent() {
   const formatNepaliDate = (): string => {
     const vs = panchang.dates.vikramSamvat;
     if (!vs.day || !vs.year) return '';
-    return `${vs.day} ${translateSanskritSafe(vs.monthName || '')}, ${vs.year}`;
+    return `${translateSanskritSafe(vs.day.toString())} ${translateSanskritSafe(vs.monthName || '')}, ${translateSanskritSafe(vs.year.toString())}`;
   };
 
   return (
@@ -43,7 +43,7 @@ function PanchangCompactContent() {
             {formatNepaliDate()}
           </p>
           <p className="text-xs text-gray-700">
-            {panchang.dates.vikramSamvat.vaar && translateSanskritSafe(panchang.dates.vikramSamvat.vaar)}
+            {panchang.dates.vikramSamvat.vaar && translateSanskritSafe(panchang.dates.vikramSamvat.vaar.toLowerCase())}
           </p>
         </div>
       </div>
