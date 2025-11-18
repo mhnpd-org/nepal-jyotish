@@ -21,6 +21,15 @@ const apps: AppCard[] = [
     features: ['राशि चक्र', 'नवांश कुण्डली', 'दशा गणना']
   },
   {
+    title: 'आजको पञ्चाङ्ग',
+    titleEnglish: 'Daily Panchang',
+    description: 'आजको तिथि, नक्षत्र, योग र करण हेर्नुहोस्। वैदिक ज्योतिष आधारित दैनिक पञ्चाङ्ग।',
+    icon: '🌙',
+    href: '/panchang',
+    gradient: 'from-indigo-500 to-purple-500',
+    features: ['तिथि', 'नक्षत्र', 'योग र करण']
+  },
+  {
     title: 'मिति परिवर्तक',
     titleEnglish: 'Nepali Date Converter',
     description: 'नेपाली र अंग्रेजी मिति बीच सजिलै रूपान्तरण गर्नुहोस्। BS ↔ AD',
@@ -65,7 +74,7 @@ export default function AppsSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
           {apps.map((app) => (
             <Link
               key={app.href}

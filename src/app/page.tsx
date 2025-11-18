@@ -1,7 +1,7 @@
 import Link from "next/link";
-import Image from "next/image";
 import BlogCard from "@internal/components/blog-card";
 import AppsSection from "@internal/components/apps-section";
+import DailyPanchangCompact from "@internal/components/daily-panchang-compact";
 import Logo from "@internal/layouts/logo";
 import Footer from "@internal/layouts/footer";
 import { getRecentBlogPosts } from "@internal/lib/blogs";
@@ -133,9 +133,9 @@ export default function LandingPage() {
           <div className="absolute top-1/2 right-20 w-20 h-20 border-2 border-white/5 rounded-lg rotate-45"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto relative z-10 flex items-center gap-12">
+        <div className="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 md:gap-12">
           {/* Left column: text */}
-          <div className="max-w-3xl">
+          <div className="flex-1 max-w-3xl">
           <h1 id="hero-heading" className="text-5xl md:text-6xl font-bold text-white leading-tight tracking-tight drop-shadow-lg">
             नेपाली ज्योतिष<br />
             <span className="text-amber-200">परम्परागत कुण्डली निर्माण</span>
@@ -162,17 +162,10 @@ export default function LandingPage() {
           </div>
           </div>
 
-          {/* Right column: decorative image (visible on md and larger) */}
-          <div className="hidden md:flex items-center justify-center flex-1 pointer-events-none">
-            <div className="w-[360px] h-[350px] bg-white/3 backdrop-blur rounded-2xl p-4 shadow-2xl flex items-center justify-center">
-              <Image
-                src="/kundali.png"
-                alt="Traditional Nepali kundali (Kundali) Chart - Vedic Astrology"
-                width={320}
-                height={180}
-                className="object-contain"
-                priority={true}
-              />
+          {/* Right column: Compact Daily Panchang */}
+          <div className="w-full md:w-auto flex justify-center md:justify-end mt-8 md:mt-0">
+            <div className="w-full max-w-[340px] md:min-w-[400px] md:max-w-[440px] lg:min-w-[440px] lg:max-w-[480px]">
+              <DailyPanchangCompact />
             </div>
           </div>
         </div>
