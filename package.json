@@ -38,8 +38,7 @@
     "react-select": "^5.10.2",
     "rehype-highlight": "^7.0.2",
     "remark": "^15.0.1",
-    "remark-gfm": "^4.0.1",
-    "timezone-support": "^2.0.0"
+    "remark-gfm": "^4.0.1"
   },
   "overrides": {
     "nepali-datepicker-reactjs": {
