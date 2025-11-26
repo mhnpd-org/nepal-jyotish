@@ -22,7 +22,7 @@
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
-    "@mhnpd-org/panchang": "^1.0.31",
+    "@mhnpd-org/panchang": "^1.0.32",
     "@next/mdx": "^16.0.3",
     "d3": "^7.9.0",
     "date-fns": "^2.30.0",
@@ -47,11 +47,11 @@
     }
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20251118.0",
+    "@cloudflare/workers-types": "^4.20251126.0",
     "@tailwindcss/postcss": "^4.1.17",
     "@types/d3": "^7.4.3",
     "@types/jest": "^30.0.0",
-    "@types/react": "^19.2.6",
+    "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@types/react-select": "^5.0.1",
     "@typescript-eslint/eslint-plugin": "^8.46.4",
@@ -63,6 +63,6 @@
     "tailwindcss": "^4.1.17",
     "ts-jest": "^29.4.5",
     "typescript": "^5.9.3",
-    "wrangler": "^4.49.0"
+    "wrangler": "^4.51.0"
   }
 }
