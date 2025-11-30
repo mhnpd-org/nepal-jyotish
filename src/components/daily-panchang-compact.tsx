@@ -6,31 +6,15 @@ import { translateSanskritSafe } from '@internal/lib/devanagari';
 import Link from 'next/link';
 
 // Create a stable promise outside the component
-const panchangPromise = getDailyPanchang().catch((error) => {
-  console.error('Failed to fetch panchang:', error);
-  return null;
-});
+const panchangPromise = getDailyPanchang();
 
 function PanchangCompactContent() {
   const panchang = use(panchangPromise);
 
-  // Handle error case
-  if (!panchang) {
-    return (
-      <div className="bg-white/95 backdrop-blur rounded-2xl shadow-2xl p-5 flex flex-col items-center justify-center text-center min-h-[200px]">
-        <svg className="w-12 h-12 text-gray-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <p className="text-gray-700 font-semibold mb-1">पञ्चाङ्ग उपलब्ध छैन</p>
-        <p className="text-xs text-gray-500">कृपया पछि पुनः प्रयास गर्नुहोस्</p>
-      </div>
-    );
-  }
-
   const formatNepaliDate = (): string => {
     const vs = panchang.dates.vikramSamvat;
     if (!vs.day || !vs.year) return '';
-    return `${translateSanskritSafe(vs.day.toString())} ${translateSanskritSafe(vs.monthName || '')}, ${translateSanskritSafe(vs.year.toString())}`;
+    return `${vs.day} ${translateSanskritSafe(vs.monthName || '')}, ${vs.year}`;
   };
 
   return (
@@ -59,7 +43,7 @@ function PanchangCompactContent() {
             {formatNepaliDate()}
           </p>
           <p className="text-xs text-gray-700">
-            {panchang.dates.vikramSamvat.vaar && translateSanskritSafe(panchang.dates.vikramSamvat.vaar.toLowerCase())}
+            {panchang.dates.vikramSamvat.vaar && translateSanskritSafe(panchang.dates.vikramSamvat.vaar)}
           </p>
         </div>
       </div>
