@@ -2,9 +2,47 @@ import Link from "next/link";
 import Logo from "@internal/layouts/logo";
 import Footer from "@internal/layouts/footer";
 import { getAllBlogPosts, hasTranslation } from "@internal/lib/blogs";
+import { notFound } from "next/navigation";
 
-export default function NepaliArticlesPage() {
-  const blogs = getAllBlogPosts('np');
+interface BlogsListPageProps {
+  params: Promise<{
+    language: string;
+  }>;
+}
+
+// Generate static params for both languages
+export async function generateStaticParams() {
+  return [
+    { language: 'np' },
+    { language: 'en' },
+  ];
+}
+
+export default async function BlogsListPage({ params }: BlogsListPageProps) {
+  const { language } = await params;
+  
+  // Validate language
+  if (language !== 'np' && language !== 'en') {
+    notFound();
+  }
+
+  const blogs = getAllBlogPosts(language);
+  const isNepali = language === 'np';
+
+  const text = {
+    home: isNepali ? 'मुख्य पृष्ठ' : 'Home',
+    articles: isNepali ? 'लेखहरू' : 'Articles',
+    openApp: isNepali ? 'एप खोल्नुहोस्' : 'Open App',
+    title: isNepali ? 'लेखहरू' : 'Articles',
+    subtitle: isNepali ? 'नेपाली ज्योतिष सम्बन्धी ज्ञान र जानकारीहरू' : 'Knowledge and Information about Nepali Jyotish',
+    switchLang: isNepali ? 'Read in English' : 'नेपालीमा पढ्नुहोस्',
+    noArticles: isNepali ? 'कुनै लेख भेटिएन' : 'No articles found',
+    comingSoon: isNepali ? 'छिट्टै नयाँ लेखहरू थपिनेछ।' : 'New articles coming soon.',
+    inEnglish: 'In English',
+    inNepali: 'In Nepali',
+  };
+
+  const otherLang = isNepali ? 'en' : 'np';
 
   return (
     <>
@@ -20,38 +58,38 @@ export default function NepaliArticlesPage() {
                 href="/" 
                 className="text-xs sm:text-sm text-white/90 hover:text-white transition-colors whitespace-nowrap"
               >
-                मुख्य पृष्ठ
+                {text.home}
               </Link>
               <Link 
-                href="/blogs/np" 
+                href={`/blogs/${language}`}
                 className="text-xs sm:text-sm text-white font-semibold transition-colors whitespace-nowrap"
               >
-                लेखहरू
+                {text.articles}
               </Link>
               <Link 
                 href="/astro/janma" 
                 className="px-3 sm:px-4 py-2 bg-white text-rose-700 text-xs sm:text-sm font-medium rounded-lg hover:bg-white/95 transition-colors shadow-sm whitespace-nowrap"
               >
-                एप खोल्नुहोस्
+                {text.openApp}
               </Link>
             </nav>
           </div>
           
           <div className="py-8">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">लेखहरू</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">{text.title}</h1>
             <p className="text-xl text-white/90 mb-3">
-              नेपाली ज्योतिष सम्बन्धी ज्ञान र जानकारीहरू
+              {text.subtitle}
             </p>
             
             {/* Language Toggle */}
             <Link
-              href="/blogs/en"
+              href={`/blogs/${otherLang}`}
               className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-transparent border-2 border-white text-white font-medium rounded-lg hover:bg-white hover:text-rose-700 transition-all duration-200 group text-sm w-fit"
             >
               <svg className="w-4 h-4 transition-transform group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
               </svg>
-              <span>Read in English</span>
+              <span>{text.switchLang}</span>
             </Link>
           </div>
         </div>
@@ -66,17 +104,17 @@ export default function NepaliArticlesPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">कुनै लेख भेटिएन</h2>
-            <p className="text-gray-600">छिट्टै नयाँ लेखहरू थपिनेछ।</p>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">{text.noArticles}</h2>
+            <p className="text-gray-600">{text.comingSoon}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {blogs.map((blog) => {
-              const translationExists = hasTranslation(blog.slug, 'np');
+              const translationExists = hasTranslation(blog.slug, language);
               return (
               <div key={blog.slug} className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100">
                 <Link
-                  href={`/blogs/np/${blog.slug}`}
+                  href={`/blogs/${language}/${blog.slug}`}
                   className="group block"
                 >
                   <div className="p-6">
@@ -96,13 +134,13 @@ export default function NepaliArticlesPage() {
                       )}
                       {translationExists && (
                         <Link
-                          href={`/blogs/en/${blog.slug}`}
+                          href={`/blogs/${otherLang}/${blog.slug}`}
                           className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-rose-600 hover:text-rose-700 hover:underline whitespace-nowrap flex-shrink-0 ml-auto"
                         >
                           <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
                           </svg>
-                          <span>In English</span>
+                          <span>{isNepali ? text.inEnglish : text.inNepali}</span>
                         </Link>
                       )}
                     </div>
@@ -120,7 +158,7 @@ export default function NepaliArticlesPage() {
                     {/* Meta */}
                     <div className="flex items-center justify-between text-sm text-gray-500 pt-4 border-t border-gray-100">
                       <time dateTime={blog.date}>
-                        {new Date(blog.date).toLocaleDateString('ne-NP', {
+                        {new Date(blog.date).toLocaleDateString(isNepali ? 'ne-NP' : 'en-US', {
                           year: 'numeric',
                           month: 'long',
                           day: 'numeric',
