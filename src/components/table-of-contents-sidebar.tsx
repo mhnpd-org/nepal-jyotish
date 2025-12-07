@@ -1,7 +1,7 @@
 'use client';
 
 import { TableOfContentsItem } from '@internal/lib/books';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface TableOfContentsSidebarProps {
   items: TableOfContentsItem[];
@@ -12,8 +12,10 @@ export default function TableOfContentsSidebar({
 }: TableOfContentsSidebarProps) {
   const [activeId, setActiveId] = useState<string>('');
   const [mobileOpen, setMobileOpen] = useState(false);
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const activeElementRef = useRef<HTMLAnchorElement>(null);
 
-  // Handle scroll to update active section
+  // Handle scroll to update active section and auto-scroll sidebar
   useEffect(() => {
     const handleScroll = () => {
       const headings = document.querySelectorAll('h2[id], h3[id]');
@@ -35,6 +37,28 @@ export default function TableOfContentsSidebar({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Auto-scroll sidebar to keep active item in view
+  useEffect(() => {
+    if (activeElementRef.current && sidebarRef.current) {
+      const sidebar = sidebarRef.current;
+      const activeElement = activeElementRef.current;
+      
+      // Calculate positions
+      const sidebarRect = sidebar.getBoundingClientRect();
+      const elementRect = activeElement.getBoundingClientRect();
+      
+      // Check if element is out of view
+      const isAboveViewport = elementRect.top < sidebarRect.top;
+      const isBelowViewport = elementRect.bottom > sidebarRect.bottom;
+      
+      if (isAboveViewport || isBelowViewport) {
+        // Scroll the sidebar to center the active element
+        const scrollTop = activeElement.offsetTop - sidebar.offsetHeight / 2 + activeElement.offsetHeight / 2;
+        sidebar.scrollTo({ top: scrollTop, behavior: 'smooth' });
+      }
+    }
+  }, [activeId]);
+
   if (items.length === 0) {
     return null;
   }
@@ -47,6 +71,7 @@ export default function TableOfContentsSidebar({
         return (
           <a
             key={item.id}
+            ref={isActive ? activeElementRef : null}
             href={`#${item.slug}`}
             onClick={() => setMobileOpen(false)}
             className={`block px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
@@ -67,7 +92,7 @@ export default function TableOfContentsSidebar({
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:block w-full lg:w-80 bg-white rounded-xl shadow-sm border border-gray-100 h-fit sticky top-20 overflow-y-auto max-h-[calc(100vh-100px)]">
+      <aside ref={sidebarRef} className="hidden lg:block w-full lg:w-80 bg-white rounded-xl shadow-sm border border-gray-100 h-fit sticky top-20 overflow-y-auto max-h-[calc(100vh-100px)]">
         <div className="p-6">
           <h2 className="text-lg font-bold text-gray-900 mb-6">Table of Contents</h2>
           {tocContent}
