@@ -213,7 +213,39 @@ export default function AppHeader({
 
               {/* Navigation Links */}
               <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-                {navItems.map((item) => (
+                <Link
+                  href="/"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`block px-4 py-3 rounded-lg transition-colors ${
+                    currentPage === 'home'
+                      ? 'bg-gray-100 text-gray-900 font-semibold'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  }`}
+                >
+                  {text.home}
+                </Link>
+
+                {/* Services Section */}
+                <div className="pt-2">
+                  <p className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    {isNepali ? 'हाम्रा सेवाहरू' : 'Our Services'}
+                  </p>
+                  <div className="space-y-1">
+                    {services.map((service) => (
+                      <Link
+                        key={service.id}
+                        href={service.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-amber-50 hover:text-rose-700 rounded-lg transition-colors group"
+                      >
+                        <span className="text-lg">{service.icon}</span>
+                        <span className="text-sm font-medium">{service.title}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                {navItems.filter(item => item.href !== '/').map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
