@@ -1,5 +1,5 @@
 import Link from "next/link";
-import BlogHeader from "@internal/layouts/blog-header";
+import AppHeader from "@internal/layouts/app-header";
 import Footer from "@internal/layouts/footer";
 import { getAllBlogPosts, hasTranslation } from "@internal/lib/blogs";
 import { notFound } from "next/navigation";
@@ -44,15 +44,17 @@ export default async function BlogsListPage({ params }: BlogsListPageProps) {
 
   return (
     <>
+      <AppHeader variant="solid" language={language as 'np' | 'en'} currentPage="blogs" />
       <main className="min-h-screen bg-gradient-to-b from-rose-50 to-amber-50">
-      <BlogHeader 
-        language={language}
-        title={text.title}
-        subtitle={text.subtitle}
-        switchLangText={text.switchLang}
-      />
+        {/* Blog Header Section */}
+        <section className="bg-white border-b border-gray-200 py-12">
+          <div className="max-w-7xl mx-auto px-6 text-center">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{text.title}</h1>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">{text.subtitle}</p>
+          </div>
+        </section>
 
-      {/* Blog List */}
+        {/* Blog List */}
       <section className="max-w-7xl mx-auto px-6 py-16">
         {blogs.length === 0 ? (
           <div className="text-center py-16">

@@ -2,7 +2,7 @@ import Link from "next/link";
 import BlogCard from "@internal/components/blog-card";
 import AppsSection from "@internal/components/apps-section";
 import DailyPanchangCompact from "@internal/components/daily-panchang-compact";
-import MainHeader from "@internal/layouts/main-header";
+import AppHeader from "@internal/layouts/app-header";
 import Footer from "@internal/layouts/footer";
 import { getRecentBlogPosts } from "@internal/lib/blogs";
 import type { Metadata } from "next";
@@ -62,8 +62,14 @@ export default function LandingPage() {
 
 
   return (
-    <main className="min-h-screen bg-vedanga-gradient">
-      <MainHeader variant="transparent" />
+    <>
+      <AppHeader 
+        variant="transparent" 
+        language="np" 
+        currentPage="home" 
+        backgroundGradient="bg-vedanga-gradient"
+      />
+      <main className="min-h-screen bg-vedanga-gradient">
 
       {/* Hero section */}
       <section className="max-w-7xl mx-auto px-6 pt-20 pb-24 relative overflow-hidden" aria-labelledby="hero-heading">
@@ -254,5 +260,6 @@ export default function LandingPage() {
       {/* Footer */}
       <Footer variant="dark" />
     </main>
+    </>
   );
 }

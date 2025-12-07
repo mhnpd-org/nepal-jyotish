@@ -1,5 +1,5 @@
 import Link from "next/link";
-import BlogDetailHeader from "@internal/layouts/blog-detail-header";
+import AppHeader from "@internal/layouts/app-header";
 import Footer from "@internal/layouts/footer";
 import { getBlogPost, getAllBlogSlugs, hasTranslation } from "@internal/lib/blogs";
 import { notFound } from "next/navigation";
@@ -137,8 +137,9 @@ export default async function BlogPage({ params }: BlogPageProps) {
   };
 
   return (
-    <main className="min-h-screen bg-white">
-      <BlogDetailHeader language={language as 'np' | 'en'} />
+    <>
+      <AppHeader variant="solid" language={language as 'np' | 'en'} currentPage="blogs" />
+      <main className="min-h-screen bg-white">
 
       {/* Article Header - Hero style */}
       <div className="bg-gradient-to-b from-rose-50 via-white to-white">
@@ -265,5 +266,6 @@ export default async function BlogPage({ params }: BlogPageProps) {
       {/* Footer */}
       <Footer variant="light" />
     </main>
+    </>
   );
 }
