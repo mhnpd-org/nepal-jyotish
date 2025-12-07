@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Footer from "@internal/layouts/footer";
-import Logo from "@internal/layouts/logo";
+import MainHeader from "@internal/layouts/main-header";
 import ContactForm from "@internal/components/contact-form";
 
 export const metadata: Metadata = {
@@ -30,29 +30,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <main className="min-h-screen bg-vedanga-gradient">
-      {/* Header */}
-      <header className="bg-gradient-to-b from-amber-900/30 via-amber-900/10 to-transparent">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Logo size="md" variant="light" />
-
-          <nav className="flex items-center gap-6" aria-label="Navigation">
-            <Link 
-              href="/blogs" 
-              className="text-sm text-white/90 hover:text-white transition-colors"
-              aria-label="ज्योतिष लेखहरू पढ्नुहोस्"
-            >
-              लेखहरू
-            </Link>
-            <Link 
-              href="/astro/janma" 
-              className="px-4 py-2 bg-white text-rose-700 text-sm font-medium rounded-lg hover:bg-white/95 transition-colors shadow-sm"
-              aria-label="नेपाली जन्मकुण्डली बनाउनुहोस्"
-            >
-              एप खोल्नुहोस्
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <MainHeader variant="transparent" />
 
       {/* Main Content */}
       <section className="max-w-4xl mx-auto px-6 py-12 lg:py-20">

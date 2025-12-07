@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Logo from "@internal/layouts/logo";
+import BlogHeader from "@internal/layouts/blog-header";
 import Footer from "@internal/layouts/footer";
 import { getAllBlogPosts, hasTranslation } from "@internal/lib/blogs";
 import { notFound } from "next/navigation";
@@ -42,58 +42,15 @@ export default async function BlogsListPage({ params }: BlogsListPageProps) {
     inNepali: 'In Nepali',
   };
 
-  const otherLang = isNepali ? 'en' : 'np';
-
   return (
     <>
       <main className="min-h-screen bg-gradient-to-b from-rose-50 to-amber-50">
-      {/* Header */}
-      <header className="bg-gradient-to-r from-rose-700 to-orange-600 text-white">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between mb-8">
-            <Logo size="md" variant="light" />
-            
-            <nav className="flex items-center gap-3 sm:gap-6">
-              <Link 
-                href="/" 
-                className="text-xs sm:text-sm text-white/90 hover:text-white transition-colors whitespace-nowrap"
-              >
-                {text.home}
-              </Link>
-              <Link 
-                href={`/blogs/${language}`}
-                className="text-xs sm:text-sm text-white font-semibold transition-colors whitespace-nowrap"
-              >
-                {text.articles}
-              </Link>
-              <Link 
-                href="/astro/janma" 
-                className="px-3 sm:px-4 py-2 bg-white text-rose-700 text-xs sm:text-sm font-medium rounded-lg hover:bg-white/95 transition-colors shadow-sm whitespace-nowrap"
-              >
-                {text.openApp}
-              </Link>
-            </nav>
-          </div>
-          
-          <div className="py-8">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">{text.title}</h1>
-            <p className="text-xl text-white/90 mb-3">
-              {text.subtitle}
-            </p>
-            
-            {/* Language Toggle */}
-            <Link
-              href={`/blogs/${otherLang}`}
-              className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-transparent border-2 border-white text-white font-medium rounded-lg hover:bg-white hover:text-rose-700 transition-all duration-200 group text-sm w-fit"
-            >
-              <svg className="w-4 h-4 transition-transform group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
-              </svg>
-              <span>{text.switchLang}</span>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <BlogHeader 
+        language={language}
+        title={text.title}
+        subtitle={text.subtitle}
+        switchLangText={text.switchLang}
+      />
 
       {/* Blog List */}
       <section className="max-w-7xl mx-auto px-6 py-16">

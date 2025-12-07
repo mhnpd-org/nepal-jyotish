@@ -1,5 +1,10 @@
 ## Repo overview
 
+Important:
+
+- /astro/janma has its own sidebar and layout. (app layout)
+- / & /blogs has its own sidebar and layout. ( marketing layout)
+
 This is a small Next.js (app directory) project scaffolded from the official template and using Tailwind CSS. Key facts:
 
 - Framework: `next` (App Router, React 19). See `package.json`.

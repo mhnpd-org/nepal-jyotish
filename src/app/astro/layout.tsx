@@ -40,6 +40,12 @@ export default function AstroLayout({ children }: { children: React.ReactNode })
             >
               लेखहरू
             </Link>
+            <Link 
+              href="/" 
+              className="px-4 py-1.5 text-sm bg-white text-amber-600 font-medium rounded hover:bg-white/95 transition-colors"
+            >
+              मुख्य पृष्ठ
+            </Link>
           </nav>
           
           {/* Mobile menu button */}

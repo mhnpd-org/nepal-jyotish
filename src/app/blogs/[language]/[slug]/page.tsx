@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Logo from "@internal/layouts/logo";
+import BlogDetailHeader from "@internal/layouts/blog-detail-header";
 import Footer from "@internal/layouts/footer";
 import { getBlogPost, getAllBlogSlugs, hasTranslation } from "@internal/lib/blogs";
 import { notFound } from "next/navigation";
@@ -138,35 +138,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
 
   return (
     <main className="min-h-screen bg-white">
-      {/* Header - Minimalist and clean */}
-      <header className="border-b border-gray-200 bg-white sticky top-0 z-50 backdrop-blur-sm bg-white/95">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <Logo size="sm" variant="dark" />
-            
-            <nav className="flex items-center gap-3 sm:gap-6">
-              <Link 
-                href="/" 
-                className="text-xs sm:text-sm text-gray-600 hover:text-gray-900 transition-colors whitespace-nowrap"
-              >
-                {text.home}
-              </Link>
-              <Link 
-                href="/blogs" 
-                className="text-xs sm:text-sm text-gray-900 font-semibold whitespace-nowrap"
-              >
-                {text.blogs}
-              </Link>
-              <Link 
-                href="/astro/janma" 
-                className="px-3 sm:px-4 py-2 bg-rose-600 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-rose-700 transition-colors whitespace-nowrap"
-              >
-                {text.openApp}
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <BlogDetailHeader language={language as 'np' | 'en'} />
 
       {/* Article Header - Hero style */}
       <div className="bg-gradient-to-b from-rose-50 via-white to-white">

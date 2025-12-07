@@ -2,7 +2,7 @@ import Link from "next/link";
 import BlogCard from "@internal/components/blog-card";
 import AppsSection from "@internal/components/apps-section";
 import DailyPanchangCompact from "@internal/components/daily-panchang-compact";
-import Logo from "@internal/layouts/logo";
+import MainHeader from "@internal/layouts/main-header";
 import Footer from "@internal/layouts/footer";
 import { getRecentBlogPosts } from "@internal/lib/blogs";
 import type { Metadata } from "next";
@@ -63,54 +63,7 @@ export default function LandingPage() {
 
   return (
     <main className="min-h-screen bg-vedanga-gradient">
-      {/* Minimal header */}
-      <header className="bg-gradient-to-b from-amber-900/30 via-amber-900/10 to-transparent">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-          <Logo size="md" variant="light" />
-
-          <nav className="flex items-center gap-2 sm:gap-4 md:gap-6" aria-label="Main navigation">
-            <Link 
-              href="/contact" 
-              className="text-sm text-white/90 hover:text-white transition-colors hidden sm:block"
-              aria-label="समस्या रिपोर्ट गर्नुहोस्"
-            >
-              सम्पर्क
-            </Link>
-            <Link 
-              href="/blogs" 
-              className="text-sm text-white/90 hover:text-white transition-colors hidden sm:block"
-              aria-label="ज्योतिष लेखहरू पढ्नुहोस्"
-            >
-              लेखहरू
-            </Link>
-            {/* Mobile navigation */}
-            <div className="flex items-center gap-2 sm:hidden">
-              <Link 
-                href="/contact" 
-                className="text-xs text-white/90 hover:text-white transition-colors"
-                aria-label="समस्या रिपोर्ट गर्नुहोस्"
-              >
-                सम्पर्क
-              </Link>
-              <Link 
-                href="/blogs" 
-                className="text-xs text-white/90 hover:text-white transition-colors"
-                aria-label="ज्योतिष लेखहरू पढ्नुहोस्"
-              >
-                लेखहरू
-              </Link>
-            </div>
-            <Link 
-              href="/astro/janma" 
-              className="px-2 py-1.5 sm:px-4 sm:py-2 bg-white text-rose-700 text-xs sm:text-sm font-medium rounded-lg hover:bg-white/95 transition-colors shadow-sm whitespace-nowrap"
-              aria-label="नेपाली जन्मकुण्डली बनाउनुहोस्"
-            >
-              <span className="sm:hidden">एप</span>
-              <span className="hidden sm:inline">एप खोल्नुहोस्</span>
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <MainHeader variant="transparent" />
 
       {/* Hero section */}
       <section className="max-w-7xl mx-auto px-6 pt-20 pb-24 relative overflow-hidden" aria-labelledby="hero-heading">

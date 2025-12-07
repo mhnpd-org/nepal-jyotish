@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Logo from '@internal/layouts/logo';
+import MainHeader from '@internal/layouts/main-header';
 import Footer from '@internal/layouts/footer';
 import DailyPanchang from '@internal/components/daily-panchang';
 import type { Metadata } from 'next';
@@ -43,33 +43,7 @@ export const metadata: Metadata = {
 export default function PanchangPage() {
   return (
     <main className="min-h-screen bg-vedanga-gradient">
-      {/* Header */}
-      <header className="bg-gradient-to-b from-amber-900/30 via-amber-900/10 to-transparent">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-          <Logo size="md" variant="light" />
-          <nav className="flex items-center gap-2 sm:gap-4 md:gap-6">
-            <Link 
-              href="/contact" 
-              className="text-sm text-white/90 hover:text-white transition-colors hidden sm:block"
-            >
-              सम्पर्क
-            </Link>
-            <Link 
-              href="/blogs" 
-              className="text-sm text-white/90 hover:text-white transition-colors hidden sm:block"
-            >
-              लेखहरू
-            </Link>
-            <Link 
-              href="/astro/janma" 
-              className="px-2 py-1.5 sm:px-4 sm:py-2 bg-white text-rose-700 text-xs sm:text-sm font-medium rounded-lg hover:bg-white/95 transition-colors shadow-sm whitespace-nowrap"
-            >
-              <span className="sm:hidden">कुण्डली</span>
-              <span className="hidden sm:inline">कुण्डली बनाउनुहोस्</span>
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <MainHeader variant="transparent" />
 
       {/* Main Content */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
