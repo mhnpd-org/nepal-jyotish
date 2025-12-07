@@ -1,6 +1,7 @@
 import Link from "next/link";
 import BlogCard from "@internal/components/blog-card";
 import AppsSection from "@internal/components/apps-section";
+import ServicesShowcase from "@internal/components/services-showcase";
 import DailyPanchangCompact from "@internal/components/daily-panchang-compact";
 import AppHeader from "@internal/layouts/app-header";
 import Footer from "@internal/layouts/footer";
@@ -129,6 +130,9 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* Services Showcase - After Hero */}
+      <ServicesShowcase />
 
       {/* Apps Section */}
       <AppsSection />
