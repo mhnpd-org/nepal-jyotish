@@ -89,43 +89,6 @@ export default async function BooksPage() {
           {/* Decorative footer element */}
           <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-200 to-transparent" />
         </section>
-
-        {/* CTA Section */}
-        {books.length > 0 && (
-          <section className="relative py-16 md:py-24 bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500">
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,white_1px,transparent_1px)] bg-[length:40px_40px]" />
-            </div>
-
-            <div className="relative max-w-4xl mx-auto px-6 text-center space-y-6">
-              <h3 className="text-4xl md:text-5xl font-bold text-white">
-                Dive into Ancient Wisdom
-              </h3>
-              <p className="text-lg text-white/90 max-w-2xl mx-auto">
-                Explore the profound teachings of Jyotish and unlock the mysteries of the cosmos through our carefully selected collection of sacred texts.
-              </p>
-              <button
-                type="button"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-white text-orange-600 font-bold rounded-lg shadow-2xl hover:shadow-xl hover:scale-105 transition-all duration-300 group"
-              >
-                Start Exploring
-                <svg
-                  className="w-5 h-5 group-hover:translate-x-1 transition-transform"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </button>
-            </div>
-          </section>
-        )}
       </main>
       <Footer />
     </>
