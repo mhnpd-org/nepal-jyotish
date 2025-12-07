@@ -10,10 +10,16 @@ const panchangPromise = getDailyPanchang();
 function PanchangContent() {
   const panchang = use(panchangPromise);
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
+  const [nepalTime, setNepalTime] = useState<Date>(new Date());
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
+      // Calculate Nepal time (GMT+5:45)
+      const now = new Date();
+      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+      const nepalOffset = 5.75 * 60 * 60000; // 5 hours 45 minutes in milliseconds
+      setNepalTime(new Date(utc + nepalOffset));
     }, 1000);
     return () => clearInterval(timer);
   }, []);
@@ -119,10 +125,10 @@ function PanchangContent() {
             <h4 className="font-semibold text-blue-900">नेपाल समय</h4>
           </div>
           <p className="text-3xl font-bold text-blue-900 font-mono">
-            {formatDateNepali(panchang.dates.zonedDate)}
+            {formatDateNepali(nepalTime)}
           </p>
           <p className="text-sm text-blue-700 mt-1">
-            Nepal Standard Time (NPT)
+            Nepal Standard Time (GMT+5:45)
           </p>
         </div>
 
