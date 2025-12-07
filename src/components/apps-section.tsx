@@ -57,6 +57,15 @@ const apps: AppCard[] = [
     features: ['नक्षत्र-विश्लेषण', 'ग्रह-योग', 'पूजा-विधि']
   },
   {
+    title: 'अनलाईन सेवा',
+    titleEnglish: 'Online Services',
+    description: 'मुहूर्त, ग्रह शान्ति, वास्तु, पूजा र अन्य ज्योतिषीय सेवाहरू प्राप्त गर्नुहोस्।',
+    icon: '✨',
+    href: '/services',
+    gradient: 'from-rose-500 to-orange-500',
+    features: ['मुहूर्त निर्धारण', 'ग्रह शान्ति', 'वास्तु परामर्श']
+  },
+  {
     title: 'सम्पर्क गर्नुहोस्',
     titleEnglish: 'Contact Us',
     description: 'समस्या वा सुझाव पठाउनुहोस्। तपाईंको प्रतिक्रिया स्वागतयोग्य छ।',
