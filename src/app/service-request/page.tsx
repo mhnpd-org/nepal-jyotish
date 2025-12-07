@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
-import MainHeader from "@internal/layouts/main-header";
+import AppHeader from "@internal/layouts/app-header";
 import Footer from "@internal/layouts/footer";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
@@ -172,7 +172,7 @@ function ServiceRequestForm() {
   if (isSubmitted) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-amber-50 via-white to-orange-50">
-        <MainHeader variant="solid" />
+        <AppHeader variant="solid" language="np" />
         
         <main className="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
           <div className="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 rounded-2xl p-8 sm:p-12 text-center shadow-lg">
@@ -222,7 +222,7 @@ function ServiceRequestForm() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 via-white to-orange-50">
-      <MainHeader variant="solid" />
+      <AppHeader variant="solid" language="np" />
 
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         {/* Page Header */}
@@ -484,7 +484,7 @@ export default function ServiceRequestPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-gradient-to-b from-amber-50 via-white to-orange-50">
-        <MainHeader variant="solid" />
+        <AppHeader variant="solid" language="np" />
         <main className="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
           <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 text-center">
             <div className="animate-spin h-12 w-12 border-4 border-rose-600 border-t-transparent rounded-full mx-auto"></div>

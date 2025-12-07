@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Footer from "@internal/layouts/footer";
-import MainHeader from "@internal/layouts/main-header";
+import AppHeader from "@internal/layouts/app-header";
 import ContactForm from "@internal/components/contact-form";
 
 export const metadata: Metadata = {
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <main className="min-h-screen bg-vedanga-gradient">
-      <MainHeader variant="transparent" />
+      <AppHeader variant="transparent" language="np" currentPage="contact" backgroundGradient="bg-vedanga-gradient" />
 
       {/* Main Content */}
       <section className="max-w-4xl mx-auto px-6 py-12 lg:py-20">

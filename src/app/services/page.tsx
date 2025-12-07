@@ -1,4 +1,4 @@
-import MainHeader from "@internal/layouts/main-header";
+import AppHeader from "@internal/layouts/app-header";
 import Footer from "@internal/layouts/footer";
 import type { Metadata }from "next";
 
@@ -104,7 +104,7 @@ const services: Service[] = [
 export default function ServicesPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 via-white to-orange-50">
-      <MainHeader variant="solid" />
+      <AppHeader variant="solid" language="np" currentPage="services" />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         {/* Page Header */}

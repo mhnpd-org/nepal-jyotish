@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import MainHeader from '@internal/layouts/main-header';
+import AppHeader from '@internal/layouts/app-header';
 import Footer from '@internal/layouts/footer';
 import DailyPanchang from '@internal/components/daily-panchang';
 import type { Metadata } from 'next';
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
 export default function PanchangPage() {
   return (
     <main className="min-h-screen bg-vedanga-gradient">
-      <MainHeader variant="transparent" />
+      <AppHeader variant="transparent" language="np" currentPage="panchang" backgroundGradient="bg-vedanga-gradient" />
 
       {/* Main Content */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
