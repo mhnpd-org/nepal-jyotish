@@ -11,7 +11,6 @@ import { notFound } from 'next/navigation';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
-import rehypeSlug from 'rehype-slug';
 import type { Metadata } from 'next';
 
 // Import highlight.js styles
@@ -50,16 +49,32 @@ export async function generateMetadata({
 
 type MDXComponentProps = React.HTMLAttributes<HTMLElement>;
 
+let headingCounter = 0;
+
 const components = {
   h1: (props: MDXComponentProps) => (
     <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 mt-0 leading-snug" {...props} />
   ),
-  h2: (props: MDXComponentProps) => (
-    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 mt-12 leading-snug border-b-2 border-rose-100 pb-3 scroll-mt-24" id={props.id} {...props} />
-  ),
-  h3: (props: MDXComponentProps) => (
-    <h3 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-3 mt-10 leading-snug scroll-mt-24" id={props.id} {...props} />
-  ),
+  h2: (props: MDXComponentProps) => {
+    const id = `heading-${headingCounter++}`;
+    return (
+      <h2 
+        id={id}
+        className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 mt-12 leading-snug border-b-2 border-rose-100 pb-3 scroll-mt-24" 
+        {...props} 
+      />
+    );
+  },
+  h3: (props: MDXComponentProps) => {
+    const id = `heading-${headingCounter++}`;
+    return (
+      <h3 
+        id={id}
+        className="text-2xl md:text-3xl font-semibold text-gray-800 mb-3 mt-10 leading-snug scroll-mt-24" 
+        {...props} 
+      />
+    );
+  },
   h4: (props: MDXComponentProps) => (
     <h4 className="text-xl md:text-2xl font-semibold text-gray-800 mb-2 mt-8 leading-normal" {...props} />
   ),
@@ -160,7 +175,7 @@ export default async function BookPage({
                   options={{
                     mdxOptions: {
                       remarkPlugins: [remarkGfm],
-                      rehypePlugins: [rehypeSlug, rehypeHighlight],
+                      rehypePlugins: [rehypeHighlight],
                     },
                   }}
                 />

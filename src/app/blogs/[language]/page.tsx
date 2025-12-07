@@ -28,6 +28,7 @@ export default async function BlogsListPage({ params }: BlogsListPageProps) {
 
   const blogs = getAllBlogPosts(language);
   const isNepali = language === 'np';
+  const otherLang = isNepali ? 'en' : 'np';
 
   const text = {
     home: isNepali ? 'मुख्य पृष्ठ' : 'Home',

@@ -50,6 +50,14 @@ export interface BookContent {
   prevLink?: { slug: string; title: string };
 }
 
+interface BookFrontmatter {
+  title?: string;
+  author?: string;
+  description?: string;
+  coverImage?: string;
+  publishDate?: string;
+}
+
 const booksDirectory = path.join(process.cwd(), 'src/books');
 
 /**
@@ -62,12 +70,8 @@ export function extractTableOfContents(content: string): TableOfContentsItem[] {
   return matches.map((match, index) => {
     const level = match[1].length; // ## = 2, ### = 3
     const title = match[2];
-    const slug = title
-      .toLowerCase()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .trim();
+    // Use index-based slug to handle any language, including non-Latin scripts
+    const slug = `heading-${index}`;
 
     return {
       id: `heading-${index}`,
@@ -104,7 +108,7 @@ export function getAllBooks(): BookMetadata[] {
     if (fs.existsSync(indexPath)) {
       const fileContents = fs.readFileSync(indexPath, 'utf8');
       const matterResult = matter(fileContents);
-      const frontmatter = matterResult.data as any;
+      const frontmatter = matterResult.data as BookFrontmatter;
 
       return {
         slug: bookDir,
@@ -140,7 +144,7 @@ export function getBook(slug: string): BookMetadata | null {
     if (fs.existsSync(indexPath)) {
       const fileContents = fs.readFileSync(indexPath, 'utf8');
       const matterResult = matter(fileContents);
-      const frontmatter = matterResult.data as any;
+      const frontmatter = matterResult.data as BookFrontmatter;
 
       return {
         slug,
