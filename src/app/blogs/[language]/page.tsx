@@ -72,38 +72,40 @@ export default async function BlogsListPage({ params }: BlogsListPageProps) {
             {blogs.map((blog) => {
               const translationExists = hasTranslation(blog.slug, language);
               return (
-              <div key={blog.slug} className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100">
+              <div
+                key={blog.slug}
+                className="group relative bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100"
+              >
+                {translationExists && (
+                  <Link
+                    href={`/blogs/${otherLang}/${blog.slug}`}
+                    className="absolute top-4 right-4 inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-rose-600 hover:text-rose-700 hover:underline whitespace-nowrap bg-white/90 backdrop-blur rounded-full border border-rose-100"
+                  >
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                    </svg>
+                    <span>{isNepali ? text.inEnglish : text.inNepali}</span>
+                  </Link>
+                )}
+
                 <Link
                   href={`/blogs/${language}/${blog.slug}`}
-                  className="group block"
+                  className="block h-full"
                 >
-                  <div className="p-6">
-                    {/* Tags and Language Toggle */}
-                    <div className="flex items-start justify-between gap-2 mb-3">
-                      {blog.tags && blog.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-2">
-                          {blog.tags.slice(0, 2).map((tag) => (
-                            <span
-                              key={tag}
-                              className="px-2 py-1 text-xs font-medium bg-rose-100 text-rose-700 rounded"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                      {translationExists && (
-                        <Link
-                          href={`/blogs/${otherLang}/${blog.slug}`}
-                          className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-rose-600 hover:text-rose-700 hover:underline whitespace-nowrap flex-shrink-0 ml-auto"
-                        >
-                          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
-                          </svg>
-                          <span>{isNepali ? text.inEnglish : text.inNepali}</span>
-                        </Link>
-                      )}
-                    </div>
+                  <div className="p-6 h-full flex flex-col">
+                    {/* Tags */}
+                    {blog.tags && blog.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        {blog.tags.slice(0, 2).map((tag) => (
+                          <span
+                            key={tag}
+                            className="px-2 py-1 text-xs font-medium bg-rose-100 text-rose-700 rounded"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
 
                     {/* Title */}
                     <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-rose-700 transition-colors line-clamp-2">
@@ -116,7 +118,7 @@ export default async function BlogsListPage({ params }: BlogsListPageProps) {
                     </p>
 
                     {/* Meta */}
-                    <div className="flex items-center justify-between text-sm text-gray-500 pt-4 border-t border-gray-100">
+                    <div className="mt-auto flex items-center justify-between text-sm text-gray-500 pt-4 border-t border-gray-100">
                       <time dateTime={blog.date}>
                         {new Date(blog.date).toLocaleDateString(isNepali ? 'ne-NP' : 'en-US', {
                           year: 'numeric',
