@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Logo from '@internal/layouts/logo';
+import LoginButton from '@internal/components/login-button';
 
 export interface AppHeaderProps {
   variant?: 'transparent' | 'solid';
@@ -78,7 +79,7 @@ export default function AppHeader({
   const logoSize = isTransparent ? 'md' : 'sm';
 
   const buttonClasses = isTransparent
-    ? 'px-2 py-1.5 sm:px-4 sm:py-2 bg-white text-rose-700 text-xs sm:text-sm font-medium rounded-lg hover:bg-white/95 transition-colors shadow-sm'
+    ? 'px-2 py-1.5 sm:px-4 sm:py-2 bg-rose-50/10 text-rose-50 text-xs sm:text-sm font-medium rounded-lg hover:bg-rose-50/20 transition-colors shadow-none'
     : 'px-3 sm:px-4 py-2 bg-rose-600 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-rose-700 transition-colors';
 
   // Navigation items - consistent across all pages
@@ -90,15 +91,7 @@ export default function AppHeader({
 
           {/* Desktop navigation */}
           <nav className="hidden sm:flex items-center gap-2 sm:gap-3 md:gap-4" aria-label="Main navigation">
-            <Link
-              href="/"
-              className={`whitespace-nowrap transition-colors ${
-                currentPage === 'home' ? activeLinkClasses : linkClasses
-              }`}
-            >
-              {text.home}
-            </Link>
-            
+            {/* Home link removed per design; keep space for other items */}
             {/* Services Dropdown */}
             <div className="relative" ref={dropdownRef}>
               <button
@@ -141,15 +134,7 @@ export default function AppHeader({
               )}
             </div>
 
-            <Link
-              href="/blogs"
-              className={`whitespace-nowrap transition-colors ${
-                currentPage === 'blogs' ? activeLinkClasses : linkClasses
-              }`}
-            >
-              {text.blogs}
-            </Link>
-            
+            {/* Blogs link removed per design */}
             <Link
               href="/kundali-matching"
               className={`whitespace-nowrap transition-colors ${linkClasses}`}
@@ -157,12 +142,13 @@ export default function AppHeader({
               {isNepali ? 'कुण्डली मिलान' : 'Kundali Matching'}
             </Link>
             
-            <Link
-              href="/astro/janma"
-              className={buttonClasses + ' whitespace-nowrap'}
-            >
+            <button className={buttonClasses + ' whitespace-nowrap'}>
               {isNepali ? 'कुण्डली निर्माण' : 'Create Kundali'}
-            </Link>
+            </button>
+
+            <div>
+              <LoginButton />
+            </div>
           </nav>
 
           {/* Mobile menu button */}
@@ -292,6 +278,10 @@ export default function AppHeader({
                     </svg>
                     <span className="font-semibold">{isNepali ? 'कुण्डली निर्माण' : 'Create Kundali'}</span>
                   </Link>
+                
+                  <div className="px-4 py-3">
+                    <LoginButton />
+                  </div>
                 </div>
               </nav>
 

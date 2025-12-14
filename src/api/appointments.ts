@@ -1,15 +1,6 @@
 import { db } from "./firebase";
 import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
-
-export type Appointment = {
-  id?: string;
-  userId: string;
-  astrologerId: string;
-  datetime: string; // ISO string
-  status: "pending" | "confirmed" | "completed";
-  callRoomId?: string;
-  [k: string]: any;
-};
+import type { Appointment as AppointmentType } from "./types";
 
 const appointmentsRef = collection(db, "appointments");
 
@@ -30,19 +21,19 @@ export const bookAppointment = async (
   return docRef.id;
 };
 
-export const getUserAppointments = async (userId: string): Promise<Appointment[]> => {
+export const getUserAppointments = async (userId: string): Promise<AppointmentType[]> => {
   const q = query(appointmentsRef, where("userId", "==", userId));
   const snapshot = await getDocs(q);
   return snapshot.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
 };
 
-export const getAstrologerAppointments = async (astrologerId: string): Promise<Appointment[]> => {
+export const getAstrologerAppointments = async (astrologerId: string): Promise<AppointmentType[]> => {
   const q = query(appointmentsRef, where("astrologerId", "==", astrologerId));
   const snapshot = await getDocs(q);
   return snapshot.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
 };
 
-export const getAllAppointments = async (): Promise<Appointment[]> => {
+export const getAllAppointments = async (): Promise<AppointmentType[]> => {
   const snapshot = await getDocs(appointmentsRef);
   return snapshot.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
 };
