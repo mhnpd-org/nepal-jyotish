@@ -103,6 +103,13 @@ export default function LandingPage() {
           <p className="mt-6 text-xl text-white/95 leading-relaxed max-w-2xl drop-shadow">
             वैदिक ज्योतिष र सूर्य सिद्धान्त (Surya Siddhanta) मा आधारित निःशुल्क परम्परागत नेपाली कुण्डली निर्माण,
             जन्म पत्रिका निर्माण, ग्रह गति अवलोकन, र दशा गणना — सबै एकै ठाउँमा।
+            <br />
+            <Link 
+              href="/kundali-matching"
+              className="inline-block mt-2 text-amber-200 font-semibold hover:text-amber-100 underline decoration-2 underline-offset-4 transition-colors"
+            >
+              अब कुण्डली मिलान सेवा पनि उपलब्ध छ।
+            </Link>
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-3 sm:gap-4">
             <Link
@@ -113,11 +120,11 @@ export default function LandingPage() {
               कुण्डली बनाउनुहोस्
             </Link>
             <Link
-              href="/blogs"
+              href="/kundali-matching"
               className="px-5 sm:px-6 py-3 text-white font-medium hover:text-amber-200 transition-colors text-sm sm:text-base whitespace-nowrap border-2 border-white rounded-lg hover:bg-white/10"
-              aria-label="ज्योतिष लेखहरू पढ्नुहोस्"
+              aria-label="कुण्डली मिलान गर्नुहोस्"
             >
-              लेखहरू पढ्नुहोस् →
+              कुण्डली मिलान
             </Link>
           </div>
           </div>
@@ -238,6 +245,12 @@ export default function LandingPage() {
             </h2>
             <p className="text-2xl font-bold text-white drop-shadow">ज्योतिष ज्ञान</p>
           </div>
+          <Link
+            href="/kundali-matching"
+            className="px-5 py-2.5 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold rounded-lg transition-all shadow-md hover:shadow-lg text-sm whitespace-nowrap"
+          >
+            कुण्डली मिलान
+          </Link>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {blogs.map((b) => (
