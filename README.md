@@ -14,35 +14,36 @@
 
 ### Bug:
 
-- Overview:
 
-- Traditinal page:
 
 ##### Blogs:
 
-- Check existing blog for the mistake and finallzed it.
-- Finallize the home page.
 
 ##### Design:
 
-- Update the design of the main astro/janma page.
-- Too many cards in barga kundali page. Reduce the number of cards and improve the design layout.
--
 
 ##### Mobile Responsiveness:
 
-- traditional page break on mobile view.
-- Homepage action buttons (both) are appearing in two line in mobile view.
-- App button on the header is also appearing in two lines in mobile view.
-- Janma details page icon is not properly aligned in mobile view.
-- AD/BS selection is too big in mobile view.
 
 ##### Additional Tools:
 
-- Add nepali data converter page.
-- Add Nepali Dictionary page.
 
 #### Main jyotish software:
 
-- Support location worldwide (currently only Nepal is supported)
-- Translate the side bar into nepali language.
+
+---
+
+Environment variables
+---------------------
+
+This project reads Firebase configuration from `.env.local` during development. Example variables are:
+
+- `NEXT_PUBLIC_FIREBASE_API_KEY`
+- `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`
+- `NEXT_PUBLIC_FIREBASE_PROJECT_ID`
+- `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`
+- `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`
+- `NEXT_PUBLIC_FIREBASE_APP_ID`
+- `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID`
+
+Do not commit `.env.local` to version control. Add it to `.gitignore` if needed.
