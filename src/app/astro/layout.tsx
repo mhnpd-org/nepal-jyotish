@@ -27,7 +27,13 @@ export default function AstroLayout({ children }: { children: React.ReactNode })
           <Logo size="md" variant="light" href="/" />
           
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-4">
+          <nav className="hidden md:flex items-center gap-2">
+            <Link 
+              href="/" 
+              className="px-3 py-1.5 text-sm text-white/90 hover:text-white hover:bg-white/10 rounded transition-colors"
+            >
+              मुख्य पृष्ठ
+            </Link>
             <Link 
               href="/contact" 
               className="px-3 py-1.5 text-sm text-white/90 hover:text-white hover:bg-white/10 rounded transition-colors"
@@ -41,10 +47,10 @@ export default function AstroLayout({ children }: { children: React.ReactNode })
               लेखहरू
             </Link>
             <Link 
-              href="/" 
-              className="px-4 py-1.5 text-sm bg-white text-amber-600 font-medium rounded hover:bg-white/95 transition-colors"
+              href="/kundali-matching" 
+              className="px-4 py-1.5 text-sm bg-white/95 hover:bg-white text-rose-600 font-semibold rounded transition-colors shadow-sm"
             >
-              मुख्य पृष्ठ
+              कुण्डली मिलान
             </Link>
           </nav>
           
