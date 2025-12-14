@@ -2,9 +2,11 @@
 
 import React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { MatchKundaliResult, KootaScore } from "@mhnpd-org/panchang";
 import type { DistrictOfNepal } from "@internal/form-components/nepal-districts";
 import { translateSanskritSafe } from "@internal/lib/devanagari";
+import { setFormDetails } from "@internal/utils/get-form-details";
 
 interface PersonFormValues {
   name?: string;
@@ -27,7 +29,21 @@ export default function MatchingResultsDisplay({
   maleData,
   femaleData,
 }: MatchingResultsDisplayProps) {
-  const { ashtaKoota, dosha, overallAssessment, rashiCompatibility, nakshatraCompatibility, marriageIndicators } = result;
+  const router = useRouter();
+  const { ashtaKoota, dosha, overallAssessment, rashiCompatibility, nakshatraCompatibility } = result;
+
+  const viewKundali = (personData: PersonFormValues) => {
+    // Save to janma form using the same utility
+    setFormDetails({
+      name: personData.name || '',
+      dateOfBirth: personData.dateOfBirth,
+      calendarType: personData.calendarType,
+      timeOfBirth: personData.timeOfBirth,
+      placeOfBirth: personData.placeOfBirth
+    });
+    // Navigate directly to traditional kundali page
+    router.push('/astro/traditional');
+  };
 
   // Use compatibility level from library
   const compatibilityLevel = result.compatibilityLevel || {
@@ -84,7 +100,7 @@ export default function MatchingResultsDisplay({
             {(dosha.nadiDosha.present || dosha.bhakootDosha.present) && (
               <div className="mt-3 p-3 bg-white/20 backdrop-blur-sm rounded-lg border border-white/30">
                 <p className="text-xs font-semibold">
-                  ⚠️ {dosha.nadiDosha.present && "नाडी दोष"}{dosha.nadiDosha.present && dosha.bhakootDosha.present && "/"}{dosha.bhakootDosha.present && "भकूट दोष"} - ज्योतिष परामर्श आवश्यक
+                  {dosha.nadiDosha.present && "नाडी दोष"}{dosha.nadiDosha.present && dosha.bhakootDosha.present && "/"}{dosha.bhakootDosha.present && "भकूट दोष"} - ज्योतिष परामर्श आवश्यक
                 </p>
               </div>
             )}
@@ -109,6 +125,13 @@ export default function MatchingResultsDisplay({
               <p><span className="font-semibold">गण:</span> {translateSanskritSafe(result.male.gana)}</p>
               <p><span className="font-semibold">नाडी:</span> {translateSanskritSafe(result.male.nadi)}</p>
             </div>
+            <button
+              onClick={() => viewKundali(maleData)}
+              className="mt-3 w-full inline-flex items-center justify-center gap-2 px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold rounded-lg transition-all"
+            >
+              <span>📜</span>
+              कुण्डली हेर्नुहोस्
+            </button>
           </div>
 
           {/* Female Details */}
@@ -127,6 +150,13 @@ export default function MatchingResultsDisplay({
               <p><span className="font-semibold">गण:</span> {translateSanskritSafe(result.female.gana)}</p>
               <p><span className="font-semibold">नाडी:</span> {translateSanskritSafe(result.female.nadi)}</p>
             </div>
+            <button
+              onClick={() => viewKundali(femaleData)}
+              className="mt-3 w-full inline-flex items-center justify-center gap-2 px-3 py-2 bg-pink-500 hover:bg-pink-600 text-white text-xs font-semibold rounded-lg transition-all"
+            >
+              <span>📜</span>
+              कुण्डली हेर्नुहोस्
+            </button>
           </div>
         </div>
 
@@ -177,7 +207,7 @@ export default function MatchingResultsDisplay({
           <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
             <p className="text-xs text-gray-700 dark:text-gray-300">
               <span className="font-semibold">तपाईंको अंक: {ashtaKoota.totalScore}/36</span>
-              {ashtaKoota.totalScore >= 18 ? " ✅ स्वीकार्य" : " ❌ कम"}
+              {ashtaKoota.totalScore >= 18 ? " • स्वीकार्य" : " • कम"}
               {(dosha.nadiDosha.present || dosha.bhakootDosha.present) && (
                 <span className="text-orange-700 dark:text-orange-400"> • {dosha.nadiDosha.present && "नाडी"}{dosha.nadiDosha.present && dosha.bhakootDosha.present && "/"}{dosha.bhakootDosha.present && "भकूट"} दोष</span>
               )}
@@ -187,8 +217,7 @@ export default function MatchingResultsDisplay({
 
         {/* Dosha Analysis */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-            <span className="text-xl">⚠️</span>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">
             दोष विश्लेषण
           </h2>
 
@@ -209,7 +238,7 @@ export default function MatchingResultsDisplay({
               <div className="mt-2 p-2 bg-gray-50 dark:bg-gray-700 rounded">
                 <p className="text-xs">
                   <span className={`font-semibold ${dosha.manglikDosha.compatible ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}>
-                    {dosha.manglikDosha.compatible ? "✅ मिलेको" : "❌ नमिलेको"}
+                    {dosha.manglikDosha.compatible ? "मिलेको" : "नमिलेको"}
                   </span>
                   {dosha.manglikDosha.cancellationPresent && " - निवारण भएको"}
                 </p>
@@ -225,7 +254,7 @@ export default function MatchingResultsDisplay({
             <div className="border-l-4 border-purple-500 pl-3">
               <h3 className="font-bold text-base mb-2 text-gray-800 dark:text-gray-200">नाडी दोष <span className="text-xs font-normal">(Nadi Dosha)</span></h3>
               <p className={`text-sm font-semibold ${dosha.nadiDosha.present ? "text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"}`}>
-                {dosha.nadiDosha.present ? "❌ नाडी दोष उपस्थित" : "✅ नाडी दोष छैन"}
+                {dosha.nadiDosha.present ? "नाडी दोष उपस्थित" : "नाडी दोष छैन"}
               </p>
               {dosha.nadiDosha.present && (
                 <div className="mt-2 text-xs sm:text-sm space-y-1">
@@ -244,7 +273,7 @@ export default function MatchingResultsDisplay({
             <div className="border-l-4 border-amber-500 pl-3">
               <h3 className="font-bold text-base mb-2 text-gray-800 dark:text-gray-200">भकूट दोष <span className="text-xs font-normal">(Bhakoot Dosha)</span></h3>
               <p className={`text-sm font-semibold ${dosha.bhakootDosha.present ? "text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"}`}>
-                {dosha.bhakootDosha.present ? "❌ भकूट दोष उपस्थित" : "✅ भकूट दोष छैन"}
+                {dosha.bhakootDosha.present ? "भकूट दोष उपस्थित" : "भकूट दोष छैन"}
               </p>
               {dosha.bhakootDosha.present && (
                 <div className="mt-2 text-xs sm:text-sm space-y-1">
@@ -287,7 +316,7 @@ export default function MatchingResultsDisplay({
             </h3>
             <div className="space-y-2 text-xs sm:text-sm">
               <p className={`font-semibold ${rashiCompatibility.compatible ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}>
-                {rashiCompatibility.compatible ? "✅ मिलेको" : "❌ नमिलेको"}
+                {rashiCompatibility.compatible ? "मिलेको" : "नमिलेको"}
               </p>
               <div>
                 <p className="font-semibold text-gray-700 dark:text-gray-300">सम्बन्धको प्रकृति:</p>
@@ -308,7 +337,7 @@ export default function MatchingResultsDisplay({
             </h3>
             <div className="space-y-2 text-xs sm:text-sm">
               <p className={`font-semibold ${nakshatraCompatibility.compatible ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}>
-                {nakshatraCompatibility.compatible ? "✅ मिलेको" : "❌ नमिलेको"}
+                {nakshatraCompatibility.compatible ? "मिलेको" : "नमिलेको"}
               </p>
               <div>
                 <p className="font-semibold text-gray-700 dark:text-gray-300">मानसिक तालमेल:</p>
@@ -329,8 +358,7 @@ export default function MatchingResultsDisplay({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           {/* Strengths */}
           <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg shadow p-4 border border-green-200 dark:border-green-800">
-            <h3 className="text-base font-bold text-green-900 dark:text-green-200 mb-3 flex items-center gap-2">
-              <span>✅</span>
+            <h3 className="text-base font-bold text-green-900 dark:text-green-200 mb-3">
               सकारात्मक
             </h3>
             <ul className="space-y-1.5">
@@ -345,8 +373,7 @@ export default function MatchingResultsDisplay({
 
           {/* Concerns */}
           <div className="bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-900/20 dark:to-rose-900/20 rounded-lg shadow p-4 border border-red-200 dark:border-red-800">
-            <h3 className="text-base font-bold text-red-900 dark:text-red-200 mb-3 flex items-center gap-2">
-              <span>⚠️</span>
+            <h3 className="text-base font-bold text-red-900 dark:text-red-200 mb-3">
               सुधार आवश्यक
             </h3>
             {(overallAssessment.concernsNp.length > 0 ? overallAssessment.concernsNp : overallAssessment.concerns).length > 0 ? (
@@ -370,7 +397,6 @@ export default function MatchingResultsDisplay({
             onClick={onReset}
             className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white rounded-lg font-semibold shadow-lg transition-all"
           >
-            <span>🔄</span>
             नयाँ कुण्डली मिलान
           </button>
 
@@ -378,7 +404,6 @@ export default function MatchingResultsDisplay({
             href="/services"
             className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white rounded-lg font-semibold shadow-lg transition-all"
           >
-            <span>✨</span>
             अन्य सेवाहरू
           </Link>
         </div>

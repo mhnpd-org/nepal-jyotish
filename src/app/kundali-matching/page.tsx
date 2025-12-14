@@ -349,17 +349,14 @@ export default function KundaliMatchingPage() {
                 गणना गर्दै...
               </>
             ) : (
-              <>
-                <span className="text-xl">🔮</span>
-                कुण्डली मिलान गर्नुहोस्
-              </>
+              "कुण्डली मिलान गर्नुहोस्"
             )}
           </button>
 
           <button
             type="button"
             onClick={handleReset}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 px-8 py-3 text-base font-semibold transition-all"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg border-2 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 px-8 py-3 text-base font-semibold transition-all"
           >
             नयाँ फारम
           </button>
