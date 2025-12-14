@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { getAllAstrologers, getAllAppointments, getUserByEmail } from '@internal/api/admin';
+import { getAllAstrologers, getAllAppointments, getUserByEmail, updateUserById, promoteUserToAstrologer } from '@internal/api/admin';
 import { auth } from '@internal/api/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { getUserById as getUserDoc } from '@internal/api/users';
@@ -22,6 +22,21 @@ export default function AdminPage() {
   const [astrologersPage, setAstrologersPage] = useState(1);
   const [appointmentsPage, setAppointmentsPage] = useState(1);
   const itemsPerPage = 10;
+
+  const handleRoleChange = async (userId: string, newRole: 'user' | 'astrologer') => {
+    try {
+      await updateUserById(userId, { role: newRole });
+      // Refresh users list
+      const snap = await getDocs(collection(db, 'users'));
+      setUsers(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      // Refresh astrologers list if needed
+      const astros = await getAllAstrologers();
+      setAstrologers(astros);
+    } catch (error) {
+      console.error('Failed to update role:', error);
+      alert('Failed to update role. Check console for details.');
+    }
+  };
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (u) => {
@@ -212,6 +227,7 @@ export default function AdminPage() {
                           <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700">Email</th>
                           <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700">Role</th>
                           <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700">Created</th>
+                          <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -231,6 +247,31 @@ export default function AdminPage() {
                             </td>
                             <td className="py-4 px-6 text-sm text-gray-600">
                               {u.createdAt ? new Date(u.createdAt.seconds * 1000).toLocaleDateString() : '—'}
+                            </td>
+                            <td className="py-4 px-6">
+                              <div className="flex gap-2">
+                                {u.role !== 'super_admin' && u.role !== 'astrologer' && (
+                                  <button
+                                    onClick={() => handleRoleChange(u.id, 'astrologer')}
+                                    className="px-3 py-1 bg-amber-600 text-white text-xs font-medium rounded hover:bg-amber-700 transition-colors"
+                                    title="Promote to Astrologer"
+                                  >
+                                    ⭐ Promote
+                                  </button>
+                                )}
+                                {u.role === 'astrologer' && (
+                                  <button
+                                    onClick={() => handleRoleChange(u.id, 'user')}
+                                    className="px-3 py-1 bg-gray-600 text-white text-xs font-medium rounded hover:bg-gray-700 transition-colors"
+                                    title="Demote to User"
+                                  >
+                                    👤 Demote
+                                  </button>
+                                )}
+                                {u.role === 'super_admin' && u.id !== currentUser?.uid && (
+                                  <span className="px-3 py-1 text-xs text-gray-500 italic">Protected</span>
+                                )}
+                              </div>
                             </td>
                           </tr>
                         ))}

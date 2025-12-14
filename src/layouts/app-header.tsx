@@ -136,6 +136,13 @@ export default function AppHeader({
 
             {/* Blogs link removed per design */}
             <Link
+              href="/astrologers"
+              className={`whitespace-nowrap transition-colors ${linkClasses}`}
+            >
+              {isNepali ? 'गुरुहरू' : 'Astrologers'}
+            </Link>
+            
+            <Link
               href="/kundali-matching"
               className={`whitespace-nowrap transition-colors ${linkClasses}`}
             >

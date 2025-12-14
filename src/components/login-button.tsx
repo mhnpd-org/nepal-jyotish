@@ -55,6 +55,9 @@ export default function LoginButton() {
       {dropdownOpen && (
         <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 z-50">
           <div className="py-1">
+            {user?.profile?.role === 'astrologer' && (
+              <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Profile</Link>
+            )}
             <Link href="/appointments" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Appointments</Link>
             {user?.profile?.role === 'super_admin' && (
               <Link href="/admin" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Admin</Link>
