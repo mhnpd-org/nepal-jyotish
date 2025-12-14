@@ -99,6 +99,9 @@ export default function LandingPage() {
           <h1 id="hero-heading" className="text-5xl md:text-6xl font-bold text-white leading-tight tracking-tight drop-shadow-lg">
             नेपाली ज्योतिष<br />
             <span className="text-amber-200">परम्परागत कुण्डली निर्माण</span>
+            <span className="ml-3 inline-block px-3 py-1 text-xs sm:text-sm font-semibold bg-amber-400 text-amber-900 rounded-full shadow-lg">
+              BETA
+            </span>
           </h1>
           <p className="mt-6 text-xl text-white/95 leading-relaxed max-w-2xl drop-shadow">
             वैदिक ज्योतिष र सूर्य सिद्धान्त (Surya Siddhanta) मा आधारित निःशुल्क परम्परागत नेपाली कुण्डली निर्माण,

@@ -97,7 +97,16 @@ export default function AppHeader({
           <Logo size={logoSize} variant={logoVariant} />
 
           {/* Desktop navigation */}
-          <nav className="hidden sm:flex items-center gap-3 sm:gap-6" aria-label="Main navigation">
+          <nav className="hidden sm:flex items-center gap-2 sm:gap-3 md:gap-4" aria-label="Main navigation">
+            <Link
+              href="/"
+              className={`whitespace-nowrap transition-colors ${
+                currentPage === 'home' ? activeLinkClasses : linkClasses
+              }`}
+            >
+              {text.home}
+            </Link>
+            
             {/* Services Dropdown */}
             <div className="relative" ref={dropdownRef}>
               <button
@@ -140,22 +149,27 @@ export default function AppHeader({
               )}
             </div>
 
-            {desktopNavItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`whitespace-nowrap transition-colors ${
-                  item.current ? activeLinkClasses : linkClasses
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+            <Link
+              href="/blogs"
+              className={`whitespace-nowrap transition-colors ${
+                currentPage === 'blogs' ? activeLinkClasses : linkClasses
+              }`}
+            >
+              {text.blogs}
+            </Link>
+            
+            <Link
+              href="/kundali-matching"
+              className={`whitespace-nowrap transition-colors ${linkClasses}`}
+            >
+              {isNepali ? 'कुण्डली मिलान' : 'Kundali Matching'}
+            </Link>
+            
             <Link
               href="/astro/janma"
-              className={`${buttonClasses} whitespace-nowrap`}
+              className={buttonClasses + ' whitespace-nowrap'}
             >
-              {text.openApp}
+              {isNepali ? 'कुण्डली निर्माण' : 'Create Kundali'}
             </Link>
           </nav>
 
@@ -217,13 +231,16 @@ export default function AppHeader({
                 <Link
                   href="/"
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`block px-4 py-3 rounded-lg transition-colors ${
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                     currentPage === 'home'
-                      ? 'bg-gray-100 text-gray-900 font-semibold'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                      ? 'bg-amber-50 text-rose-700 font-semibold'
+                      : 'text-gray-700 hover:bg-amber-50 hover:text-rose-700'
                   }`}
                 >
-                  {text.home}
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                  </svg>
+                  <span className="font-medium">{text.home}</span>
                 </Link>
 
                 {/* Services Section */}
@@ -246,31 +263,51 @@ export default function AppHeader({
                   </div>
                 </div>
 
-                {navItems.filter(item => item.href !== '/').map((item) => (
+                <Link
+                  href="/blogs"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                    currentPage === 'blogs'
+                      ? 'bg-amber-50 text-rose-700 font-semibold'
+                      : 'text-gray-700 hover:bg-amber-50 hover:text-rose-700'
+                  }`}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                  </svg>
+                  <span className="font-medium">{text.blogs}</span>
+                </Link>
+
+                <div className="pt-4 mt-4 border-t border-gray-200 space-y-2">
                   <Link
-                    key={item.href}
-                    href={item.href}
+                    href="/kundali-matching"
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`block px-4 py-3 rounded-lg transition-colors ${
-                      item.current
-                        ? 'bg-gray-100 text-gray-900 font-semibold'
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                    }`}
+                    className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-lg hover:from-pink-600 hover:to-rose-600 transition-all shadow-sm group"
                   >
-                    {item.label}
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                    </svg>
+                    <span className="font-semibold">{isNepali ? 'कुण्डली मिलान' : 'Kundali Matching'}</span>
                   </Link>
-                ))}
+                  
+                  <Link
+                    href="/astro/janma"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-rose-600 to-orange-600 text-white rounded-lg hover:from-rose-700 hover:to-orange-700 transition-all shadow-sm group"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+                    </svg>
+                    <span className="font-semibold">{isNepali ? 'कुण्डली निर्माण' : 'Create Kundali'}</span>
+                  </Link>
+                </div>
               </nav>
 
-              {/* Bottom Button */}
+              {/* Footer */}
               <div className="p-4 border-t border-gray-200">
-                <Link
-                  href="/astro/janma"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block px-4 py-3 bg-rose-600 text-white rounded-lg hover:bg-rose-700 transition-colors font-medium text-center"
-                >
-                  {text.openApp}
-                </Link>
+                <p className="text-xs text-gray-500 text-center">
+                  नेपाल ज्योतिष © 2025
+                </p>
               </div>
             </div>
           </aside>
