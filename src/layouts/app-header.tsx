@@ -82,14 +82,6 @@ export default function AppHeader({
     : 'px-3 sm:px-4 py-2 bg-rose-600 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-rose-700 transition-colors';
 
   // Navigation items - consistent across all pages
-  const navItems = [
-    { href: '/', label: text.home, current: currentPage === 'home', hidden: false },
-    { href: '/books', label: text.books, current: currentPage === 'books' || currentPage === 'book-detail', hidden: false },
-    { href: '/blogs', label: text.blogs, current: currentPage === 'blogs', hidden: false },
-  ];
-
-  const desktopNavItems = navItems.filter(item => !item.hidden);
-
   return (
     <>
       <header className={headerClasses}>
