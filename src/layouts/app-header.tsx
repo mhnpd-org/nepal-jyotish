@@ -14,6 +14,7 @@ export interface AppHeaderProps {
 
 const services = [
   { id: 'janma-kundali', title: 'जन्म-कुण्डली निर्माण', href: '/astro/janma', icon: '📜' },
+  { id: 'kundali-matching', title: 'कुण्डली मिलान', href: '/kundali-matching', icon: '💑' },
   { id: 'panchang', title: 'आजको पञ्चाङ्ग', href: '/panchang', icon: '🌙' },
   { id: 'date-converter', title: 'मिति परिवर्तक', href: '/date-converter', icon: '📅' },
   { id: 'books', title: 'पुस्तकहरू', href: '/books', icon: '📖' },
