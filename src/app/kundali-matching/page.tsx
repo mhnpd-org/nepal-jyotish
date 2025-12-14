@@ -14,6 +14,8 @@ import {
 } from "@internal/form-components/nepal-districts";
 import { matchKundali } from "@mhnpd-org/panchang";
 import type { MatchKundaliResult, JanmaDetails } from "@mhnpd-org/panchang";
+import AppHeader from "@internal/layouts/app-header";
+import Footer from "@internal/layouts/footer";
 import MatchingResultsDisplay from "./results-display";
 
 interface PersonFormValues {
@@ -129,21 +131,27 @@ export default function KundaliMatchingPage() {
 
   if (showResults && matchingResult) {
     return (
-      <MatchingResultsDisplay
-        result={matchingResult}
-        onReset={handleReset}
-        maleData={watchedAll.male}
-        femaleData={watchedAll.female}
-      />
+      <>
+        <AppHeader variant="solid" language="np" currentPage="services" />
+        <MatchingResultsDisplay
+          result={matchingResult}
+          onReset={handleReset}
+          maleData={watchedAll.male}
+          femaleData={watchedAll.female}
+        />
+        <Footer />
+      </>
     );
   }
 
   return (
-    <main className="min-h-screen w-full px-4 sm:px-6 lg:px-8 py-8 bg-gradient-to-br from-rose-50 via-orange-50 to-amber-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-6xl mx-auto"
-      >
+    <>
+      <AppHeader variant="solid" language="np" currentPage="services" />
+      <main className="min-h-screen w-full px-4 sm:px-6 lg:px-8 py-8 bg-gradient-to-br from-rose-50 via-orange-50 to-amber-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="w-full max-w-6xl mx-auto"
+        >
         {/* Header */}
         <header className="mb-8 text-center">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-100 mb-3">
@@ -358,5 +366,7 @@ export default function KundaliMatchingPage() {
         </div>
       </form>
     </main>
+    <Footer />
+    </>
   );
 }
