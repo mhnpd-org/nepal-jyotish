@@ -14,27 +14,19 @@
 
 ### Bug:
 
-
-
 ##### Blogs:
-
 
 ##### Design:
 
-
 ##### Mobile Responsiveness:
-
 
 ##### Additional Tools:
 
-
 #### Main jyotish software:
-
 
 ---
 
-Environment variables
----------------------
+## Environment variables
 
 This project reads Firebase configuration from `.env.local` during development. Example variables are:
 
