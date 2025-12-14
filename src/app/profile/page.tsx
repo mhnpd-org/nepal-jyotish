@@ -5,6 +5,7 @@ import { auth } from "@internal/api/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { getUserById } from "@internal/api/users";
 import { getAstrologerById, updateAstrologerProfile } from "@internal/api/astrologers";
+import { updateUserById } from "@internal/api/admin";
 import { useRouter } from "next/navigation";
 import type { Astrologer } from "@internal/api/types";
 
@@ -44,18 +45,16 @@ export default function ProfilePage() {
 
         // Load astrologer profile
         const astrologerDoc = await getAstrologerById(u.uid);
-        if (astrologerDoc) {
-          setProfile({
-            name: astrologerDoc.name || "",
-            description: astrologerDoc.description || "",
-            bio: astrologerDoc.bio || "",
-            specialty: astrologerDoc.specialty || [],
-            languages: astrologerDoc.languages || [],
-            availabilitySummary: astrologerDoc.availabilitySummary || "",
-            imageBase64: astrologerDoc.imageBase64 || null,
-            isActive: astrologerDoc.isActive !== undefined ? astrologerDoc.isActive : true,
-          });
-        }
+        setProfile({
+          name: astrologerDoc?.name || userDoc?.name || u.displayName || "",
+          description: astrologerDoc?.description || "",
+          bio: astrologerDoc?.bio || "",
+          specialty: astrologerDoc?.specialty || [],
+          languages: astrologerDoc?.languages || [],
+          availabilitySummary: astrologerDoc?.availabilitySummary || "",
+          imageBase64: astrologerDoc?.imageBase64 || null,
+          isActive: astrologerDoc?.isActive !== undefined ? astrologerDoc.isActive : true,
+        });
       } catch (error) {
         console.error("Error loading profile:", error);
       } finally {
@@ -116,10 +115,17 @@ export default function ProfilePage() {
     setSaving(true);
 
     try {
+      // Update name in users collection
+      if (profile.name) {
+        await updateUserById(currentUser.uid, { name: profile.name });
+      }
+      
+      // Update astrologer profile in astrologers collection
       await updateAstrologerProfile(currentUser.uid, {
         ...profile,
         uid: currentUser.uid,
       });
+      
       alert("Profile updated successfully!");
     } catch (error) {
       console.error("Error updating profile:", error);
