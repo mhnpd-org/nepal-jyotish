@@ -2,10 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import LoginDialog from "./login-dialog";
-import { auth, db } from "@internal/api/firebase";
+import { auth } from "@internal/api/firebase";
 import { logout } from "@internal/api/auth";
 import { onAuthStateChanged } from "firebase/auth";
 import Link from "next/link";
+import { getUserById } from "@internal/api/users";
+
 
 export default function LoginButton() {
   const [open, setOpen] = useState(false);
@@ -15,6 +17,13 @@ export default function LoginButton() {
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (u) => {
       setUser(u);
+      // fetch Firestore user doc if available
+      if (u) {
+        getUserById(u.uid).then((doc) => {
+          // merge firestore fields onto user state
+          setUser((prev: any) => ({ ...prev, profile: doc }));
+        }).catch(() => {});
+      }
     });
     return () => unsub();
   }, []);
@@ -47,6 +56,9 @@ export default function LoginButton() {
         <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 z-50">
           <div className="py-1">
             <Link href="/appointments" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Appointments</Link>
+            {user?.profile?.role === 'super_admin' && (
+              <Link href="/admin" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Admin</Link>
+            )}
             <button onClick={() => logout()} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Sign out</button>
           </div>
         </div>

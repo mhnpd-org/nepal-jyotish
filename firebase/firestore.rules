@@ -1,0 +1,56 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    function loggedIn() {
+      return request.auth != null;
+    }
+    
+    // Check if user is super_admin by reading their role from users collection
+    function isSuperAdmin() {
+      return loggedIn() && 
+             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "super_admin";
+    }
+    
+    function isAstrologer() {
+      return loggedIn() && 
+             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "astrologer";
+    }
+    
+    match /users/{uid} {
+      // Super admins can read all users, others can only read their own
+      allow read: if loggedIn() && (request.auth.uid == uid || isSuperAdmin());
+      // Super admins can write all users, others can only write their own
+      allow write: if loggedIn() && (request.auth.uid == uid || isSuperAdmin());
+    }
+    
+    match /astrologers/{uid} {
+      // Anyone can read astrologer profiles (for public listing)
+      allow read: if true;
+      // Only super admins and the astrologer themselves can update
+      allow write: if loggedIn() && (isSuperAdmin() || request.auth.uid == uid);
+    }
+    
+    match /appointments/{id} {
+      // Super admins can see all, users see their own, astrologers see theirs
+      allow read: if loggedIn() && 
+        (isSuperAdmin() ||
+         request.auth.uid == resource.data.userId ||
+         request.auth.uid == resource.data.astrologerId);
+      
+      // Any logged-in user can create appointments
+      allow create: if loggedIn();
+      
+      // Only super admin or involved parties can update
+      allow update: if loggedIn() && 
+        (isSuperAdmin() ||
+         request.auth.uid == resource.data.userId ||
+         request.auth.uid == resource.data.astrologerId);
+         
+      // Only super admin can delete
+      allow delete: if isSuperAdmin();
+    }
+  }
+}
