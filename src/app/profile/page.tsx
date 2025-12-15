@@ -11,6 +11,7 @@ import type { User } from 'firebase/auth';
 import { services } from "@internal/app/service-request/page";
 import AppHeader from "@internal/layouts/app-header";
 import Footer from "@internal/layouts/footer";
+import CentralLoading from '@internal/components/central-loading';
 
 export default function ProfilePage() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -140,11 +141,7 @@ export default function ProfilePage() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-rose-50 via-amber-50 to-orange-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading profile...</div>
-      </div>
-    );
+    return <CentralLoading message="Loading profile..." />;
   }
 
   if (!currentUser) {

@@ -11,7 +11,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import LoginDialog from "@internal/components/login-dialog";
 import { auth } from "@internal/api/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-// no firestore user fetch required here
+import CentralLoading from '@internal/components/central-loading';
 
 export default function AstrologerDetailPage() {
   const router = useRouter();
@@ -62,9 +62,7 @@ export default function AstrologerDetailPage() {
     return (
       <>
         <AppHeader variant="solid" language="np" />
-        <div className="min-h-screen bg-gradient-to-br from-rose-50 via-amber-50 to-orange-50 flex items-center justify-center">
-          <div className="text-gray-600">Loading...</div>
-        </div>
+        <CentralLoading message="Loading..." />
         <Footer />
       </>
     );

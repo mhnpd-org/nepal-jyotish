@@ -11,6 +11,7 @@ import AppHeader from '@internal/layouts/app-header';
 import Footer from '@internal/layouts/footer';
 import type { Appointment, Astrologer, AppUser } from '@internal/api/types';
 import { services } from '@internal/app/service-request/page';
+import CentralLoading from '@internal/components/central-loading';
 
 export default function AppointmentsPage() {
   const [user, setUser] = useState<import('firebase/auth').User | null>(null);
@@ -84,12 +85,7 @@ export default function AppointmentsPage() {
     return (
       <>
         <AppHeader variant="solid" language="np" />
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-rose-600 border-r-transparent"></div>
-            <p className="mt-4 text-gray-600">Loading...</p>
-          </div>
-        </div>
+        <CentralLoading message="Loading..." />
         <Footer variant="light" />
       </>
     );
