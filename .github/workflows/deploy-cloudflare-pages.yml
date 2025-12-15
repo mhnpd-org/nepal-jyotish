@@ -25,6 +25,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Create environment file
+        run: echo "${{ secrets.ENV_PRODUCTION }}" > .env.production
+
       - name: Type check
         run: npm run typecheck
 
