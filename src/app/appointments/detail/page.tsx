@@ -385,6 +385,9 @@ function AppointmentDetailContent() {
                           <p className="text-sm text-amber-800">
                             <span className="font-semibold">नोट:</span> मिटिङमा जोडिने विकल्प शेड्युल गरिएको मितिमा मात्र उपलब्ध हुनेछ।
                           </p>
+                          <p className="text-sm text-amber-800 mt-2">
+                            तोकिएको दिनमा यसै बक्सबाट गुरुसँग कुरा गर्न सकिन्छ। तोकिएको दिनभन्दा पहिले वा पछि यो बक्समा भिडियो कलको सुविधा देखिने छैन।
+                          </p>
                         </div>
                       )}
                     </div>
