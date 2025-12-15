@@ -17,6 +17,7 @@ export interface AppHeaderProps {
   currentPage?: 'home' | 'books' | 'blogs' | 'book-detail' | 'services' | 'contact' | 'panchang' | 'date-converter' | 'service-request';
   showMobileMenu?: boolean;
   backgroundGradient?: string;
+  fullWidth?: boolean;
 }
 
 const services = [
@@ -35,7 +36,8 @@ export default function AppHeader({
   language = 'en',
   currentPage = 'home',
   showMobileMenu = true,
-  backgroundGradient
+  backgroundGradient,
+  fullWidth = false
 }: AppHeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
@@ -92,17 +94,22 @@ export default function AppHeader({
     headerClasses = `sticky top-0 z-50 backdrop-blur-sm ${backgroundGradient}`;
   }
 
-  const linkClasses = isTransparent
+  // Determine if we should use light text (for dark/colored backgrounds)
+  const useLightText = isTransparent || !!backgroundGradient;
+
+  const linkClasses = useLightText
     ? 'text-sm text-white/90 hover:text-white transition-colors'
     : 'text-xs sm:text-sm text-gray-600 hover:text-gray-900 transition-colors';
 
-  const logoVariant = isTransparent ? 'light' : 'dark';
+  const logoVariant = useLightText ? 'light' : 'dark';
   const logoSize = isTransparent ? 'md' : 'sm';
 
   return (
     <>
       <header className={headerClasses}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+        <div className={`flex items-center justify-between py-4 ${
+          fullWidth ? 'px-3 sm:px-4' : 'max-w-7xl mx-auto px-4 sm:px-6'
+        }`}>
           <Logo size={logoSize} variant={logoVariant} />
 
           {/* Desktop navigation */}
