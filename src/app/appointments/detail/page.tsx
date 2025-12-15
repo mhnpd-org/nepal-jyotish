@@ -198,8 +198,18 @@ function AppointmentDetailContent() {
       return;
     }
     
-    // Validate date is not more than 1 year in advance
+    // Validate date
     const selectedDate = new Date(newDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    // Check if past date
+    if (selectedDate < today) {
+      alert('विगतको मिति चयन गर्न सकिँदैन');
+      return;
+    }
+    
+    // Validate date is not more than 1 year in advance
     const maxDate = new Date();
     maxDate.setFullYear(maxDate.getFullYear() + 1);
     
