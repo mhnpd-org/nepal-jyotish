@@ -63,7 +63,7 @@ export default function LoginButton({ language = 'en' }: { language?: 'en' | 'np
             )}
             <Link href="/accounts/appointments" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">{language === 'np' ? 'अपोइन्टमेन्टहरू' : 'Appointments'}</Link>
             {profile?.role === 'super_admin' && (
-              <Link href="/accounts/users" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Admin</Link>
+              <Link href="/accounts/users" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">{language === 'np' ? 'प्रयोगकर्ताहरू' : 'Users'}</Link>
             )}
             <button onClick={() => logout()} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">{language === 'np' ? 'साइन आउट' : 'Sign out'}</button>
           </div>
