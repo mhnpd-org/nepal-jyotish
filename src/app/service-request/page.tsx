@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { getAllAstrologers } from "@internal/api/astrologers";
 import { createAppointment } from "@internal/api/appointments";
+import { getBookedTimeSlots } from "@internal/api/appointments";
 import { getUserById } from "@internal/api/users";
 import { auth } from "@internal/api/firebase";
 import { onAuthStateChanged, type User } from "firebase/auth";
@@ -120,6 +121,8 @@ function ServiceRequestForm() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [createdAppointmentId, setCreatedAppointmentId] = useState<string | null>(null);
+  const [bookedSlots, setBookedSlots] = useState<string[]>([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);
 
   // Calculate max date (1 year from today)
   const getMaxDate = () => {
@@ -171,6 +174,28 @@ function ServiceRequestForm() {
       }));
     }
   }, [userProfile, formData.name, formData.email]);
+
+  // Fetch booked time slots when astrologer and date are selected
+  useEffect(() => {
+    const fetchBookedSlots = async () => {
+      if (formData.astrologerId && formData.scheduledDate) {
+        setLoadingSlots(true);
+        try {
+          const slots = await getBookedTimeSlots(formData.astrologerId, formData.scheduledDate);
+          setBookedSlots(slots);
+        } catch (error) {
+          console.error("Failed to fetch booked slots:", error);
+          setBookedSlots([]);
+        } finally {
+          setLoadingSlots(false);
+        }
+      } else {
+        setBookedSlots([]);
+      }
+    };
+
+    fetchBookedSlots();
+  }, [formData.astrologerId, formData.scheduledDate]);
 
   // Email validation regex
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -237,6 +262,8 @@ function ServiceRequestForm() {
     // Time validation
     if (!formData.scheduledTime) {
       newErrors.scheduledTime = "कृपया समय छान्नुहोस्";
+    } else if (bookedSlots.includes(formData.scheduledTime)) {
+      newErrors.scheduledTime = "यो समय पहिले नै बुक भइसकेको छ। कृपया अर्को समय छान्नुहोस्";
     }
 
     // Message validation
@@ -752,17 +779,37 @@ function ServiceRequestForm() {
                 <div className="text-sm text-gray-500 py-4 px-4 bg-gray-50 rounded-lg border border-gray-200">
                   समय छान्न पहिले मिति छान्नुहोस्
                 </div>
+              ) : !formData.astrologerId ? (
+                <div className="text-sm text-gray-500 py-4 px-4 bg-gray-50 rounded-lg border border-gray-200">
+                  समय छान्न पहिले गुरुजी छान्नुहोस्
+                </div>
+              ) : loadingSlots ? (
+                <div className="text-sm text-gray-500 py-4 px-4 bg-gray-50 rounded-lg border border-gray-200 flex items-center gap-2">
+                  <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  उपलब्ध समय जाँच गर्दै...
+                </div>
               ) : (
-                <TimeSlotPicker
-                  selectedDate={formData.scheduledDate}
-                  selectedTime={formData.scheduledTime}
-                  onTimeSelect={(time) => {
-                    setFormData(prev => ({ ...prev, scheduledTime: time }));
-                    if (errors.scheduledTime) {
-                      setErrors(prev => ({ ...prev, scheduledTime: undefined }));
-                    }
-                  }}
-                />
+                <>
+                  <TimeSlotPicker
+                    selectedDate={formData.scheduledDate}
+                    selectedTime={formData.scheduledTime}
+                    onTimeSelect={(time) => {
+                      setFormData(prev => ({ ...prev, scheduledTime: time }));
+                      if (errors.scheduledTime) {
+                        setErrors(prev => ({ ...prev, scheduledTime: undefined }));
+                      }
+                    }}
+                    bookedSlots={bookedSlots}
+                  />
+                  {bookedSlots.length > 0 && (
+                    <p className="text-xs text-amber-600 mt-2">
+                      {bookedSlots.length} समय पहिले नै बुक भइसकेको छ
+                    </p>
+                  )}
+                </>
               )}
             </div>
 

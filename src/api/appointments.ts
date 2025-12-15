@@ -73,3 +73,15 @@ export const updateAppointmentSchedule = async (appointmentId: string, scheduled
     updatedAt: serverTimestamp(),
   });
 };
+
+// Get booked time slots for a specific astrologer on a specific date
+export const getBookedTimeSlots = async (astrologerId: string, date: string): Promise<string[]> => {
+  const q = query(
+    appointmentsRef,
+    where("astrologerId", "==", astrologerId),
+    where("scheduledDate", "==", date),
+    where("status", "in", ["pending", "confirmed"]) // Only count pending and confirmed appointments
+  );
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((d) => d.data().scheduledTime as string);
+};

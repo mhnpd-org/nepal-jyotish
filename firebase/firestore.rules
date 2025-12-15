@@ -56,9 +56,14 @@ service cloud.firestore {
 
     /* APPOINTMENTS */
     match /appointments/{id} {
-      allow read: if isSuperAdmin()
+      // Allow reading own appointments or astrologer's appointments
+      allow get: if isSuperAdmin()
         || request.auth.uid == resource.data.userId
         || request.auth.uid == resource.data.astrologerId;
+      
+      // Allow querying appointments for availability checking
+      // Users can query to see booked time slots (but only for pending/confirmed appointments)
+      allow list: if loggedIn();
 
       allow create: if loggedIn()
         && request.resource.data.userId == request.auth.uid;

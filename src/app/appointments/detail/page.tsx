@@ -6,6 +6,7 @@ import Footer from "@internal/layouts/footer";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { getAppointmentById, addComment, updateAppointmentStatus } from "@internal/api/appointments";
+import { getBookedTimeSlots } from "@internal/api/appointments";
 import { getAstrologerById } from "@internal/api/astrologers";
 import { getUserById } from "@internal/api/users";
 import { updateAppointmentSchedule } from '@internal/api/appointments';
@@ -13,6 +14,7 @@ import { auth } from "@internal/api/firebase";
 import { onAuthStateChanged, type User } from "firebase/auth";
 import type { Appointment, Astrologer, AppUser } from "@internal/api/types";
 import { services } from "@internal/app/service-request/page";
+import TimeSlotPicker from "@internal/form-components/time-slot-picker";
 // @ts-ignore
 import NepaliDate from "nepali-date-converter";
 import { format } from "date-fns";
@@ -185,16 +187,50 @@ function AppointmentDetailContent() {
   const [newDate, setNewDate] = useState(appointment?.scheduledDate || '');
   const [newTime, setNewTime] = useState(appointment?.scheduledTime || '');
   const [isRescheduling, setIsRescheduling] = useState(false);
+  const [bookedSlots, setBookedSlots] = useState<string[]>([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);
 
   useEffect(() => {
     setNewDate(appointment?.scheduledDate || '');
     setNewTime(appointment?.scheduledTime || '');
   }, [appointment]);
 
+  // Fetch booked time slots when rescheduling and date is selected
+  useEffect(() => {
+    const fetchBookedSlots = async () => {
+      if (showReschedule && newDate && appointment?.astrologerId) {
+        setLoadingSlots(true);
+        try {
+          const slots = await getBookedTimeSlots(appointment.astrologerId, newDate);
+          // Filter out current appointment's time slot if it's the same date
+          const filteredSlots = slots.filter(slot => 
+            !(newDate === appointment.scheduledDate && slot === appointment.scheduledTime)
+          );
+          setBookedSlots(filteredSlots);
+        } catch (error) {
+          console.error("Failed to fetch booked slots:", error);
+          setBookedSlots([]);
+        } finally {
+          setLoadingSlots(false);
+        }
+      } else {
+        setBookedSlots([]);
+      }
+    };
+
+    fetchBookedSlots();
+  }, [showReschedule, newDate, appointment?.astrologerId, appointment?.scheduledDate, appointment?.scheduledTime]);
+
   const handleReschedule = async () => {
     if (!appointmentId || !user) return;
     if (!newDate || !newTime) {
       alert('कृपया नयाँ मिति र समय चयन गर्नुहोस्');
+      return;
+    }
+    
+    // Check if time slot is already booked
+    if (bookedSlots.includes(newTime)) {
+      alert('यो समय पहिले नै बुक भइसकेको छ। कृपया अर्को समय छान्नुहोस्');
       return;
     }
     
@@ -512,12 +548,29 @@ function AppointmentDetailContent() {
                             <label className="block text-xs font-semibold text-gray-700 mb-1">
                               समय
                             </label>
-                            <input
-                              type="time"
-                              value={newTime}
-                              onChange={(e) => setNewTime(e.target.value)}
-                              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
-                            />
+                            {loadingSlots ? (
+                              <div className="text-sm text-gray-500 py-4 px-4 bg-gray-50 rounded-lg border border-gray-200 flex items-center gap-2">
+                                <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                उपलब्ध समय जाँच गर्दै...
+                              </div>
+                            ) : (
+                              <>
+                                <TimeSlotPicker
+                                  selectedDate={newDate}
+                                  selectedTime={newTime}
+                                  onTimeSelect={(time) => setNewTime(time)}
+                                  bookedSlots={bookedSlots}
+                                />
+                                {bookedSlots.length > 0 && (
+                                  <p className="text-xs text-amber-600 mt-2">
+                                    {bookedSlots.length} समय पहिले नै बुक भइसकेको छ
+                                  </p>
+                                )}
+                              </>
+                            )}
                           </div>
                         </div>
                         <div className="flex gap-2">
