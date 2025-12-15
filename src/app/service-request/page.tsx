@@ -11,8 +11,6 @@ import { getUserById } from "@internal/api/users";
 import { auth } from "@internal/api/firebase";
 import { onAuthStateChanged, type User } from "firebase/auth";
 import TimeSlotPicker from "@internal/form-components/time-slot-picker";
-import { NepaliDatePicker } from "nepali-datepicker-reactjs";
-import "nepali-datepicker-reactjs/dist/index.css";
 // @ts-ignore
 import NepaliDate from "nepali-date-converter";
 import { format } from "date-fns";
@@ -35,8 +33,20 @@ const adToBs = (adDate: string): string => {
   }
 };
 
-// Convert BS date to AD date string  
-const bsToAd = (bsDate: string): string => {
+// Get Nepali month name
+const getNepaliMonth = (adDate: string): string => {
+  try {
+    const [year, month, day] = adDate.split("-").map(Number);
+    const nd = new NepaliDate(new Date(year, month - 1, day));
+    const monthNames = ["बैशाख", "जेठ", "असार", "साउन", "भदौ", "असोज", "कार्तिक", "मंसिर", "पुष", "माघ", "फागुन", "चैत"];
+    return monthNames[nd.getMonth()] || "";
+  } catch {
+    return "";
+  }
+};
+
+// Convert BS date to AD date string (currently unused but kept for potential future use)
+const _bsToAd = (bsDate: string): string => {
   try {
     if (!bsDate || !/^\d{4}-\d{2}-\d{2}$/.test(bsDate)) return "";
     const nd = new NepaliDate(bsDate);
@@ -581,35 +591,44 @@ function ServiceRequestForm() {
 
             {/* Date and Time Selection */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* Nepali Date Picker */}
+              {/* Date Picker */}
               <div>
                 <label
                   htmlFor="scheduledDate"
                   className="block text-sm font-semibold text-gray-700 mb-2"
                 >
-                  मिति छान्नुहोस् (विक्रम संवत्) <span className="text-rose-600">*</span>
+                  मिति छान्नुहोस् <span className="text-rose-600">*</span>
                 </label>
-                <div className="[&_.nepali-datepicker-reactjs]:w-full [&_.nepali-datepicker-reactjs_input]:w-full">
-                  <NepaliDatePicker
-                    inputClassName={`w-full px-4 py-3 border ${
-                      errors.scheduledDate ? "border-rose-500" : "border-gray-300"
-                    } rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent outline-none transition-all cursor-pointer`}
-                    className=""
-                    value={formData.scheduledDate ? adToBs(formData.scheduledDate) : ""}
-                    onChange={(bsDate: string) => {
-                      const adDate = bsToAd(bsDate);
-                      setFormData(prev => ({ ...prev, scheduledDate: adDate }));
-                      if (errors.scheduledDate) {
-                        setErrors(prev => ({ ...prev, scheduledDate: undefined }));
-                      }
-                    }}
-                    options={{
-                      calenderLocale: "ne",
-                      valueLocale: "en",
-                      closeOnSelect: true
-                    }}
-                  />
-                </div>
+                <input
+                  type="date"
+                  id="scheduledDate"
+                  value={formData.scheduledDate}
+                  onChange={(e) => {
+                    setFormData(prev => ({ ...prev, scheduledDate: e.target.value }));
+                    if (errors.scheduledDate) {
+                      setErrors(prev => ({ ...prev, scheduledDate: undefined }));
+                    }
+                  }}
+                  min={new Date().toISOString().split('T')[0]}
+                  max={getMaxDate()}
+                  className={`w-full px-4 py-3 border ${
+                    errors.scheduledDate ? "border-rose-500" : "border-gray-300"
+                  } rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent outline-none transition-all`}
+                />
+                {formData.scheduledDate && (
+                  <div className="mt-2 p-2 bg-amber-50 border border-amber-200 rounded text-xs">
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600">ईस्वी:</span>
+                      <span className="font-semibold text-gray-900">{formData.scheduledDate}</span>
+                    </div>
+                    <div className="flex justify-between items-center mt-1">
+                      <span className="text-gray-600">विक्रम संवत्:</span>
+                      <span className="font-semibold text-gray-900">
+                        {adToBs(formData.scheduledDate)} ({getNepaliMonth(formData.scheduledDate)})
+                      </span>
+                    </div>
+                  </div>
+                )}
                 {errors.scheduledDate && (
                   <p className="mt-1 text-sm text-rose-600">{errors.scheduledDate}</p>
                 )}
