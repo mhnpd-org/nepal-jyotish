@@ -8,6 +8,7 @@ import { useSearchParams } from "next/navigation";
 import { getAppointmentById, addComment, updateAppointmentStatus } from "@internal/api/appointments";
 import { getAstrologerById } from "@internal/api/astrologers";
 import { getUserById } from "@internal/api/users";
+import { updateAppointmentSchedule } from '@internal/api/appointments';
 import { auth } from "@internal/api/firebase";
 import { onAuthStateChanged, type User } from "firebase/auth";
 import type { Appointment, Astrologer, AppUser } from "@internal/api/types";
@@ -140,6 +141,61 @@ function AppointmentDetailContent() {
       alert("स्थिति अपडेट गर्न सकिएन");
     }
   };
+
+  const [showReschedule, setShowReschedule] = useState(false);
+  const [newDate, setNewDate] = useState(appointment?.scheduledDate || '');
+  const [newTime, setNewTime] = useState(appointment?.scheduledTime || '');
+  const [isRescheduling, setIsRescheduling] = useState(false);
+
+  useEffect(() => {
+    setNewDate(appointment?.scheduledDate || '');
+    setNewTime(appointment?.scheduledTime || '');
+  }, [appointment]);
+
+  const handleReschedule = async () => {
+    if (!appointmentId || !user) return;
+    if (!newDate || !newTime) {
+      alert('कृपया नयाँ मिति र समय चयन गर्नुहोस्');
+      return;
+    }
+    // Prevent selecting past date/time in Nepal time
+    const confirmMsg = `के तपाईं पक्का हुनुहुन्छ कि तपाईं यो अपोइन्टमेन्ट ${newDate} ${newTime} मा सार्न चाहनुहुन्छ?`;
+    if (!confirm(confirmMsg)) return;
+
+    setIsRescheduling(true);
+    try {
+      await updateAppointmentSchedule(appointmentId, newDate, newTime);
+      const updatedAppt = await getAppointmentById(appointmentId);
+      if (updatedAppt) setAppointment(updatedAppt);
+      setShowReschedule(false);
+    } catch (err) {
+      console.error('Failed to reschedule:', err);
+      alert('मिति परिवर्तन गर्न सकेन');
+    } finally {
+      setIsRescheduling(false);
+    }
+  };
+
+  // Helper: compute today's date in Nepal (UTC+5:45)
+  const getNepalToday = () => {
+    const now = new Date();
+    // convert to ms and add 5h45m
+    const nepOffset = 5 * 60 + 45; // minutes
+    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+    const nep = new Date(utc + nepOffset * 60000);
+    return nep.toISOString().split('T')[0];
+  };
+  const minDate = getNepalToday();
+  const getNepalTimeHHMM = () => {
+    const now = new Date();
+    const nepOffset = 5 * 60 + 45;
+    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+    const nep = new Date(utc + nepOffset * 60000);
+    const hh = String(nep.getHours()).padStart(2, '0');
+    const mm = String(nep.getMinutes()).padStart(2, '0');
+    return `${hh}:${mm}`;
+  };
+  const minTime = getNepalTimeHHMM();
 
   if (loading) {
     return (
@@ -340,13 +396,64 @@ function AppointmentDetailContent() {
                           पूरा भयो
                         </button>
                       )}
-                      <button
-                        onClick={() => handleStatusChange('cancelled')}
-                        className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all text-sm font-semibold"
-                      >
-                        रद्द गर्नुहोस्
-                      </button>
+                      {userProfile?.role === 'super_admin' && (
+                        <button
+                          onClick={() => handleStatusChange('cancelled')}
+                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all text-sm font-semibold"
+                        >
+                          रद्द गर्नुहोस्
+                        </button>
+                      )}
                     </div>
+                  </div>
+                )}
+
+                {/* Reschedule (postpone) for users */}
+                {isUserView && appointment.status !== 'completed' && appointment.status !== 'cancelled' && (
+                  <div className="border-t pt-4">
+                    <span className="text-sm font-semibold text-gray-700 block mb-2">मिति परिवर्तन (पछाडि सर्नुहोस्):</span>
+                    {!showReschedule ? (
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => setShowReschedule(true)}
+                          className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-all text-sm font-semibold"
+                        >
+                          पछाडि सर्नुहोस्
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col gap-2">
+                        <div className="grid grid-cols-2 gap-2">
+                          <input
+                            type="date"
+                            value={newDate}
+                            onChange={(e) => setNewDate(e.target.value)}
+                            className="px-3 py-2 border rounded-lg"
+                          />
+                          <input
+                            type="time"
+                            value={newTime}
+                            onChange={(e) => setNewTime(e.target.value)}
+                            className="px-3 py-2 border rounded-lg"
+                          />
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={handleReschedule}
+                            disabled={isRescheduling}
+                            className={`px-4 py-2 rounded-lg text-white font-semibold ${isRescheduling ? 'bg-gray-300' : 'bg-rose-600 hover:bg-rose-700'}`}
+                          >
+                            {isRescheduling ? 'रिच्छित हुँदैछ...' : 'पुष्टि गर्नुहोस्'}
+                          </button>
+                          <button
+                            onClick={() => setShowReschedule(false)}
+                            className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200"
+                          >
+                            रद्द गर्नुहोस्
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

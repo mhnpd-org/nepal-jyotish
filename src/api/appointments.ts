@@ -65,3 +65,11 @@ export const updateAppointmentStatus = async (appointmentId: string, status: App
     updatedAt: serverTimestamp(),
   });
 };
+
+export const updateAppointmentSchedule = async (appointmentId: string, scheduledDate: string, scheduledTime: string) => {
+  await updateDoc(doc(db, "appointments", appointmentId), {
+    scheduledDate,
+    scheduledTime,
+    updatedAt: serverTimestamp(),
+  });
+};
