@@ -23,10 +23,9 @@ export default function GoogleSignInButton({ onClick, label = 'Continue with Goo
     >
       <span className="flex items-center gap-3">
         <span className="flex items-center justify-center bg-white rounded-full w-7 h-7 overflow-hidden">
-          <img src="/favicon/google.svg" alt="Google" className="h-4 w-4" />
+          <img src="/favicon/google.png" alt="Google" className="h-4 w-4" />
         </span>
         <span className="flex items-center gap-2">
-          <Logo size="sm" variant="light" />
           <span className="font-medium">{label}</span>
         </span>
       </span>
