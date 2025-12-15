@@ -87,7 +87,7 @@ export default function AstrologersPage() {
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">हाम्रा ज्योतिषीहरू</h1>
           <p className="text-lg text-gray-600">
-            व्यक्तिगत मार्गदर्शनका लागि अनुभवी पेशेवरहरूसँग जोडिनुहोस्
+            व्यक्तिगत मार्गदर्शनका लागि अनुभवी गुरुहरूसँग जोडिनुहोस्
           </p>
         </div>
 
