@@ -45,7 +45,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy out --project-name=vedanga-jotish
+          command: pages deploy out --project-name=vedanga-jotish --commit-dirty=true
 
       - name: Notify IndexNow
         if: github.ref == 'refs/heads/main'
