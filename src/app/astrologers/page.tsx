@@ -25,6 +25,7 @@ export default function AstrologersPage() {
         setShowLoginDialog(true);
         setLoading(false);
       } else {
+        setLoading(true);
         loadAstrologers();
       }
     });

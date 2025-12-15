@@ -59,11 +59,11 @@ export default function LoginButton({ language = 'en' }: { language?: 'en' | 'np
         <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 z-50">
           <div className="py-1">
             {profile?.role === 'astrologer' && (
-              <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">{language === 'np' ? 'प्रोफाइल' : 'Profile'}</Link>
+              <Link href="/accounts/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">{language === 'np' ? 'प्रोफाइल' : 'Profile'}</Link>
             )}
-            <Link href="/appointments" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">{language === 'np' ? 'अपोइन्टमेन्टहरू' : 'Appointments'}</Link>
+            <Link href="/accounts/appointments" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">{language === 'np' ? 'अपोइन्टमेन्टहरू' : 'Appointments'}</Link>
             {profile?.role === 'super_admin' && (
-              <Link href="/admin" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Admin</Link>
+              <Link href="/accounts/users" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Admin</Link>
             )}
             <button onClick={() => logout()} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">{language === 'np' ? 'साइन आउट' : 'Sign out'}</button>
           </div>

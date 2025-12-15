@@ -316,7 +316,7 @@ export default function AppHeader({
                       
                       {profile?.role === 'astrologer' && (
                         <Link
-                          href="/profile"
+                          href="/accounts/profile"
                           onClick={() => setMobileMenuOpen(false)}
                           className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-amber-50 hover:text-rose-700 rounded-lg transition-colors"
                         >
@@ -328,7 +328,7 @@ export default function AppHeader({
                       )}
                       
                       <Link
-                        href="/appointments"
+                        href="/accounts/appointments"
                         onClick={() => setMobileMenuOpen(false)}
                         className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-amber-50 hover:text-rose-700 rounded-lg transition-colors"
                       >
@@ -340,7 +340,7 @@ export default function AppHeader({
                       
                       {profile?.role === 'super_admin' && (
                         <Link
-                          href="/admin"
+                          href="/accounts/users"
                           onClick={() => setMobileMenuOpen(false)}
                           className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-amber-50 hover:text-rose-700 rounded-lg transition-colors"
                         >
