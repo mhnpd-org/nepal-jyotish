@@ -12,6 +12,7 @@ import Footer from '@internal/layouts/footer';
 import type { Appointment, Astrologer, AppUser } from '@internal/api/types';
 import { services } from '@internal/app/service-request/page';
 import CentralLoading from '@internal/components/central-loading';
+import LoginDialog from '@internal/components/login-dialog';
 
 export default function AppointmentsPage() {
   const [user, setUser] = useState<import('firebase/auth').User | null>(null);
@@ -21,6 +22,7 @@ export default function AppointmentsPage() {
   const [astrologersCache, setAstrologersCache] = useState<Record<string, Astrologer>>({});
   const [tab, setTab] = useState<'user' | 'astrologer'>('user');
   const [loading, setLoading] = useState(true);
+  const [showLoginDialog, setShowLoginDialog] = useState(false);
   const [userPage, setUserPage] = useState(1);
   const [astroPage, setAstroPage] = useState(1);
   const itemsPerPage = 10;
@@ -99,9 +101,16 @@ export default function AppointmentsPage() {
           <div className="max-w-md mx-auto text-center p-8 bg-white rounded-xl shadow-lg">
             <div className="text-6xl mb-4">🔐</div>
             <h1 className="text-2xl font-semibold text-gray-900 mb-2">Login Required</h1>
-            <p className="text-gray-600">Please login to view your appointments.</p>
+            <p className="text-gray-600 mb-6">Please login to view your appointments.</p>
+            <button
+              onClick={() => setShowLoginDialog(true)}
+              className="w-full py-3 bg-gradient-to-r from-rose-600 to-orange-600 text-white font-semibold rounded-lg hover:from-rose-700 hover:to-orange-700 transition-all"
+            >
+              Sign in with Google
+            </button>
           </div>
         </div>
+        <LoginDialog open={showLoginDialog} onClose={() => setShowLoginDialog(false)} />
         <Footer variant="light" />
       </>
     );
