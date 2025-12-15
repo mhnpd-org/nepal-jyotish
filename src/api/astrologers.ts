@@ -30,29 +30,12 @@ export const getAstrologerById = async (uid: string): Promise<AstrologerType | n
 };
 
 export const getAllAstrologers = async (): Promise<AstrologerType[]> => {
-  // Query users collection for users with role 'astrologer'
-  const usersQuery = query(collection(db, "users"), where("role", "==", "astrologer"));
-  const usersSnapshot = await getDocs(usersQuery);
+  // Read public astrologer profiles from the astrologers collection.
+  // Firestore rules allow public reads on /astrologers.
+  const q = query(astrologersRef);
+  const snapshot = await getDocs(q);
 
-  // Fetch all astrologer profile data in parallel
-  const astrologerPromises = usersSnapshot.docs.map(async (userDoc) => {
-    const uid = userDoc.id;
-    const userData = userDoc.data();
-
-    // Try to get astrologer profile from astrologers collection
-    const astroDoc = await getDoc(doc(db, "astrologers", uid));
-    const astroData = astroDoc.exists() ? astroDoc.data() : {};
-
-    // Merge user data with astrologer profile data
-    return {
-      uid,
-      name: userData.name,
-      email: userData.email,
-      ...astroData,
-    } as AstrologerType;
-  });
-
-  return Promise.all(astrologerPromises);
+  return snapshot.docs.map((d) => ({ uid: d.id, ...(d.data() as any) })) as AstrologerType[];
 };
 
 export const updateAstrologerProfile = async (uid: string, data: Partial<AstrologerType>) => {

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { getAllAstrologers } from "@internal/api/astrologers";
 import type { Astrologer } from "@internal/api/types";
+import { services } from "@internal/app/service-request/page";
 import Link from "next/link";
 import AppHeader from "@internal/layouts/app-header";
 import Footer from "@internal/layouts/footer";
@@ -162,14 +163,14 @@ export default function AstrologersPage() {
                 {astrologer.specialty && astrologer.specialty.length > 0 && (
                   <div className="mb-3">
                     <div className="flex flex-wrap gap-1">
-                      {astrologer.specialty.slice(0, 3).map((s) => (
-                        <span
-                          key={s}
-                          className="px-2 py-1 bg-amber-50 text-amber-700 text-xs rounded-full"
-                        >
-                          {s}
-                        </span>
-                      ))}
+                        {astrologer.specialty.slice(0, 3).map((s) => (
+                          <span
+                            key={s}
+                            className="px-2 py-1 bg-amber-50 text-amber-700 text-xs rounded-full"
+                          >
+                            {services.find((svc) => svc.id === s)?.title || s}
+                          </span>
+                        ))}
                       {astrologer.specialty.length > 3 && (
                         <span className="px-2 py-1 bg-gray-50 text-gray-600 text-xs rounded-full">
                           +{astrologer.specialty.length - 3} more

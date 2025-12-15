@@ -1,55 +1,58 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    
+
     function loggedIn() {
       return request.auth != null;
     }
-    
-    // Check if user is super_admin by reading their role from users collection
+
     function isSuperAdmin() {
-      return loggedIn() && 
-             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "super_admin";
+      return loggedIn() && request.auth.token.role == "super_admin";
     }
-    
+
     function isAstrologer() {
-      return loggedIn() && 
-             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "astrologer";
+      return loggedIn() && request.auth.token.role == "astrologer";
     }
-    
+
+    /* USERS */
     match /users/{uid} {
-      // Super admins can read all users, others can only read their own
-      allow read: if loggedIn() && (request.auth.uid == uid || isSuperAdmin());
-      // Super admins can write all users, others can only write their own
-      allow write: if loggedIn() && (request.auth.uid == uid || isSuperAdmin());
+      allow read: if isSuperAdmin() || request.auth.uid == uid;
+
+      // Users can update ONLY safe fields (not role)
+      allow update: if request.auth.uid == uid &&
+        !("role" in request.resource.data);
+
+      // Only super admin can set role
+      allow write: if isSuperAdmin();
     }
-    
+
+    /* ASTROLOGERS */
     match /astrologers/{uid} {
-      // Anyone can read astrologer profiles (for public listing)
+      // Public profiles
       allow read: if true;
-      // Only super admins and the astrologer themselves can update
-      allow write: if loggedIn() && (isSuperAdmin() || request.auth.uid == uid);
+
+      // Astrologer can update profile EXCEPT protected fields
+      allow update: if request.auth.uid == uid &&
+        !("verified" in request.resource.data) &&
+        !("ratingAvg" in request.resource.data) &&
+        !("ratingCount" in request.resource.data);
+
+      allow write: if isSuperAdmin();
     }
-    
+
+    /* APPOINTMENTS */
     match /appointments/{id} {
-      // Super admins can see all, users see their own, astrologers see theirs
-      allow read: if loggedIn() && 
-        (isSuperAdmin() ||
-         request.auth.uid == resource.data.userId ||
-         request.auth.uid == resource.data.astrologerId);
-      
-      // Any logged-in user can create appointments
-      allow create: if loggedIn();
-      
-      // Only super admin or involved parties can update
-      allow update: if loggedIn() && 
-        (isSuperAdmin() ||
-         request.auth.uid == resource.data.userId ||
-         request.auth.uid == resource.data.astrologerId);
-         
-      // Only super admin can delete
+      allow read: if isSuperAdmin()
+        || request.auth.uid == resource.data.userId
+        || request.auth.uid == resource.data.astrologerId;
+
+      allow create: if loggedIn()
+        && request.resource.data.userId == request.auth.uid;
+
+      allow update: if isSuperAdmin()
+        || request.auth.uid == resource.data.userId
+        || request.auth.uid == resource.data.astrologerId;
+
       allow delete: if isSuperAdmin();
     }
   }

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { getAstrologerById } from "@internal/api/astrologers";
 import type { Astrologer } from "@internal/api/types";
 import Link from "next/link";
+import { services } from "@internal/app/service-request/page";
 import AppHeader from "@internal/layouts/app-header";
 import Footer from "@internal/layouts/footer";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -169,7 +170,7 @@ export default function AstrologerDetailPage() {
                         key={s}
                         className="px-4 py-2 bg-amber-50 text-amber-700 font-medium rounded-lg border border-amber-200"
                       >
-                        {s}
+                        {services.find((svc) => svc.id === s)?.title || s}
                       </span>
                     ))}
                   </div>
