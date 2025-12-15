@@ -462,7 +462,7 @@ function AppointmentDetailContent() {
                 )}
 
                 {/* Reschedule (postpone) for users */}
-                {isUserView && appointment.status !== 'completed' && appointment.status !== 'cancelled' && (
+                {isUserView && appointment.status !== 'completed' && appointment.status !== 'cancelled' && !isPastAppointment && (
                   <div className="border-t pt-4">
                     <span className="text-sm font-semibold text-gray-700 block mb-2">मिति परिवर्तन (पछाडि सर्नुहोस्):</span>
                     {!showReschedule ? (

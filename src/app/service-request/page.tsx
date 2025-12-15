@@ -381,7 +381,7 @@ function ServiceRequestForm() {
     <div className="min-h-screen bg-gradient-to-b from-amber-50 via-white to-orange-50">
       <AppHeader variant="solid" language="np" />
 
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         {/* Page Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
@@ -392,7 +392,100 @@ function ServiceRequestForm() {
           </p>
         </div>
 
-        {/* Form Card */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Sidebar - How it works */}
+          <div className="lg:col-span-1 order-2 lg:order-1">
+            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden sticky top-6">
+              <div className="bg-gradient-to-r from-amber-600 to-orange-600 px-6 py-4">
+                <h3 className="text-lg font-bold text-white">कसरी काम गर्छ?</h3>
+              </div>
+              
+              <div className="p-6 space-y-4">
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center font-bold text-sm">
+                    १
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-1">फारम भर्नुहोस्</h4>
+                    <p className="text-sm text-gray-600">
+                      आफ्नो नाम, इमेल, फोन नम्बर र स्थान भर्नुहोस्। तपाईंलाई चाहिएको सेवा र गुरुजी छान्नुहोस्।
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center font-bold text-sm">
+                    २
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-1">मिति र समय छान्नुहोस्</h4>
+                    <p className="text-sm text-gray-600">
+                      तपाईंलाई उपयुक्त मिति र समय छान्नुहोस्। एक वर्षसम्मको अग्रिम बुकिङ गर्न सकिन्छ।
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center font-bold text-sm">
+                    ३
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-1">विवरण लेख्नुहोस्</h4>
+                    <p className="text-sm text-gray-600">
+                      सन्देश/विवरण खण्डमा तपाईंको समस्या वा छलफलको विषय विस्तृत रूपमा लेख्नुहोस्।
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center font-bold text-sm">
+                    ४
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-1">बुकिङ सिर्जना गर्नुहोस्</h4>
+                    <p className="text-sm text-gray-600">
+                      सबै जानकारी भरेपछि "अपोइन्टमेन्ट बुक गर्नुहोस्" बटन थिच्नुहोस्।
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center font-bold text-sm">
+                    ५
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-1">अपोइन्टमेन्ट हेर्नुहोस्</h4>
+                    <p className="text-sm text-gray-600">
+                      अकाउन्ट → अपोइन्टमेन्टहरू मा गएर तपाईंको सबै बुकिङहरू हेर्न सक्नुहुन्छ।
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center font-bold text-sm">
+                    ६
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-1">भिडियो कल सुरु गर्नुहोस्</h4>
+                    <p className="text-sm text-gray-600">
+                      तोकिएको मितिमा तपाईंको अपोइन्टमेन्ट खोल्नुहोस् र गुरुजीसँग भिडियो कलमा कुरा गर्नुहोस्।
+                    </p>
+                  </div>
+                </div>
+
+                <div className="border-t pt-4 mt-4">
+                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                    <p className="text-xs text-amber-800">
+                      <span className="font-semibold">नोट:</span> प्रत्येक अपोइन्टमेन्ट १ घण्टाको हुन्छ। तपाईं आफ्नो समस्या वा आवश्यकता अनुसार गुरुजीसँग छलफल गर्न सक्नुहुन्छ। आवश्यक भएमा तपाईं मिति पछाडि सार्न सक्नुहुन्छ।
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Form Card */}
+          <div className="lg:col-span-2 order-1 lg:order-2">
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
           {/* Form Header */}
           <div className="bg-gradient-to-r from-rose-600 to-orange-600 px-6 sm:px-8 py-6">
@@ -771,6 +864,8 @@ function ServiceRequestForm() {
               <span className="text-rose-600">*</span> चिन्ह लागेका क्षेत्रहरू अनिवार्य छन्
             </p>
           </form>
+        </div>
+          </div>
         </div>
       </main>
 
