@@ -127,7 +127,7 @@ export default function AstrologerDetailPage() {
                       </span>
                     )}
                     {astrologer.isActive !== false && (
-                      <span className="px-3 py-1 bg-blue-500 text-white text-sm font-medium rounded-full">
+                      <span className="px-3 py-1 text-rose-50 text-rose-600 border border-rose-600 text-sm font-medium rounded-full bg-white">
                         सक्रिय
                       </span>
                     )}
