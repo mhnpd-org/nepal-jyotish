@@ -55,7 +55,7 @@ export default function AstrologerDetailPage() {
       setShowLoginDialog(true);
       return;
     }
-    router.push(`/kundali-matching?astrologer=${uid}`);
+    router.push(`/service-request?astrologer=${uid}`);
   };
 
   if (loading) {
