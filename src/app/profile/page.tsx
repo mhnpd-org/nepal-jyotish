@@ -3,9 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { auth } from "@internal/api/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { getUserById } from "@internal/api/users";
+import { getUserById, updateMyUserProfile } from "@internal/api/users";
 import { getAstrologerById, updateAstrologerProfile } from "@internal/api/astrologers";
-import { updateUserById } from "@internal/api/admin";
 import { useRouter } from "next/navigation";
 import type { Astrologer } from "@internal/api/types";
 import { services } from "@internal/app/service-request/page";
@@ -28,7 +27,6 @@ export default function ProfilePage() {
     imageBase64: null,
     isActive: true,
   });
-  const [newSpecialty, setNewSpecialty] = useState("");
   const [newLanguage, setNewLanguage] = useState("");
   const router = useRouter();
 
@@ -81,23 +79,6 @@ export default function ProfilePage() {
     reader.readAsDataURL(file);
   };
 
-  const addSpecialty = () => {
-    if (newSpecialty.trim() && !profile.specialty?.includes(newSpecialty.trim())) {
-      setProfile((prev) => ({
-        ...prev,
-        specialty: [...(prev.specialty || []), newSpecialty.trim()],
-      }));
-      setNewSpecialty("");
-    }
-  };
-
-  const removeSpecialty = (item: string) => {
-    setProfile((prev) => ({
-      ...prev,
-      specialty: prev.specialty?.filter((s) => s !== item),
-    }));
-  };
-
   const addLanguage = () => {
     if (newLanguage.trim() && !profile.languages?.includes(newLanguage.trim())) {
       setProfile((prev) => ({
@@ -120,24 +101,33 @@ export default function ProfilePage() {
     setSaving(true);
 
     try {
-      // Update name in users collection
+      // Update name in users collection (user-level update)
       if (profile.name) {
-        await updateUserById(currentUser.uid, { name: profile.name });
+        try {
+          await updateMyUserProfile(currentUser.uid, { name: profile.name });
+        } catch (uErr: any) {
+          console.error("User update failed:", uErr);
+          setErrorMessage(`User update failed: ${uErr?.code || uErr?.message || uErr}`);
+          setSaving(false);
+          return;
+        }
       }
-      
-      // Update astrologer profile in astrologers collection
-      await updateAstrologerProfile(currentUser.uid, {
-        ...profile,
-        uid: currentUser.uid,
-      });
-      
+
+      // Update astrologer profile in astrologers collection (don't send uid)
+      const safeProfile = { ...profile } as any;
+      delete safeProfile.uid;
+      try {
+        await updateAstrologerProfile(currentUser.uid, safeProfile);
+      } catch (aErr: any) {
+        console.error("Astrologer update failed:", aErr);
+        setErrorMessage(`Profile update failed: ${aErr?.code || aErr?.message || aErr}`);
+        setSaving(false);
+        return;
+      }
+
       setSuccessMessage("Profile updated successfully.");
       // Auto-dismiss
       setTimeout(() => setSuccessMessage(null), 4000);
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      setErrorMessage("Failed to update profile. Please try again.");
-      setTimeout(() => setErrorMessage(null), 6000);
     } finally {
       setSaving(false);
     }

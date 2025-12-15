@@ -39,5 +39,9 @@ export const getAllAstrologers = async (): Promise<AstrologerType[]> => {
 };
 
 export const updateAstrologerProfile = async (uid: string, data: Partial<AstrologerType>) => {
-  await setDoc(doc(db, "astrologers", uid), data, { merge: true });
+  const ref = doc(db, "astrologers", uid);
+  // Use setDoc with merge to both create and update in one call. This aligns with
+  // security rules that allow owners to create or update their profile (with
+  // protected-field checks).
+  await setDoc(ref, data, { merge: true });
 };
