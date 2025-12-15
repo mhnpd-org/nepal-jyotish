@@ -7,28 +7,31 @@ import { logout } from "@internal/api/auth";
 import { onAuthStateChanged } from "firebase/auth";
 import Link from "next/link";
 import { getUserById } from "@internal/api/users";
+import type { AppUser } from '@internal/api/types';
 
 
 export default function LoginButton() {
   const [open, setOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [authUser, setAuthUser] = useState<import('firebase/auth').User | null>(null);
+  const [profile, setProfile] = useState<AppUser | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (u) => {
-      setUser(u);
+      setAuthUser(u);
       // fetch Firestore user doc if available
       if (u) {
-        getUserById(u.uid).then((doc) => {
-          // merge firestore fields onto user state
-          setUser((prev: any) => ({ ...prev, profile: doc }));
+        getUserById(u.uid).then((doc: AppUser | null) => {
+          setProfile(doc);
         }).catch(() => {});
+      } else {
+        setProfile(null);
       }
     });
     return () => unsub();
   }, []);
 
-  if (!user) {
+  if (!authUser) {
     return (
       <>
         <button
@@ -48,18 +51,18 @@ export default function LoginButton() {
         onClick={() => setDropdownOpen(!dropdownOpen)}
         className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-white text-rose-700 border border-rose-200 text-xs sm:text-sm font-medium rounded-lg hover:shadow-sm"
       >
-        <img src={user.photoURL || '/favicon/user.svg'} alt="avatar" className="h-6 w-6 rounded-full" />
+        <img src={authUser?.photoURL || '/favicon/user.svg'} alt="avatar" className="h-6 w-6 rounded-full" />
         <span className="hidden sm:inline">Account</span>
       </button>
 
       {dropdownOpen && (
         <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 z-50">
           <div className="py-1">
-            {user?.profile?.role === 'astrologer' && (
+            {profile?.role === 'astrologer' && (
               <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Profile</Link>
             )}
             <Link href="/appointments" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Appointments</Link>
-            {user?.profile?.role === 'super_admin' && (
+            {profile?.role === 'super_admin' && (
               <Link href="/admin" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Admin</Link>
             )}
             <button onClick={() => logout()} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Sign out</button>

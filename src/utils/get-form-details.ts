@@ -35,8 +35,9 @@ export function getFormDetails<T extends JsonValue = JsonValue>():
  * helper (which already JSON.stringifies) instead of pre-stringifying.
  */
 // Accept any value that can be JSON.stringify-ed; we trust caller.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function setFormDetails(details: any) {
+
+export function setFormDetails(details: unknown) {
+  // We accept any serializable payload and cast at the point of storage.
   setEncodedItem(KEY, details as JsonValue);
 }
 

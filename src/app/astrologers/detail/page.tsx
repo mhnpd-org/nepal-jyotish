@@ -11,7 +11,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import LoginDialog from "@internal/components/login-dialog";
 import { auth } from "@internal/api/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { getUserById } from "@internal/api/users";
+// no firestore user fetch required here
 
 export default function AstrologerDetailPage() {
   const router = useRouter();
@@ -20,16 +20,12 @@ export default function AstrologerDetailPage() {
   
   const [astrologer, setAstrologer] = useState<Astrologer | null>(null);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
+  const [authUser, setAuthUser] = useState<import('firebase/auth').User | null>(null);
   const [showLoginDialog, setShowLoginDialog] = useState(false);
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (u) => {
-      setUser(u);
-      if (u) {
-        const userDoc = await getUserById(u.uid);
-        setUser({ ...u, profile: userDoc });
-      }
+    const unsub = onAuthStateChanged(auth, (u) => {
+      setAuthUser(u);
     });
     return () => unsub();
   }, []);
@@ -55,7 +51,7 @@ export default function AstrologerDetailPage() {
   };
 
   const handleBookConsultation = () => {
-    if (!user) {
+    if (!authUser) {
       setShowLoginDialog(true);
       return;
     }

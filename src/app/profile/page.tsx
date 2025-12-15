@@ -7,12 +7,13 @@ import { getUserById, updateMyUserProfile } from "@internal/api/users";
 import { getAstrologerById, updateAstrologerProfile } from "@internal/api/astrologers";
 import { useRouter } from "next/navigation";
 import type { Astrologer } from "@internal/api/types";
+import type { User } from 'firebase/auth';
 import { services } from "@internal/app/service-request/page";
 import AppHeader from "@internal/layouts/app-header";
 import Footer from "@internal/layouts/footer";
 
 export default function ProfilePage() {
-  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -30,6 +31,12 @@ export default function ProfilePage() {
   const [newLanguage, setNewLanguage] = useState("");
   const router = useRouter();
 
+  const getErrorMessage = (e: unknown) => {
+    if (typeof e === 'string') return e;
+    if (typeof e === 'object' && e !== null && 'message' in e) return String((e as { message?: unknown }).message ?? '');
+    return String(e);
+  };
+
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (u) => {
       if (!u) {
@@ -44,7 +51,7 @@ export default function ProfilePage() {
           return;
         }
 
-        setCurrentUser({ ...u, profile: userDoc });
+          setCurrentUser(u);
 
         // Load astrologer profile
         const astrologerDoc = await getAstrologerById(u.uid);
@@ -105,22 +112,21 @@ export default function ProfilePage() {
       if (profile.name) {
         try {
           await updateMyUserProfile(currentUser.uid, { name: profile.name });
-        } catch (uErr: any) {
+        } catch (uErr: unknown) {
           console.error("User update failed:", uErr);
-          setErrorMessage(`User update failed: ${uErr?.code || uErr?.message || uErr}`);
+          setErrorMessage(`User update failed: ${getErrorMessage(uErr)}`);
           setSaving(false);
           return;
         }
       }
 
       // Update astrologer profile in astrologers collection (don't send uid)
-      const safeProfile = { ...profile } as any;
-      delete safeProfile.uid;
+      const { uid, ...profileToSave } = profile as Partial<Astrologer> & { uid?: string };
       try {
-        await updateAstrologerProfile(currentUser.uid, safeProfile);
-      } catch (aErr: any) {
+        await updateAstrologerProfile(currentUser.uid, profileToSave as Partial<Astrologer>);
+      } catch (aErr: unknown) {
         console.error("Astrologer update failed:", aErr);
-        setErrorMessage(`Profile update failed: ${aErr?.code || aErr?.message || aErr}`);
+        setErrorMessage(`Profile update failed: ${getErrorMessage(aErr)}`);
         setSaving(false);
         return;
       }

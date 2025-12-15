@@ -14,7 +14,7 @@ import { onAuthStateChanged } from "firebase/auth";
 export default function AstrologersPage() {
   const [astrologers, setAstrologers] = useState<Astrologer[]>([]);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<import('firebase/auth').User | null>(null);
   const [showLoginDialog, setShowLoginDialog] = useState(false);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export default function AstrologersPage() {
       const data = await getAllAstrologers();
       console.log('Loaded astrologers:', data);
       setAstrologers(data);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error loading astrologers:", error);
     } finally {
       setLoading(false);

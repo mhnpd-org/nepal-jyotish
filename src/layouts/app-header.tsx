@@ -71,10 +71,6 @@ export default function AppHeader({
     ? 'text-sm text-white/90 hover:text-white transition-colors'
     : 'text-xs sm:text-sm text-gray-600 hover:text-gray-900 transition-colors';
 
-  const activeLinkClasses = isTransparent
-    ? 'text-sm text-white font-semibold'
-    : 'text-xs sm:text-sm text-gray-900 font-semibold';
-
   const logoVariant = isTransparent ? 'light' : 'dark';
   const logoSize = isTransparent ? 'md' : 'sm';
 

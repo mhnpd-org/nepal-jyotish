@@ -28,25 +28,28 @@ export const createAppointment = async (appointmentData: Omit<AppointmentType, '
 export const getAppointmentById = async (id: string): Promise<AppointmentType | null> => {
   const docRef = doc(db, "appointments", id);
   const docSnap = await getDoc(docRef);
-  if (docSnap.exists()) return { id: docSnap.id, ...(docSnap.data() as any) };
+  if (docSnap.exists()) {
+    const data = docSnap.data() as Omit<AppointmentType, 'id'> & { [k: string]: unknown };
+    return { id: docSnap.id, ...data } as AppointmentType;
+  }
   return null;
 };
 
 export const getUserAppointments = async (userId: string): Promise<AppointmentType[]> => {
   const q = query(appointmentsRef, where("userId", "==", userId));
   const snapshot = await getDocs(q);
-  return snapshot.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
+  return snapshot.docs.map((d) => ({ id: d.id, ...(d.data() as Record<string, unknown>) } as AppointmentType));
 };
 
 export const getAstrologerAppointments = async (astrologerId: string): Promise<AppointmentType[]> => {
   const q = query(appointmentsRef, where("astrologerId", "==", astrologerId));
   const snapshot = await getDocs(q);
-  return snapshot.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
+  return snapshot.docs.map((d) => ({ id: d.id, ...(d.data() as Record<string, unknown>) } as AppointmentType));
 };
 
 export const getAllAppointments = async (): Promise<AppointmentType[]> => {
   const snapshot = await getDocs(appointmentsRef);
-  return snapshot.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
+  return snapshot.docs.map((d) => ({ id: d.id, ...(d.data() as Record<string, unknown>) } as AppointmentType));
 };
 
 export const addComment = async (appointmentId: string, comment: AppointmentComment) => {

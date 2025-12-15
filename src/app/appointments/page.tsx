@@ -9,12 +9,12 @@ import { getAstrologerById } from '@internal/api/astrologers';
 import { isAstrologer, isNormalUser, isSuperAdmin } from '@internal/api/roleGuards';
 import AppHeader from '@internal/layouts/app-header';
 import Footer from '@internal/layouts/footer';
-import type { Appointment, Astrologer } from '@internal/api/types';
+import type { Appointment, Astrologer, AppUser } from '@internal/api/types';
 import { services } from '@internal/app/service-request/page';
 
 export default function AppointmentsPage() {
-  const [user, setUser] = useState<any>(null);
-  const [profile, setProfile] = useState<any>(null);
+  const [user, setUser] = useState<import('firebase/auth').User | null>(null);
+  const [profile, setProfile] = useState<AppUser | null>(null);
   const [userAppointments, setUserAppointments] = useState<Appointment[]>([]);
   const [astroAppointments, setAstroAppointments] = useState<Appointment[]>([]);
   const [astrologersCache, setAstrologersCache] = useState<Record<string, Astrologer>>({});
@@ -125,7 +125,7 @@ export default function AppointmentsPage() {
     astroPage * itemsPerPage
   );
 
-  const Pagination = ({ currentPage, totalPages, onPageChange }: any) => {
+  const Pagination = ({ currentPage, totalPages, onPageChange }: { currentPage: number; totalPages: number; onPageChange: (p: number) => void }) => {
     if (totalPages <= 1) return null;
     
     return (

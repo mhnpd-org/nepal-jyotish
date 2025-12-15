@@ -192,7 +192,6 @@ function AppointmentDetailContent() {
   const isScheduledToday = appointment.scheduledDate === today;
   const scheduledDateObj = new Date(appointment.scheduledDate);
   const isPastAppointment = scheduledDateObj < new Date(today);
-  const isFutureAppointment = scheduledDateObj > new Date(today);
 
   const statusColors = {
     pending: "bg-yellow-100 text-yellow-800 border-yellow-200",

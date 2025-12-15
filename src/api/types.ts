@@ -5,8 +5,8 @@ export type AppUser = {
   name?: string;
   email?: string;
   role?: Role;
-  createdAt?: any;
-  [k: string]: any;
+  createdAt?: unknown;
+  [k: string]: unknown;
 };
 
 export type Astrologer = {
@@ -19,11 +19,12 @@ export type Astrologer = {
   imageBase64?: string | null;  // profile image as base64 string
   description?: string;          // long bio/description
   languages?: string[];          // e.g. ["English", "Hindi", "Nepali"]
+  services?: string[];           // service IDs offered by astrologer
   ratingAvg?: number;            // average rating, e.g. 4.6
   ratingCount?: number;          // total number of ratings
   isActive?: boolean;            // whether astrologer is actively taking appointments
   availabilitySummary?: string;  // e.g. "Mon–Fri, 10am–6pm"
-  [k: string]: any;
+  [k: string]: unknown;
 };
 
 export type AppointmentComment = {
@@ -61,8 +62,8 @@ export type Appointment = {
   comments?: AppointmentComment[];
 
   // Metadata
-  createdAt?: any;
-  updatedAt?: any;
+  createdAt?: unknown;
+  updatedAt?: unknown;
 
-  [k: string]: any;
+  [k: string]: unknown;
 };

@@ -1,34 +1,53 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { getAllAstrologers, getAllAppointments, getUserByEmail, updateUserById, promoteUserToAstrologer } from '@internal/api/admin';
+import { getAllAstrologers, getAllAppointments, updateUserById } from '@internal/api/admin';
 import { auth } from '@internal/api/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { getUserById as getUserDoc } from '@internal/api/users';
 import { isSuperAdmin } from '@internal/api/roleGuards';
 import AppHeader from '@internal/layouts/app-header';
 import Footer from '@internal/layouts/footer';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@internal/api/firebase';
+import type { AppUser, Appointment } from '@internal/api/types';
 
 export default function AdminPage() {
-  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [currentUser, setCurrentUser] = useState<AppUser | null>(null);
   const [loading, setLoading] = useState(true);
-  const [users, setUsers] = useState<any[]>([]);
-  const [astrologers, setAstrologers] = useState<any[]>([]);
-  const [appointments, setAppointments] = useState<any[]>([]);
+  const [users, setUsers] = useState<AppUser[]>([]);
+  const [astrologers, setAstrologers] = useState<AppUser[]>([]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [tab, setTab] = useState<'users' | 'astrologers' | 'appointments'>('users');
   const [usersPage, setUsersPage] = useState(1);
   const [astrologersPage, setAstrologersPage] = useState(1);
   const [appointmentsPage, setAppointmentsPage] = useState(1);
   const itemsPerPage = 10;
 
+  const getUid = (u: unknown): string => {
+    if (!u || typeof u !== 'object') return '';
+    const o = u as Record<string, unknown>;
+    const uidVal = o['uid'];
+    if (typeof uidVal === 'string') return uidVal;
+    const idVal = o['id'];
+    if (typeof idVal === 'string') return idVal;
+    return '';
+  };
+
+  const formatCreatedAt = (ts: unknown) => {
+    const s = ts as { seconds?: number } | undefined;
+    if (s && typeof s.seconds === 'number') return new Date(s.seconds * 1000).toLocaleDateString();
+    return '—';
+  };
+
+  const toStringSafe = (v: unknown) => (v === null || v === undefined ? '' : String(v));
+
   const handleRoleChange = async (userId: string, newRole: 'user' | 'astrologer') => {
     try {
       await updateUserById(userId, { role: newRole });
       // Refresh users list
       const snap = await getDocs(collection(db, 'users'));
-      setUsers(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      setUsers(snap.docs.map(d => ({ uid: d.id, ...(d.data() as Record<string, unknown>) } as AppUser)));
       // Refresh astrologers list if needed
       const astros = await getAllAstrologers();
       setAstrologers(astros);
@@ -59,7 +78,7 @@ export default function AdminPage() {
 
     // Fetch all users
     getDocs(collection(db, 'users')).then(snap => {
-      setUsers(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      setUsers(snap.docs.map(d => ({ uid: d.id, ...(d.data() as Record<string, unknown>) } as AppUser)));
     });
 
     getAllAstrologers().then(setAstrologers);
@@ -117,7 +136,7 @@ export default function AdminPage() {
     appointmentsPage * itemsPerPage
   );
 
-  const Pagination = ({ currentPage, totalPages, onPageChange }: any) => {
+  const Pagination = ({ currentPage, totalPages, onPageChange }: { currentPage: number; totalPages: number; onPageChange: (p: number) => void }) => {
     if (totalPages <= 1) return null;
     
     return (
@@ -232,7 +251,7 @@ export default function AdminPage() {
                       </thead>
                       <tbody>
                         {paginatedUsers.map((u, idx) => (
-                          <tr key={u.id} className="border-b border-gray-100 hover:bg-rose-50/30 transition-colors">
+                          <tr key={getUid(u)} className="border-b border-gray-100 hover:bg-rose-50/30 transition-colors">
                             <td className="py-4 px-6 text-sm text-gray-900">{(usersPage - 1) * itemsPerPage + idx + 1}</td>
                             <td className="py-4 px-6 text-sm text-gray-900 font-medium">{u.name || 'N/A'}</td>
                             <td className="py-4 px-6 text-sm text-gray-600">{u.email}</td>
@@ -245,14 +264,14 @@ export default function AdminPage() {
                                 {u.role || 'user'}
                               </span>
                             </td>
-                            <td className="py-4 px-6 text-sm text-gray-600">
-                              {u.createdAt ? new Date(u.createdAt.seconds * 1000).toLocaleDateString() : '—'}
+                              <td className="py-4 px-6 text-sm text-gray-600">
+                              {formatCreatedAt(u.createdAt)}
                             </td>
                             <td className="py-4 px-6">
                               <div className="flex gap-2">
                                 {u.role !== 'super_admin' && u.role !== 'astrologer' && (
                                   <button
-                                    onClick={() => handleRoleChange(u.id, 'astrologer')}
+                                    onClick={() => handleRoleChange(getUid(u), 'astrologer')}
                                     className="px-3 py-1 bg-amber-600 text-white text-xs font-medium rounded hover:bg-amber-700 transition-colors"
                                     title="Promote to Astrologer"
                                   >
@@ -261,14 +280,14 @@ export default function AdminPage() {
                                 )}
                                 {u.role === 'astrologer' && (
                                   <button
-                                    onClick={() => handleRoleChange(u.id, 'user')}
+                                    onClick={() => handleRoleChange(getUid(u), 'user')}
                                     className="px-3 py-1 bg-gray-600 text-white text-xs font-medium rounded hover:bg-gray-700 transition-colors"
                                     title="Demote to User"
                                   >
                                     👤 Demote
                                   </button>
                                 )}
-                                {u.role === 'super_admin' && u.id !== currentUser?.uid && (
+                                {u.role === 'super_admin' && getUid(u) !== currentUser?.uid && (
                                   <span className="px-3 py-1 text-xs text-gray-500 italic">Protected</span>
                                 )}
                               </div>
@@ -313,7 +332,7 @@ export default function AdminPage() {
                       </thead>
                       <tbody>
                         {paginatedAstrologers.map((a, idx) => (
-                          <tr key={a.id} className="border-b border-gray-100 hover:bg-amber-50/30 transition-colors">
+                          <tr key={getUid(a)} className="border-b border-gray-100 hover:bg-amber-50/30 transition-colors">
                             <td className="py-4 px-6 text-sm text-gray-900">{(astrologersPage - 1) * itemsPerPage + idx + 1}</td>
                             <td className="py-4 px-6 text-sm text-gray-900 font-medium">{a.name || 'N/A'}</td>
                             <td className="py-4 px-6 text-sm text-gray-600">{a.email}</td>
@@ -323,7 +342,7 @@ export default function AdminPage() {
                               </span>
                             </td>
                             <td className="py-4 px-6 text-sm text-gray-600">
-                              {a.createdAt ? new Date(a.createdAt.seconds * 1000).toLocaleDateString() : '—'}
+                              {formatCreatedAt(a.createdAt)}
                             </td>
                           </tr>
                         ))}
@@ -366,11 +385,11 @@ export default function AdminPage() {
                       </thead>
                       <tbody>
                         {paginatedAppointments.map((ap, idx) => (
-                          <tr key={ap.id} className="border-b border-gray-100 hover:bg-blue-50/30 transition-colors">
+                          <tr key={toStringSafe(ap.id)} className="border-b border-gray-100 hover:bg-blue-50/30 transition-colors">
                             <td className="py-4 px-6 text-sm text-gray-900">{(appointmentsPage - 1) * itemsPerPage + idx + 1}</td>
                             <td className="py-4 px-6 text-sm text-gray-900 font-medium">{ap.userId.substring(0, 12)}...</td>
                             <td className="py-4 px-6 text-sm text-gray-900">{ap.astrologerId.substring(0, 12)}...</td>
-                            <td className="py-4 px-6 text-sm text-gray-600">{ap.datetime || 'Not scheduled'}</td>
+                            <td className="py-4 px-6 text-sm text-gray-600">{toStringSafe((ap as unknown as Record<string, unknown>)['datetime']) || 'Not scheduled'}</td>
                             <td className="py-4 px-6">
                               <span className={`px-3 py-1 text-xs font-medium rounded-full ${
                                 ap.status === 'confirmed' ? 'bg-green-100 text-green-700' :
@@ -380,7 +399,7 @@ export default function AdminPage() {
                                 {ap.status}
                               </span>
                             </td>
-                            <td className="py-4 px-6 text-sm text-gray-600">{ap.callRoomId || '—'}</td>
+                            <td className="py-4 px-6 text-sm text-gray-600">{toStringSafe((ap as unknown as Record<string, unknown>)['callRoomId']) || '—'}</td>
                           </tr>
                         ))}
                       </tbody>
