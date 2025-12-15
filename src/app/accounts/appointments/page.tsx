@@ -245,7 +245,7 @@ export default function AccountsAppointmentsPage() {
                           </td>
                           <td className="py-4 px-6">
                             <a
-                              href={`/appointments/detail?id=${a.id}`}
+                              href={`/accounts/appointments/detail?id=${a.id}`}
                               className="px-3 py-1.5 text-xs font-semibold bg-gradient-to-r from-rose-600 to-orange-600 text-white rounded-lg hover:from-rose-700 hover:to-orange-700 transition-all inline-block"
                             >
                               विवरण हेर्नुहोस्
@@ -318,7 +318,7 @@ export default function AccountsAppointmentsPage() {
                           </td>
                           <td className="py-4 px-6">
                             <a
-                              href={`/appointments/detail?id=${a.id}`}
+                              href={`/accounts/appointments/detail?id=${a.id}`}
                               className="px-3 py-1.5 text-xs font-semibold bg-gradient-to-r from-rose-600 to-orange-600 text-white rounded-lg hover:from-rose-700 hover:to-orange-700 transition-all inline-block"
                             >
                               विवरण हेर्नुहोस्
@@ -396,7 +396,7 @@ export default function AccountsAppointmentsPage() {
                           </td>
                           <td className="py-4 px-6">
                             <a
-                              href={`/appointments/detail?id=${a.id}`}
+                              href={`/accounts/appointments/detail?id=${a.id}`}
                               className="px-3 py-1.5 text-xs font-semibold bg-gradient-to-r from-rose-600 to-orange-600 text-white rounded-lg hover:from-rose-700 hover:to-orange-700 transition-all inline-block"
                             >
                               विवरण हेर्नुहोस्

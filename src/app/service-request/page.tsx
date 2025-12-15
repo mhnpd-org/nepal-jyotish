@@ -381,7 +381,7 @@ function ServiceRequestForm() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
-                onClick={() => router.push(`/appointments/detail?id=${createdAppointmentId}`)}
+                onClick={() => router.push(`/accounts/appointments/detail?id=${createdAppointmentId}`)}
                 className="px-6 py-3 bg-gradient-to-r from-rose-600 to-orange-600 text-white font-semibold rounded-lg hover:from-rose-700 hover:to-orange-700 transition-all shadow-md hover:shadow-lg"
               >
                 अपोइन्टमेन्ट विवरण हेर्नुहोस्
