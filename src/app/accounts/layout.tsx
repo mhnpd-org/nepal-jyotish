@@ -35,6 +35,11 @@ export default function AccountsLayout({ children }: { children: React.ReactNode
     return () => unsub();
   }, [router]);
 
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
   if (loading) {
     return (
       <>
