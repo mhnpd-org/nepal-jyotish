@@ -15,6 +15,7 @@ import type { Appointment, Astrologer, AppUser } from "@internal/api/types";
 import { services } from "@internal/app/service-request/page";
 // @ts-ignore
 import NepaliDate from "nepali-date-converter";
+import { format } from "date-fns";
 
 // Set page metadata via side effect
 if (typeof document !== 'undefined') {
@@ -42,6 +43,18 @@ const getNepaliMonth = (adDate: string): string => {
     return monthNames[nd.getMonth()] || "";
   } catch {
     return "";
+  }
+};
+
+// Convert BS date to AD date string (currently unused but kept for potential future use)
+const _bsToAd = (bsDate: string): string => {
+  try {
+    if (!bsDate || !/^\d{4}-\d{2}-\d{2}$/.test(bsDate)) return "";
+    const nd = new NepaliDate(bsDate);
+    const jsDate = nd.toJsDate();
+    return format(jsDate, "yyyy-MM-dd");
+  } catch {
+    return bsDate;
   }
 };
 
@@ -212,36 +225,6 @@ function AppointmentDetailContent() {
       setIsRescheduling(false);
     }
   };
-
-  // Helper: compute today's date in Nepal (UTC+5:45)
-  const getNepalToday = () => {
-    const now = new Date();
-    // convert to ms and add 5h45m
-    const nepOffset = 5 * 60 + 45; // minutes
-    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-    const nep = new Date(utc + nepOffset * 60000);
-    return nep.toISOString().split('T')[0];
-  };
-  const minDate = getNepalToday();
-  
-  // Helper: compute max date (1 year from today)
-  const getMaxDate = () => {
-    const maxDate = new Date();
-    maxDate.setFullYear(maxDate.getFullYear() + 1);
-    return maxDate.toISOString().split('T')[0];
-  };
-  const maxDate = getMaxDate();
-  
-  const getNepalTimeHHMM = () => {
-    const now = new Date();
-    const nepOffset = 5 * 60 + 45;
-    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-    const nep = new Date(utc + nepOffset * 60000);
-    const hh = String(nep.getHours()).padStart(2, '0');
-    const mm = String(nep.getMinutes()).padStart(2, '0');
-    return `${hh}:${mm}`;
-  };
-  const minTime = getNepalTimeHHMM();
 
   if (loading) {
     return (
@@ -483,27 +466,55 @@ function AppointmentDetailContent() {
                       </div>
                     ) : (
                       <div className="flex flex-col gap-2">
-                        <div className="grid grid-cols-2 gap-2">
-                          <input
-                            type="date"
-                            value={newDate}
-                            onChange={(e) => setNewDate(e.target.value)}
-                            min={minDate}
-                            max={maxDate}
-                            className="px-3 py-2 border rounded-lg"
-                          />
-                          <input
-                            type="time"
-                            value={newTime}
-                            onChange={(e) => setNewTime(e.target.value)}
-                            className="px-3 py-2 border rounded-lg"
-                          />
+                        <div className="grid grid-cols-1 gap-2">
+                          <div>
+                            <label className="block text-xs font-semibold text-gray-700 mb-1">
+                              मिति छान्नुहोस्
+                            </label>
+                            <input
+                              type="date"
+                              value={newDate}
+                              onChange={(e) => setNewDate(e.target.value)}
+                              min={new Date().toISOString().split('T')[0]}
+                              max={(() => {
+                                const maxDate = new Date();
+                                maxDate.setFullYear(maxDate.getFullYear() + 1);
+                                return maxDate.toISOString().split('T')[0];
+                              })()}
+                              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent outline-none transition-all"
+                            />
+                            {newDate && (
+                              <div className="mt-2 p-2 bg-amber-50 border border-amber-200 rounded text-xs">
+                                <div className="flex justify-between items-center">
+                                  <span className="text-gray-600">ईस्वी:</span>
+                                  <span className="font-semibold text-gray-900">{newDate}</span>
+                                </div>
+                                <div className="flex justify-between items-center mt-1">
+                                  <span className="text-gray-600">विक्रम संवत्:</span>
+                                  <span className="font-semibold text-gray-900">
+                                    {adToBs(newDate)} ({getNepaliMonth(newDate)})
+                                  </span>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-gray-700 mb-1">
+                              समय
+                            </label>
+                            <input
+                              type="time"
+                              value={newTime}
+                              onChange={(e) => setNewTime(e.target.value)}
+                              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
+                            />
+                          </div>
                         </div>
                         <div className="flex gap-2">
                           <button
                             onClick={handleReschedule}
-                            disabled={isRescheduling}
-                            className={`px-4 py-2 rounded-lg text-white font-semibold ${isRescheduling ? 'bg-gray-300' : 'bg-rose-600 hover:bg-rose-700'}`}
+                            disabled={isRescheduling || !newDate}
+                            className={`px-4 py-2 rounded-lg text-white font-semibold ${isRescheduling || !newDate ? 'bg-gray-300 cursor-not-allowed' : 'bg-rose-600 hover:bg-rose-700'}`}
                           >
                             {isRescheduling ? 'रिच्छित हुँदैछ...' : 'पुष्टि गर्नुहोस्'}
                           </button>
