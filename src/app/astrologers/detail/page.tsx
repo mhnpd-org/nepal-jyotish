@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { getAstrologerById } from "@internal/api/astrologers";
 import type { Astrologer } from "@internal/api/types";
 import Link from "next/link";
@@ -13,7 +13,7 @@ import { auth } from "@internal/api/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import CentralLoading from '@internal/components/central-loading';
 
-export default function AstrologerDetailPage() {
+function AstrologerDetailContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const uid = searchParams.get('uid');
@@ -220,5 +220,19 @@ export default function AstrologerDetailPage() {
       <Footer />
       <LoginDialog open={showLoginDialog} onClose={() => setShowLoginDialog(false)} />
     </>
+  );
+}
+
+export default function AstrologerDetailPage() {
+  return (
+    <Suspense fallback={
+      <>
+        <AppHeader variant="solid" language="np" />
+        <CentralLoading message="Loading..." />
+        <Footer />
+      </>
+    }>
+      <AstrologerDetailContent />
+    </Suspense>
   );
 }
