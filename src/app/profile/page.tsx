@@ -8,11 +8,16 @@ import { getAstrologerById, updateAstrologerProfile } from "@internal/api/astrol
 import { updateUserById } from "@internal/api/admin";
 import { useRouter } from "next/navigation";
 import type { Astrologer } from "@internal/api/types";
+import { services } from "@internal/app/service-request/page";
+import AppHeader from "@internal/layouts/app-header";
+import Footer from "@internal/layouts/footer";
 
 export default function ProfilePage() {
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [profile, setProfile] = useState<Partial<Astrologer>>({
     name: "",
     description: "",
@@ -126,10 +131,13 @@ export default function ProfilePage() {
         uid: currentUser.uid,
       });
       
-      alert("Profile updated successfully!");
+      setSuccessMessage("Profile updated successfully.");
+      // Auto-dismiss
+      setTimeout(() => setSuccessMessage(null), 4000);
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert("Failed to update profile. Please try again.");
+      setErrorMessage("Failed to update profile. Please try again.");
+      setTimeout(() => setErrorMessage(null), 6000);
     } finally {
       setSaving(false);
     }
@@ -148,11 +156,27 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-amber-50 to-orange-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-lg p-8">
+    <div>
+      <AppHeader variant="solid" language="np" />
+      <div className="min-h-screen bg-gradient-to-br from-rose-50 via-amber-50 to-orange-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-lg p-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Astrologer Profile</h1>
-          <p className="text-gray-600 mb-8">Manage your professional information</p>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+            <p className="text-gray-600">Manage your professional information</p>
+            <div className="flex items-center gap-3">
+              {successMessage && (
+                <div className="px-4 py-2 bg-green-50 border border-green-200 text-green-800 rounded-lg text-sm">
+                  {successMessage}
+                </div>
+              )}
+              {errorMessage && (
+                <div className="px-4 py-2 bg-rose-50 border border-rose-200 text-rose-800 rounded-lg text-sm">
+                  {errorMessage}
+                </div>
+              )}
+            </div>
+          </div>
 
           <div className="space-y-6">
             {/* Profile Image */}
@@ -220,40 +244,37 @@ export default function ProfilePage() {
               />
             </div>
 
-            {/* Specialties */}
+            {/* Services (replaces Specialties) */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Specialties
+                Services Offered
               </label>
-              <div className="flex gap-2 mb-2">
-                <input
-                  type="text"
-                  value={newSpecialty}
-                  onChange={(e) => setNewSpecialty(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && addSpecialty()}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
-                  placeholder="e.g., Vedic Astrology, Numerology"
-                />
-                <button
-                  onClick={addSpecialty}
-                  className="px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700"
-                >
-                  Add
-                </button>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {profile.specialty?.map((s) => (
-                  <span
-                    key={s}
-                    className="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm flex items-center gap-2"
-                  >
-                    {s}
-                    <button onClick={() => removeSpecialty(s)} className="text-amber-600 hover:text-amber-900">
-                      ×
-                    </button>
-                  </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {services.map((svc) => (
+                  <label key={svc.id} className="flex items-center gap-3 p-2 border rounded-lg cursor-pointer hover:bg-rose-50">
+                    <input
+                      type="checkbox"
+                      checked={profile.specialty?.includes(svc.id) || false}
+                      onChange={(e) => {
+                        const checked = e.target.checked;
+                        setProfile((prev) => {
+                          const current = prev.specialty || [];
+                          if (checked) {
+                            return { ...prev, specialty: Array.from(new Set([...current, svc.id])) };
+                          }
+                          return { ...prev, specialty: current.filter((c) => c !== svc.id) };
+                        });
+                      }}
+                      className="w-4 h-4 text-rose-600 border-gray-300 rounded"
+                    />
+                    <div>
+                      <div className="text-sm font-medium text-gray-900">{svc.title}</div>
+                      <div className="text-xs text-gray-500">{svc.subtitle}</div>
+                    </div>
+                  </label>
                 ))}
               </div>
+              <p className="text-xs text-gray-500 mt-2">Select services you provide. These will be shown on your public profile.</p>
             </div>
 
             {/* Languages */}
@@ -335,6 +356,8 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+      <Footer />
+    </div>
     </div>
   );
 }

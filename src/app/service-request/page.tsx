@@ -29,7 +29,7 @@ interface FormErrors {
   message?: string;
 }
 
-const services = [
+export const services = [
   { id: "muhurta", title: "मुहूर्त निर्धारण", subtitle: "Shubha Muhurta" },
   { id: "graha-shanti", title: "अरिष्ट ग्रह तथा योग शान्ती", subtitle: "Graha Shanti" },
   { id: "birth-chart", title: "चिना एवं जन्मकुण्डली निर्माण", subtitle: "Birth Chart" },
