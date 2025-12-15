@@ -187,6 +187,13 @@ function AppointmentDetailContent() {
   const isAstrologerView = user?.uid === appointment.astrologerId;
   const canManageStatus = isAstrologerView || userProfile?.role === 'super_admin';
 
+  // Check if today is the scheduled date
+  const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+  const isScheduledToday = appointment.scheduledDate === today;
+  const scheduledDateObj = new Date(appointment.scheduledDate);
+  const isPastAppointment = scheduledDateObj < new Date(today);
+  const isFutureAppointment = scheduledDateObj > new Date(today);
+
   const statusColors = {
     pending: "bg-yellow-100 text-yellow-800 border-yellow-200",
     confirmed: "bg-blue-100 text-blue-800 border-blue-200",
@@ -354,7 +361,35 @@ function AppointmentDetailContent() {
                 </div>
 
                 <div className="p-6">
-                  {!showMeeting ? (
+                  {!isScheduledToday ? (
+                    <div className="text-center py-8">
+                      <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 ${
+                        isPastAppointment 
+                          ? 'bg-gray-100 text-gray-400' 
+                          : 'bg-gradient-to-br from-amber-100 to-orange-100 text-amber-600'
+                      }`}>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                      </div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                        {isPastAppointment ? 'मिटिङ समाप्त भयो' : 'मिटिङ आउँदै छ'}
+                      </h3>
+                      <p className="text-gray-600 mb-4">
+                        {isPastAppointment 
+                          ? 'यो अपोइन्टमेन्टको मिति बितिसकेको छ।'
+                          : `तपाईंको मिटिङ ${appointment.scheduledDate} मा ${appointment.scheduledTime} बजे शेड्युल गरिएको छ।`
+                        }
+                      </p>
+                      {!isPastAppointment && (
+                        <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 max-w-md mx-auto">
+                          <p className="text-sm text-amber-800">
+                            <span className="font-semibold">नोट:</span> मिटिङमा जोडिने विकल्प शेड्युल गरिएको मितिमा मात्र उपलब्ध हुनेछ।
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  ) : !showMeeting ? (
                     <div className="text-center py-8">
                       <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-rose-100 to-orange-100 rounded-full mb-4">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -364,8 +399,11 @@ function AppointmentDetailContent() {
                       <h3 className="text-lg font-semibold text-gray-900 mb-2">
                         मिटिङमा सामेल हुनुहोस्
                       </h3>
-                      <p className="text-gray-600 mb-6">
+                      <p className="text-gray-600 mb-2">
                         तपाईंको भिडियो परामर्श सुरु गर्न तल क्लिक गर्नुहोस्
+                      </p>
+                      <p className="text-sm text-green-600 font-semibold mb-6">
+                        आज {appointment.scheduledTime} बजे
                       </p>
                       <button
                         onClick={() => setShowMeeting(true)}

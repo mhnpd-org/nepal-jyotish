@@ -205,7 +205,7 @@ export default function AstrologersPage() {
                     प्रोफाइल हेर्नुहोस्
                   </Link>
                   <Link
-                    href={`/kundali-matching?astrologer=${astrologer.uid}`}
+                    href={`/service-request?astrologer=${astrologer.uid}`}
                     className="flex-1 py-2 bg-gradient-to-r from-rose-600 to-orange-600 text-white text-center font-semibold rounded-lg hover:from-rose-700 hover:to-orange-700 transition-all"
                   >
                     परामर्श बुक गर्नुहोस्

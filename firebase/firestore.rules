@@ -18,9 +18,14 @@ service cloud.firestore {
     match /users/{uid} {
       allow read: if isSuperAdmin() || request.auth.uid == uid;
 
+      // Allow users to create their own document on first login (without setting role or with role='user')
+      allow create: if request.auth.uid == uid && 
+        (!("role" in request.resource.data) || request.resource.data.role == "user");
+
       // Users can update only when they are the owner and they DO NOT change the role
+      // Support both updating with unchanged role or omitting role field
       allow update: if request.auth.uid == uid &&
-        request.resource.data.role == resource.data.role;
+        (request.resource.data.role == resource.data.role || !("role" in request.resource.data));
 
       // Only super admin can set role or perform arbitrary writes
       allow write: if isSuperAdmin();

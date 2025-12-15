@@ -58,6 +58,7 @@ function ServiceRequestForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const preSelectedService = searchParams.get("service") || "";
+  const preSelectedAstrologer = searchParams.get("astrologer") || "";
 
   const [user, setUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<AppUser | null>(null);
@@ -70,7 +71,7 @@ function ServiceRequestForm() {
     location: "",
     serviceType: preSelectedService,
     message: "",
-    astrologerId: "",
+    astrologerId: preSelectedAstrologer,
     scheduledDate: "",
     scheduledTime: "",
   });
