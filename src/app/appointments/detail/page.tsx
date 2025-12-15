@@ -13,11 +13,37 @@ import { auth } from "@internal/api/firebase";
 import { onAuthStateChanged, type User } from "firebase/auth";
 import type { Appointment, Astrologer, AppUser } from "@internal/api/types";
 import { services } from "@internal/app/service-request/page";
+// @ts-ignore
+import NepaliDate from "nepali-date-converter";
 
 // Set page metadata via side effect
 if (typeof document !== 'undefined') {
   document.title = "अपोइन्टमेन्ट विवरण | नेपाल ज्योतिष";
 }
+
+// Convert AD date to BS date string for display
+const adToBs = (adDate: string): string => {
+  try {
+    if (!adDate || !/^\d{4}-\d{2}-\d{2}$/.test(adDate)) return "";
+    const [year, month, day] = adDate.split("-").map(Number);
+    const nd = new NepaliDate(new Date(year, month - 1, day));
+    return nd.format ? nd.format("YYYY-MM-DD") : `${nd.getYear()}-${String(nd.getMonth() + 1).padStart(2, "0")}-${String(nd.getDate()).padStart(2, "0")}`;
+  } catch {
+    return adDate;
+  }
+};
+
+// Get Nepali month name
+const getNepaliMonth = (adDate: string): string => {
+  try {
+    const [year, month, day] = adDate.split("-").map(Number);
+    const nd = new NepaliDate(new Date(year, month - 1, day));
+    const monthNames = ["बैशाख", "जेठ", "असार", "साउन", "भदौ", "असोज", "कार्तिक", "मंसिर", "पुष", "माघ", "फागुन", "चैत"];
+    return monthNames[nd.getMonth()] || "";
+  } catch {
+    return "";
+  }
+};
 
 function AppointmentDetailContent() {
   const searchParams = useSearchParams();
@@ -158,6 +184,17 @@ function AppointmentDetailContent() {
       alert('कृपया नयाँ मिति र समय चयन गर्नुहोस्');
       return;
     }
+    
+    // Validate date is not more than 1 year in advance
+    const selectedDate = new Date(newDate);
+    const maxDate = new Date();
+    maxDate.setFullYear(maxDate.getFullYear() + 1);
+    
+    if (selectedDate > maxDate) {
+      alert('एक वर्षभन्दा बढी अग्रिम बुकिङ गर्न सकिँदैन');
+      return;
+    }
+    
     // Prevent selecting past date/time in Nepal time
     const confirmMsg = `के तपाईं पक्का हुनुहुन्छ कि तपाईं यो अपोइन्टमेन्ट ${newDate} ${newTime} मा सार्न चाहनुहुन्छ?`;
     if (!confirm(confirmMsg)) return;
@@ -186,6 +223,15 @@ function AppointmentDetailContent() {
     return nep.toISOString().split('T')[0];
   };
   const minDate = getNepalToday();
+  
+  // Helper: compute max date (1 year from today)
+  const getMaxDate = () => {
+    const maxDate = new Date();
+    maxDate.setFullYear(maxDate.getFullYear() + 1);
+    return maxDate.toISOString().split('T')[0];
+  };
+  const maxDate = getMaxDate();
+  
   const getNepalTimeHHMM = () => {
     const now = new Date();
     const nepOffset = 5 * 60 + 45;
@@ -303,11 +349,25 @@ function AppointmentDetailContent() {
                 </div>
 
                 {/* Scheduled Date & Time */}
-                <div className="flex items-center justify-between border-t pt-4">
-                  <span className="text-sm font-semibold text-gray-700">मिति र समय:</span>
-                  <span className="text-gray-900 font-medium">
-                    {appointment.scheduledDate} - {appointment.scheduledTime}
-                  </span>
+                <div className="flex flex-col border-t pt-4 gap-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-semibold text-gray-700">मिति (विक्रम संवत्):</span>
+                    <span className="text-gray-900 font-medium">
+                      {adToBs(appointment.scheduledDate)} ({getNepaliMonth(appointment.scheduledDate)})
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-semibold text-gray-700">मिति (ईस्वी):</span>
+                    <span className="text-gray-600 font-medium">
+                      {appointment.scheduledDate}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-semibold text-gray-700">समय:</span>
+                    <span className="text-gray-900 font-medium">
+                      {appointment.scheduledTime}
+                    </span>
+                  </div>
                 </div>
 
                 {/* Duration */}
@@ -428,6 +488,8 @@ function AppointmentDetailContent() {
                             type="date"
                             value={newDate}
                             onChange={(e) => setNewDate(e.target.value)}
+                            min={minDate}
+                            max={maxDate}
                             className="px-3 py-2 border rounded-lg"
                           />
                           <input
@@ -481,12 +543,17 @@ function AppointmentDetailContent() {
                       <h3 className="text-lg font-semibold text-gray-900 mb-2">
                         {isPastAppointment ? 'मिटिङ समाप्त भयो' : 'मिटिङ आउँदै छ'}
                       </h3>
-                      <p className="text-gray-600 mb-4">
+                      <p className="text-gray-600 mb-2">
                         {isPastAppointment 
                           ? 'यो अपोइन्टमेन्टको मिति बितिसकेको छ।'
-                          : `तपाईंको मिटिङ ${appointment.scheduledDate} मा ${appointment.scheduledTime} बजे शेड्युल गरिएको छ।`
+                          : `तपाईंको मिटिङ ${adToBs(appointment.scheduledDate)} (विक्रम संवत्) मा ${appointment.scheduledTime} बजे शेड्युल गरिएको छ।`
                         }
                       </p>
+                      {!isPastAppointment && (
+                        <p className="text-sm text-gray-500">
+                          ईस्वी: {appointment.scheduledDate}
+                        </p>
+                      )}
                       {!isPastAppointment && (
                         <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 max-w-md mx-auto">
                           <p className="text-sm text-amber-800">

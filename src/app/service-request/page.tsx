@@ -11,12 +11,41 @@ import { getUserById } from "@internal/api/users";
 import { auth } from "@internal/api/firebase";
 import { onAuthStateChanged, type User } from "firebase/auth";
 import TimeSlotPicker from "@internal/form-components/time-slot-picker";
+import { NepaliDatePicker } from "nepali-datepicker-reactjs";
+import "nepali-datepicker-reactjs/dist/index.css";
+// @ts-ignore
+import NepaliDate from "nepali-date-converter";
+import { format } from "date-fns";
 import type { Astrologer, AppUser } from "@internal/api/types";
 
 // Set page metadata via side effect
 if (typeof document !== 'undefined') {
   document.title = "सेवा अनुरोध फारम | नेपाल ज्योतिष";
 }
+
+// Convert AD date to BS date string
+const adToBs = (adDate: string): string => {
+  try {
+    if (!adDate || !/^\d{4}-\d{2}-\d{2}$/.test(adDate)) return "";
+    const [year, month, day] = adDate.split("-").map(Number);
+    const nd = new NepaliDate(new Date(year, month - 1, day));
+    return nd.format ? nd.format("YYYY-MM-DD") : `${nd.getYear()}-${String(nd.getMonth() + 1).padStart(2, "0")}-${String(nd.getDate()).padStart(2, "0")}`;
+  } catch {
+    return adDate;
+  }
+};
+
+// Convert BS date to AD date string  
+const bsToAd = (bsDate: string): string => {
+  try {
+    if (!bsDate || !/^\d{4}-\d{2}-\d{2}$/.test(bsDate)) return "";
+    const nd = new NepaliDate(bsDate);
+    const jsDate = nd.toJsDate();
+    return format(jsDate, "yyyy-MM-dd");
+  } catch {
+    return bsDate;
+  }
+};
 
 interface FormData {
   name: string;
@@ -81,6 +110,13 @@ function ServiceRequestForm() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [createdAppointmentId, setCreatedAppointmentId] = useState<string | null>(null);
+
+  // Calculate max date (1 year from today)
+  const getMaxDate = () => {
+    const maxDate = new Date();
+    maxDate.setFullYear(maxDate.getFullYear() + 1);
+    return maxDate.toISOString().split('T')[0];
+  };
 
   // Auth listener
   useEffect(() => {
@@ -177,8 +213,14 @@ function ServiceRequestForm() {
       const selectedDate = new Date(formData.scheduledDate);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
+      const maxDate = new Date();
+      maxDate.setFullYear(maxDate.getFullYear() + 1);
+      maxDate.setHours(0, 0, 0, 0);
+      
       if (selectedDate < today) {
         newErrors.scheduledDate = "कृपया भविष्यको मिति छान्नुहोस्";
+      } else if (selectedDate > maxDate) {
+        newErrors.scheduledDate = "एक वर्षभन्दा बढी अग्रिम बुकिङ गर्न सकिँदैन";
       }
     }
 
@@ -539,25 +581,35 @@ function ServiceRequestForm() {
 
             {/* Date and Time Selection */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* Date Picker */}
+              {/* Nepali Date Picker */}
               <div>
                 <label
                   htmlFor="scheduledDate"
                   className="block text-sm font-semibold text-gray-700 mb-2"
                 >
-                  मिति छान्नुहोस् <span className="text-rose-600">*</span>
+                  मिति छान्नुहोस् (विक्रम संवत्) <span className="text-rose-600">*</span>
                 </label>
-                <input
-                  type="date"
-                  id="scheduledDate"
-                  name="scheduledDate"
-                  value={formData.scheduledDate}
-                  onChange={handleInputChange}
-                  min={new Date().toISOString().split('T')[0]}
-                  className={`w-full px-4 py-3 border ${
-                    errors.scheduledDate ? "border-rose-500" : "border-gray-300"
-                  } rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent outline-none transition-all`}
-                />
+                <div className="[&_.nepali-datepicker-reactjs]:w-full [&_.nepali-datepicker-reactjs_input]:w-full">
+                  <NepaliDatePicker
+                    inputClassName={`w-full px-4 py-3 border ${
+                      errors.scheduledDate ? "border-rose-500" : "border-gray-300"
+                    } rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent outline-none transition-all cursor-pointer`}
+                    className=""
+                    value={formData.scheduledDate ? adToBs(formData.scheduledDate) : ""}
+                    onChange={(bsDate: string) => {
+                      const adDate = bsToAd(bsDate);
+                      setFormData(prev => ({ ...prev, scheduledDate: adDate }));
+                      if (errors.scheduledDate) {
+                        setErrors(prev => ({ ...prev, scheduledDate: undefined }));
+                      }
+                    }}
+                    options={{
+                      calenderLocale: "ne",
+                      valueLocale: "en",
+                      closeOnSelect: true
+                    }}
+                  />
+                </div>
                 {errors.scheduledDate && (
                   <p className="mt-1 text-sm text-rose-600">{errors.scheduledDate}</p>
                 )}
