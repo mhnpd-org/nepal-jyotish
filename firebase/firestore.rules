@@ -18,13 +18,9 @@ service cloud.firestore {
     match /users/{uid} {
       allow read: if isSuperAdmin() || request.auth.uid == uid;
 
-      // Users can update only when they are the owner and they DO NOT change the role.
-      // Allow the update if `role` is unchanged or if the request omits the field.
+      // Users can update only when they are the owner and they DO NOT change the role
       allow update: if request.auth.uid == uid &&
-        (
-          request.resource.data.role == resource.data.role ||
-          !("role" in request.resource.data)
-        );
+        request.resource.data.role == resource.data.role;
 
       // Only super admin can set role or perform arbitrary writes
       allow write: if isSuperAdmin();
@@ -35,19 +31,19 @@ service cloud.firestore {
       // Public profiles
       allow read: if true;
 
-      // Allow the owner to create their profile (e.g., first-time setDoc with merge)
-      // but prevent them from setting protected fields.
+      // Allow the owner to create their profile (first-time setDoc with merge)
+      // Prevent setting protected fields
       allow create: if request.auth != null && request.auth.uid == uid &&
         !("verified" in request.resource.data) &&
         !("ratingAvg" in request.resource.data) &&
         !("ratingCount" in request.resource.data);
 
-      // Astrologer can update profile only if protected fields are unchanged.
-      // Compare new vs existing values to allow updates that don't alter these fields.
+      // Owner can update profile, but protected fields cannot be changed
+      // Missing protected fields are treated as unchanged
       allow update: if request.auth != null && request.auth.uid == uid &&
-        request.resource.data.verified == resource.data.verified &&
-        request.resource.data.ratingAvg == resource.data.ratingAvg &&
-        request.resource.data.ratingCount == resource.data.ratingCount;
+        (!("verified" in request.resource.data) || request.resource.data.verified == resource.data.verified) &&
+        (!("ratingAvg" in request.resource.data) || request.resource.data.ratingAvg == resource.data.ratingAvg) &&
+        (!("ratingCount" in request.resource.data) || request.resource.data.ratingCount == resource.data.ratingCount);
 
       // Only super admins can perform arbitrary writes (delete, etc.)
       allow write: if isSuperAdmin();

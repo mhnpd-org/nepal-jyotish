@@ -1,24 +1,35 @@
 import { db } from "./firebase";
-import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
-import type { Appointment as AppointmentType } from "./types";
+import { collection, addDoc, query, where, getDocs, doc, getDoc, updateDoc, arrayUnion, serverTimestamp } from "firebase/firestore";
+import type { Appointment as AppointmentType, AppointmentComment } from "./types";
 
 const appointmentsRef = collection(db, "appointments");
 
-export const bookAppointment = async (
-  userId: string,
-  astrologerId: string,
-  datetime: string,
-  callRoomId?: string
-) => {
+// Generate Jitsi meeting link
+const generateMeetingLink = (appointmentId: string) => {
+  return `https://meet.jit.si/nepal-jotish-${appointmentId}`;
+};
+
+export const createAppointment = async (appointmentData: Omit<AppointmentType, 'id' | 'createdAt' | 'updatedAt' | 'meetingLink'>): Promise<string> => {
   const docRef = await addDoc(appointmentsRef, {
-    userId,
-    astrologerId,
-    datetime,
-    status: "pending",
-    callRoomId: callRoomId || null,
-    createdAt: new Date().toISOString(),
+    ...appointmentData,
+    status: appointmentData.status || 'pending',
+    comments: [],
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
   });
+
+  // Generate and update meeting link
+  const meetingLink = generateMeetingLink(docRef.id);
+  await updateDoc(docRef, { meetingLink });
+
   return docRef.id;
+};
+
+export const getAppointmentById = async (id: string): Promise<AppointmentType | null> => {
+  const docRef = doc(db, "appointments", id);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) return { id: docSnap.id, ...(docSnap.data() as any) };
+  return null;
 };
 
 export const getUserAppointments = async (userId: string): Promise<AppointmentType[]> => {
@@ -36,4 +47,18 @@ export const getAstrologerAppointments = async (astrologerId: string): Promise<A
 export const getAllAppointments = async (): Promise<AppointmentType[]> => {
   const snapshot = await getDocs(appointmentsRef);
   return snapshot.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
+};
+
+export const addComment = async (appointmentId: string, comment: AppointmentComment) => {
+  await updateDoc(doc(db, "appointments", appointmentId), {
+    comments: arrayUnion(comment),
+    updatedAt: serverTimestamp(),
+  });
+};
+
+export const updateAppointmentStatus = async (appointmentId: string, status: AppointmentType['status']) => {
+  await updateDoc(doc(db, "appointments", appointmentId), {
+    status,
+    updatedAt: serverTimestamp(),
+  });
 };

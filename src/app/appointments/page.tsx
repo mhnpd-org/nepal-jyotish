@@ -5,15 +5,19 @@ import { auth } from '@internal/api/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { getUserAppointments, getAstrologerAppointments } from '@internal/api/appointments';
 import { getUserById } from '@internal/api/users';
+import { getAstrologerById } from '@internal/api/astrologers';
 import { isAstrologer, isNormalUser, isSuperAdmin } from '@internal/api/roleGuards';
 import AppHeader from '@internal/layouts/app-header';
 import Footer from '@internal/layouts/footer';
+import type { Appointment, Astrologer } from '@internal/api/types';
+import { services } from '@internal/app/service-request/page';
 
 export default function AppointmentsPage() {
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<any>(null);
-  const [userAppointments, setUserAppointments] = useState<any[]>([]);
-  const [astroAppointments, setAstroAppointments] = useState<any[]>([]);
+  const [userAppointments, setUserAppointments] = useState<Appointment[]>([]);
+  const [astroAppointments, setAstroAppointments] = useState<Appointment[]>([]);
+  const [astrologersCache, setAstrologersCache] = useState<Record<string, Astrologer>>({});
   const [tab, setTab] = useState<'user' | 'astrologer'>('user');
   const [loading, setLoading] = useState(true);
   const [userPage, setUserPage] = useState(1);
@@ -35,6 +39,17 @@ export default function AppointmentsPage() {
         setTab('user');
         const list = await getUserAppointments(u.uid);
         setUserAppointments(list);
+        
+        // Load astrologers for user appointments
+        const astrologerIds = [...new Set(list.map(a => a.astrologerId))];
+        const astrologers = await Promise.all(
+          astrologerIds.map(id => getAstrologerById(id))
+        );
+        const cache: Record<string, Astrologer> = {};
+        astrologers.forEach(a => {
+          if (a) cache[a.uid] = a;
+        });
+        setAstrologersCache(cache);
       } else if (isAstrologer(doc)) {
         setTab('astrologer');
         const list = await getAstrologerAppointments(u.uid);
@@ -47,6 +62,17 @@ export default function AppointmentsPage() {
         ]);
         setUserAppointments(uList);
         setAstroAppointments(aList);
+        
+        // Load astrologers for user appointments
+        const astrologerIds = [...new Set(uList.map(a => a.astrologerId))];
+        const astrologers = await Promise.all(
+          astrologerIds.map(id => getAstrologerById(id))
+        );
+        const cache: Record<string, Astrologer> = {};
+        astrologers.forEach(a => {
+          if (a) cache[a.uid] = a;
+        });
+        setAstrologersCache(cache);
       }
       setLoading(false);
     });
@@ -194,29 +220,51 @@ export default function AppointmentsPage() {
                         <tr>
                           <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700">#</th>
                           <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700">Astrologer</th>
+                          <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700">Service</th>
                           <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700">Date & Time</th>
                           <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700">Status</th>
-                          <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700">Room</th>
+                          <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {paginatedUserAppointments.map((a, idx) => (
-                          <tr key={a.id} className="border-b border-gray-100 hover:bg-rose-50/30 transition-colors">
-                            <td className="py-4 px-6 text-sm text-gray-900">{(userPage - 1) * itemsPerPage + idx + 1}</td>
-                            <td className="py-4 px-6 text-sm text-gray-900 font-medium">{a.astrologerId.substring(0, 12)}...</td>
-                            <td className="py-4 px-6 text-sm text-gray-600">{a.datetime || 'Not scheduled'}</td>
-                            <td className="py-4 px-6">
-                              <span className={`px-3 py-1 text-xs font-medium rounded-full ${
-                                a.status === 'confirmed' ? 'bg-green-100 text-green-700' :
-                                a.status === 'completed' ? 'bg-gray-100 text-gray-700' :
-                                'bg-rose-100 text-rose-700'
-                              }`}>
-                                {a.status}
-                              </span>
-                            </td>
-                            <td className="py-4 px-6 text-sm text-gray-600">{a.callRoomId || '—'}</td>
-                          </tr>
-                        ))}
+                        {paginatedUserAppointments.map((a, idx) => {
+                          const astrologer = astrologersCache[a.astrologerId];
+                          const serviceTitle = services.find(s => s.id === a.serviceType)?.title || a.serviceType;
+                          
+                          return (
+                            <tr key={a.id} className="border-b border-gray-100 hover:bg-rose-50/30 transition-colors">
+                              <td className="py-4 px-6 text-sm text-gray-900">{(userPage - 1) * itemsPerPage + idx + 1}</td>
+                              <td className="py-4 px-6 text-sm text-gray-900 font-medium">
+                                {astrologer ? astrologer.name : a.astrologerId.substring(0, 12) + '...'}
+                              </td>
+                              <td className="py-4 px-6 text-sm text-gray-600">{serviceTitle}</td>
+                              <td className="py-4 px-6 text-sm text-gray-600">
+                                {a.scheduledDate} {a.scheduledTime}
+                              </td>
+                              <td className="py-4 px-6">
+                                <span className={`px-3 py-1 text-xs font-medium rounded-full ${
+                                  a.status === 'confirmed' ? 'bg-blue-100 text-blue-700' :
+                                  a.status === 'completed' ? 'bg-green-100 text-green-700' :
+                                  a.status === 'cancelled' ? 'bg-red-100 text-red-700' :
+                                  'bg-yellow-100 text-yellow-700'
+                                }`}>
+                                  {a.status === 'pending' ? 'विचाराधीन' :
+                                   a.status === 'confirmed' ? 'पुष्टि भयो' :
+                                   a.status === 'completed' ? 'पूरा भयो' :
+                                   a.status === 'cancelled' ? 'रद्द गरियो' : a.status}
+                                </span>
+                              </td>
+                              <td className="py-4 px-6">
+                                <a
+                                  href={`/appointments/detail?id=${a.id}`}
+                                  className="px-3 py-1.5 text-xs font-semibold bg-gradient-to-r from-rose-600 to-orange-600 text-white rounded-lg hover:from-rose-700 hover:to-orange-700 transition-all inline-block"
+                                >
+                                  विवरण हेर्नुहोस्
+                                </a>
+                              </td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                     <div className="p-4">
@@ -248,29 +296,48 @@ export default function AppointmentsPage() {
                         <tr>
                           <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700">#</th>
                           <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700">Client</th>
+                          <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700">Service</th>
                           <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700">Date & Time</th>
                           <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700">Status</th>
-                          <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700">Room</th>
+                          <th className="text-left py-3 px-6 text-sm font-semibold text-gray-700">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {paginatedAstroAppointments.map((a, idx) => (
-                          <tr key={a.id} className="border-b border-gray-100 hover:bg-amber-50/30 transition-colors">
-                            <td className="py-4 px-6 text-sm text-gray-900">{(astroPage - 1) * itemsPerPage + idx + 1}</td>
-                            <td className="py-4 px-6 text-sm text-gray-900 font-medium">{a.userId.substring(0, 12)}...</td>
-                            <td className="py-4 px-6 text-sm text-gray-600">{a.datetime || 'Not scheduled'}</td>
-                            <td className="py-4 px-6">
-                              <span className={`px-3 py-1 text-xs font-medium rounded-full ${
-                                a.status === 'confirmed' ? 'bg-green-100 text-green-700' :
-                                a.status === 'completed' ? 'bg-gray-100 text-gray-700' :
-                                'bg-amber-100 text-amber-700'
-                              }`}>
-                                {a.status}
-                              </span>
-                            </td>
-                            <td className="py-4 px-6 text-sm text-gray-600">{a.callRoomId || '—'}</td>
-                          </tr>
-                        ))}
+                        {paginatedAstroAppointments.map((a, idx) => {
+                          const serviceTitle = services.find(s => s.id === a.serviceType)?.title || a.serviceType;
+                          
+                          return (
+                            <tr key={a.id} className="border-b border-gray-100 hover:bg-amber-50/30 transition-colors">
+                              <td className="py-4 px-6 text-sm text-gray-900">{(astroPage - 1) * itemsPerPage + idx + 1}</td>
+                              <td className="py-4 px-6 text-sm text-gray-900 font-medium">{a.userName}</td>
+                              <td className="py-4 px-6 text-sm text-gray-600">{serviceTitle}</td>
+                              <td className="py-4 px-6 text-sm text-gray-600">
+                                {a.scheduledDate} {a.scheduledTime}
+                              </td>
+                              <td className="py-4 px-6">
+                                <span className={`px-3 py-1 text-xs font-medium rounded-full ${
+                                  a.status === 'confirmed' ? 'bg-blue-100 text-blue-700' :
+                                  a.status === 'completed' ? 'bg-green-100 text-green-700' :
+                                  a.status === 'cancelled' ? 'bg-red-100 text-red-700' :
+                                  'bg-yellow-100 text-yellow-700'
+                                }`}>
+                                  {a.status === 'pending' ? 'विचाराधीन' :
+                                   a.status === 'confirmed' ? 'पुष्टि भयो' :
+                                   a.status === 'completed' ? 'पूरा भयो' :
+                                   a.status === 'cancelled' ? 'रद्द गरियो' : a.status}
+                                </span>
+                              </td>
+                              <td className="py-4 px-6">
+                                <a
+                                  href={`/appointments/detail?id=${a.id}`}
+                                  className="px-3 py-1.5 text-xs font-semibold bg-gradient-to-r from-rose-600 to-orange-600 text-white rounded-lg hover:from-rose-700 hover:to-orange-700 transition-all inline-block"
+                                >
+                                  विवरण हेर्नुहोस्
+                                </a>
+                              </td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                     <div className="p-4">

@@ -3,8 +3,15 @@
 import { Suspense } from "react";
 import AppHeader from "@internal/layouts/app-header";
 import Footer from "@internal/layouts/footer";
-import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { getAllAstrologers } from "@internal/api/astrologers";
+import { createAppointment } from "@internal/api/appointments";
+import { getUserById } from "@internal/api/users";
+import { auth } from "@internal/api/firebase";
+import { onAuthStateChanged, type User } from "firebase/auth";
+import TimeSlotPicker from "@internal/form-components/time-slot-picker";
+import type { Astrologer, AppUser } from "@internal/api/types";
 
 // Set page metadata via side effect
 if (typeof document !== 'undefined') {
@@ -18,6 +25,9 @@ interface FormData {
   location: string;
   serviceType: string;
   message: string;
+  astrologerId: string;
+  scheduledDate: string;
+  scheduledTime: string;
 }
 
 interface FormErrors {
@@ -27,6 +37,9 @@ interface FormErrors {
   location?: string;
   serviceType?: string;
   message?: string;
+  astrologerId?: string;
+  scheduledDate?: string;
+  scheduledTime?: string;
 }
 
 export const services = [
@@ -43,8 +56,13 @@ export const services = [
 
 function ServiceRequestForm() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const preSelectedService = searchParams.get("service") || "";
 
+  const [user, setUser] = useState<User | null>(null);
+  const [userProfile, setUserProfile] = useState<AppUser | null>(null);
+  const [astrologers, setAstrologers] = useState<Astrologer[]>([]);
+  const [loadingAstrologers, setLoadingAstrologers] = useState(true);
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
@@ -52,12 +70,60 @@ function ServiceRequestForm() {
     location: "",
     serviceType: preSelectedService,
     message: "",
+    astrologerId: "",
+    scheduledDate: "",
+    scheduledTime: "",
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
-  const [_isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [createdAppointmentId, setCreatedAppointmentId] = useState<string | null>(null);
+
+  // Auth listener
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      setUser(firebaseUser);
+      if (firebaseUser) {
+        const profile = await getUserById(firebaseUser.uid);
+        setUserProfile(profile);
+      } else {
+        setUserProfile(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // Load astrologers on mount
+  useEffect(() => {
+    const loadAstrologers = async () => {
+      try {
+        const astrologersList = await getAllAstrologers();
+        // Filter only active astrologers
+        const activeAstrologers = astrologersList.filter(a => a.isActive !== false);
+        setAstrologers(activeAstrologers);
+      } catch (error) {
+        console.error("Failed to load astrologers:", error);
+      } finally {
+        setLoadingAstrologers(false);
+      }
+    };
+
+    loadAstrologers();
+  }, []);
+
+  // Prefill name and email if user is logged in
+  useEffect(() => {
+    if (userProfile && !formData.name && !formData.email) {
+      setFormData(prev => ({
+        ...prev,
+        name: userProfile.name || "",
+        email: userProfile.email || "",
+      }));
+    }
+  }, [userProfile, formData.name, formData.email]);
 
   // Email validation regex
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -98,6 +164,28 @@ function ServiceRequestForm() {
       newErrors.serviceType = "कृपया सेवा छान्नुहोस्";
     }
 
+    // Astrologer validation
+    if (!formData.astrologerId) {
+      newErrors.astrologerId = "कृपया ज्योतिषी छान्नुहोस्";
+    }
+
+    // Date validation
+    if (!formData.scheduledDate) {
+      newErrors.scheduledDate = "कृपया मिति छान्नुहोस्";
+    } else {
+      const selectedDate = new Date(formData.scheduledDate);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (selectedDate < today) {
+        newErrors.scheduledDate = "कृपया भविष्यको मिति छान्नुहोस्";
+      }
+    }
+
+    // Time validation
+    if (!formData.scheduledTime) {
+      newErrors.scheduledTime = "कृपया समय छान्नुहोस्";
+    }
+
     // Message validation
     if (!formData.message.trim()) {
       newErrors.message = "कृपया सन्देश लेख्नुहोस्";
@@ -133,23 +221,33 @@ function ServiceRequestForm() {
       return;
     }
 
+    if (!user) {
+      setSubmitError("कृपया पहिले लगइन गर्नुहोस्");
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitError(null);
 
     try {
-      const response = await fetch("/api/service-request", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+      const appointmentId = await createAppointment({
+        userId: user.uid,
+        astrologerId: formData.astrologerId,
+        userName: formData.name.trim(),
+        userEmail: formData.email.trim(),
+        userPhone: formData.phone.trim(),
+        userLocation: formData.location.trim(),
+        serviceType: formData.serviceType,
+        message: formData.message.trim(),
+        scheduledDate: formData.scheduledDate,
+        scheduledTime: formData.scheduledTime,
+        duration: 60, // 1 hour appointment
+        status: "pending",
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to submit form");
-      }
-
+      setCreatedAppointmentId(appointmentId);
       setIsSubmitted(true);
+      
       // Reset form
       setFormData({
         name: "",
@@ -158,18 +256,21 @@ function ServiceRequestForm() {
         location: "",
         serviceType: "",
         message: "",
+        astrologerId: "",
+        scheduledDate: "",
+        scheduledTime: "",
       });
     } catch (error) {
       setSubmitError(
-        "फारम पेश गर्न सकिएन। कृपया पछि पुन: प्रयास गर्नुहोस्।"
+        "अपोइन्टमेन्ट बुक गर्न सकिएन। कृपया पछि पुन: प्रयास गर्नुहोस्।"
       );
-      console.error("Form submission error:", error);
+      console.error("Appointment creation error:", error);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  if (isSubmitted) {
+  if (isSubmitted && createdAppointmentId) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-amber-50 via-white to-orange-50">
         <AppHeader variant="solid" language="np" />
@@ -193,24 +294,27 @@ function ServiceRequestForm() {
               </svg>
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              धन्यवाद!
+              अपोइन्टमेन्ट बुक भयो!
             </h1>
             <p className="text-lg text-gray-600 mb-8 max-w-md mx-auto">
-              तपाईंको सेवा अनुरोध सफलतापूर्वक पेश गरिएको छ। हामी चाँडै तपाईंलाई सम्पर्क गर्नेछौं।
+              तपाईंको अपोइन्टमेन्ट सफलतापूर्वक बुक गरिएको छ। तपाईं अपोइन्टमेन्ट विवरण पृष्ठमा मिटिङ लिङ्क र थप जानकारी पाउन सक्नुहुन्छ।
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
-                onClick={() => setIsSubmitted(false)}
+                onClick={() => router.push(`/appointments/detail?id=${createdAppointmentId}`)}
                 className="px-6 py-3 bg-gradient-to-r from-rose-600 to-orange-600 text-white font-semibold rounded-lg hover:from-rose-700 hover:to-orange-700 transition-all shadow-md hover:shadow-lg"
               >
-                अर्को अनुरोध पठाउनुहोस्
+                अपोइन्टमेन्ट विवरण हेर्नुहोस्
               </button>
-              <a
-                href="/services"
+              <button
+                onClick={() => {
+                  setIsSubmitted(false);
+                  setCreatedAppointmentId(null);
+                }}
                 className="px-6 py-3 bg-white text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-all shadow-md border border-gray-200"
               >
-                सेवाहरू हेर्नुहोस्
-              </a>
+                अर्को अपोइन्टमेन्ट बुक गर्नुहोस्
+              </button>
             </div>
           </div>
         </main>
@@ -386,6 +490,117 @@ function ServiceRequestForm() {
               )}
             </div>
 
+            {/* Astrologer Selection */}
+            <div>
+              <label
+                htmlFor="astrologerId"
+                className="block text-sm font-semibold text-gray-700 mb-2"
+              >
+                ज्योतिषी छान्नुहोस् <span className="text-rose-600">*</span>
+              </label>
+              {loadingAstrologers ? (
+                <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">
+                  ज्योतिषीहरू लोड हुँदैछ...
+                </div>
+              ) : astrologers.length === 0 ? (
+                <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">
+                  कुनै ज्योतिषी उपलब्ध छैन
+                </div>
+              ) : (
+                <select
+                  id="astrologerId"
+                  name="astrologerId"
+                  value={formData.astrologerId}
+                  onChange={handleInputChange}
+                  className={`w-full px-4 py-3 border ${
+                    errors.astrologerId ? "border-rose-500" : "border-gray-300"
+                  } rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent outline-none transition-all bg-white`}
+                >
+                  <option value="">ज्योतिषी छान्नुहोस्</option>
+                  {astrologers.map((astrologer) => {
+                    const serviceTitles = astrologer.services?.map((sid: string) => 
+                      services.find(s => s.id === sid)?.title
+                    ).filter(Boolean).join(", ") || "";
+                    
+                    return (
+                      <option key={astrologer.uid} value={astrologer.uid}>
+                        {astrologer.name}
+                        {serviceTitles && ` - ${serviceTitles}`}
+                      </option>
+                    );
+                  })}
+                </select>
+              )}
+              {errors.astrologerId && (
+                <p className="mt-1 text-sm text-rose-600">{errors.astrologerId}</p>
+              )}
+            </div>
+
+            {/* Date and Time Selection */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {/* Date Picker */}
+              <div>
+                <label
+                  htmlFor="scheduledDate"
+                  className="block text-sm font-semibold text-gray-700 mb-2"
+                >
+                  मिति छान्नुहोस् <span className="text-rose-600">*</span>
+                </label>
+                <input
+                  type="date"
+                  id="scheduledDate"
+                  name="scheduledDate"
+                  value={formData.scheduledDate}
+                  onChange={handleInputChange}
+                  min={new Date().toISOString().split('T')[0]}
+                  className={`w-full px-4 py-3 border ${
+                    errors.scheduledDate ? "border-rose-500" : "border-gray-300"
+                  } rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent outline-none transition-all`}
+                />
+                {errors.scheduledDate && (
+                  <p className="mt-1 text-sm text-rose-600">{errors.scheduledDate}</p>
+                )}
+              </div>
+
+              {/* Time Display (Time Slot Picker is below) */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  चयनित समय
+                </label>
+                <div className={`w-full px-4 py-3 border ${
+                  errors.scheduledTime ? "border-rose-500" : "border-gray-300"
+                } rounded-lg bg-gray-50 text-gray-700 font-medium`}>
+                  {formData.scheduledTime || "समय छान्नुहोस्"}
+                </div>
+                {errors.scheduledTime && (
+                  <p className="mt-1 text-sm text-rose-600">{errors.scheduledTime}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Time Slot Picker */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                समय छान्नुहोस् (नेपाल समय) <span className="text-rose-600">*</span>
+              </label>
+              {!formData.scheduledDate ? (
+                <div className="text-sm text-gray-500 py-4 px-4 bg-gray-50 rounded-lg border border-gray-200">
+                  समय छान्न पहिले मिति छान्नुहोस्
+                </div>
+              ) : (
+                <TimeSlotPicker
+                  selectedDate={formData.scheduledDate}
+                  selectedTime={formData.scheduledTime}
+                  onTimeSelect={(time) => {
+                    setFormData(prev => ({ ...prev, scheduledTime: time }));
+                    if (errors.scheduledTime) {
+                      setErrors(prev => ({ ...prev, scheduledTime: undefined }));
+                    }
+                  }}
+                />
+              )}
+            </div>
+
             {/* Message Field */}
             <div>
               <label
@@ -431,36 +646,52 @@ function ServiceRequestForm() {
               </div>
             )}
 
-            {/* Beta Notice */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <div className="text-sm text-blue-800">
-                <p className="font-semibold mb-1">बीटा मोडमा छ</p>
-                <p>यो सुविधा छिट्टै उपलब्ध हुनेछ। तपाईं चाँडै नै आफ्नो अनुरोध पठाउन सक्नुहुनेछ।</p>
+            {/* Login Notice */}
+            {!user && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <div className="text-sm text-blue-800">
+                  <p className="font-semibold mb-1">लगइन आवश्यक छ</p>
+                  <p>अपोइन्टमेन्ट बुक गर्न कृपया पहिले लगइन गर्नुहोस्।</p>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Submit Button */}
             <div className="pt-2">
               <button
                 type="submit"
-                disabled={true}
-                className="w-full px-6 py-4 bg-gray-400 text-white font-semibold rounded-lg transition-all shadow-md cursor-not-allowed opacity-60"
+                disabled={isSubmitting || !user}
+                className={`w-full px-6 py-4 font-semibold rounded-lg transition-all shadow-md ${
+                  isSubmitting || !user
+                    ? "bg-gray-400 text-white cursor-not-allowed opacity-60"
+                    : "bg-gradient-to-r from-rose-600 to-orange-600 text-white hover:from-rose-700 hover:to-orange-700 hover:shadow-lg"
+                }`}
               >
-                अनुरोध पठाउनुहोस्
+                {isSubmitting ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    बुक हुँदैछ...
+                  </span>
+                ) : (
+                  "अपोइन्टमेन्ट बुक गर्नुहोस्"
+                )}
               </button>
             </div>
 

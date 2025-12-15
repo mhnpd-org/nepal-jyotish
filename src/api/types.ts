@@ -26,12 +26,43 @@ export type Astrologer = {
   [k: string]: any;
 };
 
+export type AppointmentComment = {
+  userId: string;
+  userName: string;
+  text: string;
+  timestamp: string;
+};
+
 export type Appointment = {
   id?: string;
   userId: string;
   astrologerId: string;
-  datetime: string;
-  status: 'pending' | 'confirmed' | 'completed';
-  callRoomId?: string;
+
+  // User details from form
+  userName: string;
+  userEmail: string;
+  userPhone: string;
+  userLocation: string;
+
+  // Service details
+  serviceType: string;  // service ID
+  message: string;      // user's message/requirements
+
+  // Scheduling (Nepal Time)
+  scheduledDate: string; // YYYY-MM-DD
+  scheduledTime: string; // HH:mm (24hr format, Nepal Time)
+  duration: number;      // minutes (default 60)
+
+  // Status and meeting
+  status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
+  meetingLink?: string;  // Jitsi meet URL
+
+  // Comments/chat
+  comments?: AppointmentComment[];
+
+  // Metadata
+  createdAt?: any;
+  updatedAt?: any;
+
   [k: string]: any;
 };
