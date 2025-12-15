@@ -182,7 +182,7 @@ export default function AstrologersPage() {
                 {/* Languages */}
                 {astrologer.languages && astrologer.languages.length > 0 && (
                   <div className="mb-3">
-                    <p className="text-xs text-gray-500 mb-1">Languages:</p>
+                    <p className="text-xs text-gray-500 mb-1">भाषाहरू:</p>
                     <p className="text-sm text-gray-700">{astrologer.languages.join(", ")}</p>
                   </div>
                 )}
@@ -190,19 +190,26 @@ export default function AstrologersPage() {
                 {/* Availability */}
                 {astrologer.availabilitySummary && (
                   <div className="mb-4">
-                    <p className="text-xs text-gray-500 mb-1">Availability:</p>
+                    <p className="text-xs text-gray-500 mb-1">उपलब्धता:</p>
                     <p className="text-sm text-gray-700">{astrologer.availabilitySummary}</p>
                   </div>
                 )}
-  <LoginDialog open={showLoginDialog} onClose={() => setShowLoginDialog(false)} />
-    
-                {/* Book Button */}
-                <Link
-                  href={`/kundali-matching?astrologer=${astrologer.uid}`}
-                  className="block w-full py-2 bg-gradient-to-r from-rose-600 to-orange-600 text-white text-center font-semibold rounded-lg hover:from-rose-700 hover:to-orange-700 transition-all"
-                >
-                  Book Consultation
-                </Link>
+
+                {/* Action Buttons */}
+                <div className="flex gap-2">
+                  <Link
+                    href={`/astrologers/detail?uid=${astrologer.uid}`}
+                    className="flex-1 py-2 bg-white border-2 border-rose-600 text-rose-600 text-center font-semibold rounded-lg hover:bg-rose-50 transition-all"
+                  >
+                    प्रोफाइल हेर्नुहोस्
+                  </Link>
+                  <Link
+                    href={`/kundali-matching?astrologer=${astrologer.uid}`}
+                    className="flex-1 py-2 bg-gradient-to-r from-rose-600 to-orange-600 text-white text-center font-semibold rounded-lg hover:from-rose-700 hover:to-orange-700 transition-all"
+                  >
+                    परामर्श बुक गर्नुहोस्
+                  </Link>
+                </div>
               </div>
             ))}
           </div>
