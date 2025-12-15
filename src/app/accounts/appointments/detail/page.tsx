@@ -325,25 +325,27 @@ function AppointmentDetailContent() {
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
-          अपोइन्टमेन्ट विवरण
-        </h1>
-        <p className="text-gray-600">
-          अपोइन्टमेन्ट ID: <span className="font-mono text-sm">{appointmentId}</span>
-        </p>
+      <div className="mb-4">
+        <div className="flex items-center justify-between">
+          <h1 className="text-xl font-bold text-gray-900">
+            अपोइन्टमेन्ट विवरण
+          </h1>
+          <p className="text-sm text-gray-600">
+            ID: <span className="font-mono text-xs">{appointmentId}</span>
+          </p>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-4">
           {/* Appointment Info Card */}
-          <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-            <div className="px-6 py-5 border-b border-gray-100 bg-gradient-to-r from-rose-50 to-orange-50">
-              <h2 className="text-xl font-bold text-gray-900">अपोइन्टमेन्ट जानकारी</h2>
+          <div className="bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-gray-100 bg-gradient-to-r from-rose-50 to-orange-50">
+              <h2 className="text-base font-bold text-gray-900">अपोइन्टमेन्ट जानकारी</h2>
             </div>
 
-            <div className="p-6 space-y-4">
+            <div className="p-4 space-y-3">
               {/* Status */}
               <div className="flex items-center justify-between">
                 <span className="text-sm font-semibold text-gray-700">स्थिति:</span>
@@ -578,12 +580,12 @@ function AppointmentDetailContent() {
 
             {/* Jitsi Meeting */}
             {appointment.meetingLink && appointment.status !== 'cancelled' && (
-              <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-                <div className="bg-gradient-to-r from-rose-600 to-orange-600 px-6 py-4">
-                  <h2 className="text-xl font-bold text-white">भिडियो मिटिङ</h2>
+              <div className="bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden">
+                <div className="bg-gradient-to-r from-rose-600 to-orange-600 px-4 py-3">
+                  <h2 className="text-base font-bold text-white">भिडियो मिटिङ</h2>
                 </div>
 
-                <div className="p-6">
+                <div className="p-4">
                   {!isScheduledToday ? (
                     <div className="text-center py-8">
                       <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 ${
@@ -682,17 +684,17 @@ function AppointmentDetailContent() {
         </div>
 
         {/* Sidebar */}
-        <div className="space-y-6">
+        <div className="space-y-4">
             {/* Comments Section */}
-            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-              <div className="bg-gradient-to-r from-rose-600 to-orange-600 px-6 py-4">
-                <h2 className="text-xl font-bold text-white">टिप्पणीहरू</h2>
+            <div className="bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden">
+              <div className="bg-gradient-to-r from-rose-600 to-orange-600 px-4 py-3">
+                <h2 className="text-base font-bold text-white">टिप्पणीहरू</h2>
               </div>
 
-              <div className="p-6">
+              <div className="p-4">
                 {/* Comment Form */}
                 {user && (isUserView || isAstrologerView || userProfile?.role === 'super_admin') && (
-                  <form onSubmit={handleAddComment} className="mb-6">
+                  <form onSubmit={handleAddComment} className="mb-4">
                     <textarea
                       value={commentText}
                       onChange={(e) => setCommentText(e.target.value)}
@@ -715,7 +717,7 @@ function AppointmentDetailContent() {
                 )}
 
                 {/* Comments List */}
-                <div className="space-y-4 max-h-96 overflow-y-auto">
+                <div className="space-y-3 max-h-80 overflow-y-auto">
                   {appointment.comments && appointment.comments.length > 0 ? (
                     appointment.comments.map((comment, index) => (
                       <div key={index} className="bg-gray-50 p-4 rounded-lg border border-gray-200">

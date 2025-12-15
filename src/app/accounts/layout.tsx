@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { auth } from '@internal/api/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { getUserById } from '@internal/api/users';
@@ -39,7 +39,9 @@ export default function AccountsLayout({ children }: { children: React.ReactNode
     return (
       <>
         <AppHeader variant="solid" language="np" />
-        <CentralLoading message="लोड हुँदैछ..." />
+        <div className="min-h-screen bg-gradient-to-br from-rose-50 via-amber-50 to-orange-50 flex items-center justify-center">
+          <CentralLoading message="लोड हुँदैछ..." />
+        </div>
         <Footer variant="light" />
       </>
     );
@@ -123,7 +125,13 @@ export default function AccountsLayout({ children }: { children: React.ReactNode
 
             {/* Main content */}
             <main className="flex-1">
-              {children}
+              <Suspense fallback={
+                <div className="bg-white rounded-lg shadow-md p-8 flex items-center justify-center min-h-[400px]">
+                  <CentralLoading message="लोड हुँदैछ..." />
+                </div>
+              }>
+                {children}
+              </Suspense>
             </main>
           </div>
         </div>
