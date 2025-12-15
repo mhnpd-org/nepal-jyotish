@@ -42,8 +42,7 @@ export default function AccountsUsersPage() {
       // Refresh users list
       const snap = await getDocs(collection(db, 'users'));
       const allUsers = snap.docs.map(d => ({ uid: d.id, ...(d.data() as Record<string, unknown>) } as AppUser));
-      // Filter only normal users and astrologers (exclude super_admin from this view)
-      setUsers(allUsers.filter(u => u.role !== 'super_admin'));
+      setUsers(allUsers);
     } catch (error) {
       console.error('Failed to update role:', error);
       alert('भूमिका अद्यावधिक गर्न असफल भयो। कृपया पुन: प्रयास गर्नुहोस्।');
@@ -65,10 +64,10 @@ export default function AccountsUsersPage() {
 
       setCurrentUser(doc);
       
-      // Fetch all users (excluding super_admins)
+      // Fetch all users
       const snap = await getDocs(collection(db, 'users'));
       const allUsers = snap.docs.map(d => ({ uid: d.id, ...(d.data() as Record<string, unknown>) } as AppUser));
-      setUsers(allUsers.filter(u => u.role !== 'super_admin'));
+      setUsers(allUsers);
       setLoading(false);
     });
 
@@ -162,10 +161,12 @@ export default function AccountsUsersPage() {
                       <td className="py-4 px-6 text-sm text-gray-600">{u.email}</td>
                       <td className="py-4 px-6">
                         <span className={`px-3 py-1 text-xs font-medium rounded-full ${
+                          u.role === 'super_admin' ? 'bg-purple-100 text-purple-700' :
                           u.role === 'astrologer' ? 'bg-amber-100 text-amber-700' :
                           'bg-gray-100 text-gray-700'
                         }`}>
-                          {u.role === 'astrologer' ? 'ज्योतिषी' : 'प्रयोगकर्ता'}
+                          {u.role === 'super_admin' ? 'सुपर एडमिन' :
+                           u.role === 'astrologer' ? 'ज्योतिषी' : 'प्रयोगकर्ता'}
                         </span>
                       </td>
                       <td className="py-4 px-6 text-sm text-gray-600">
@@ -173,7 +174,9 @@ export default function AccountsUsersPage() {
                       </td>
                       <td className="py-4 px-6">
                         <div className="flex gap-2">
-                          {u.role !== 'astrologer' && (
+                          {u.role === 'super_admin' ? (
+                            <span className="px-3 py-1 text-xs text-gray-500 italic">सुरक्षित</span>
+                          ) : u.role !== 'astrologer' ? (
                             <button
                               onClick={() => handleRoleChange(getUid(u), 'astrologer')}
                               className="px-3 py-1 bg-amber-600 text-white text-xs font-medium rounded hover:bg-amber-700 transition-colors"
@@ -181,8 +184,7 @@ export default function AccountsUsersPage() {
                             >
                               ⭐ स्तरोन्नति
                             </button>
-                          )}
-                          {u.role === 'astrologer' && (
+                          ) : (
                             <button
                               onClick={() => handleRoleChange(getUid(u), 'user')}
                               className="px-3 py-1 bg-gray-600 text-white text-xs font-medium rounded hover:bg-gray-700 transition-colors"

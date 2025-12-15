@@ -6,17 +6,22 @@ service cloud.firestore {
       return request.auth != null;
     }
 
+    function getUserRole() {
+      return loggedIn() ? get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role : null;
+    }
+
     function isSuperAdmin() {
-      return loggedIn() && request.auth.token.role == "super_admin";
+      return getUserRole() == "super_admin";
     }
 
     function isAstrologer() {
-      return loggedIn() && request.auth.token.role == "astrologer";
+      return getUserRole() == "astrologer";
     }
 
     /* USERS */
     match /users/{uid} {
-      allow read: if isSuperAdmin() || request.auth.uid == uid;
+      allow get: if loggedIn() && (isSuperAdmin() || request.auth.uid == uid);
+      allow list: if loggedIn() && isSuperAdmin();
 
       // Allow users to create their own document on first login (without setting role or with role='user')
       allow create: if request.auth.uid == uid && 
