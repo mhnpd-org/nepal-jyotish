@@ -10,7 +10,7 @@ import { getUserById } from "@internal/api/users";
 import type { AppUser } from '@internal/api/types';
 
 
-export default function LoginButton() {
+export default function LoginButton({ language = 'en' }: { language?: 'en' | 'np' }) {
   const [open, setOpen] = useState(false);
   const [authUser, setAuthUser] = useState<import('firebase/auth').User | null>(null);
   const [profile, setProfile] = useState<AppUser | null>(null);
@@ -38,7 +38,7 @@ export default function LoginButton() {
           onClick={() => setOpen(true)}
           className="px-3 sm:px-4 py-2 bg-rose-600 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-rose-700 transition-colors"
         >
-          Login
+          {language === 'np' ? 'लगइन' : 'Login'}
         </button>
         <LoginDialog open={open} onClose={() => setOpen(false)} />
       </>
@@ -47,25 +47,25 @@ export default function LoginButton() {
 
   return (
     <div className="relative">
-      <button
+        <button
         onClick={() => setDropdownOpen(!dropdownOpen)}
         className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-white text-rose-700 border border-rose-200 text-xs sm:text-sm font-medium rounded-lg hover:shadow-sm"
       >
         <img src={authUser?.photoURL || '/favicon/user.svg'} alt="avatar" className="h-6 w-6 rounded-full" />
-        <span className="hidden sm:inline">Account</span>
+        <span className="hidden sm:inline">{language === 'np' ? 'अकाउन्ट' : 'Account'}</span>
       </button>
 
       {dropdownOpen && (
         <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 z-50">
           <div className="py-1">
             {profile?.role === 'astrologer' && (
-              <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Profile</Link>
+              <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">{language === 'np' ? 'प्रोफाइल' : 'Profile'}</Link>
             )}
-            <Link href="/appointments" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Appointments</Link>
+            <Link href="/appointments" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">{language === 'np' ? 'अपोइन्टमेन्टहरू' : 'Appointments'}</Link>
             {profile?.role === 'super_admin' && (
               <Link href="/admin" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Admin</Link>
             )}
-            <button onClick={() => logout()} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Sign out</button>
+            <button onClick={() => logout()} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">{language === 'np' ? 'साइन आउट' : 'Sign out'}</button>
           </div>
         </div>
       )}
