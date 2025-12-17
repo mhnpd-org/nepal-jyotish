@@ -59,7 +59,7 @@ interface AstroSidebarProps {
   onMobileClose?: () => void;
 }
 
-export default function AstroSidebar({ mobileOpen = false, onMobileClose }: AstroSidebarProps) {
+export default function AstroSidebar({ mobileOpen: _mobileOpen = false, onMobileClose: _onMobileClose }: AstroSidebarProps) {
   const pathname = usePathname();
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   
