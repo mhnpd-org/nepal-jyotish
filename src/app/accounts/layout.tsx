@@ -5,7 +5,7 @@ import { auth } from '@internal/api/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { getUserById } from '@internal/api/users';
 import AppHeader from '@internal/layouts/app-header';
-import AccountsSidebar from '@internal/components/accounts-sidebar';
+import AccountsSidebar from '@internal/layouts/accounts-sidebar';
 import type { AppUser } from '@internal/api/types';
 import CentralLoading from '@internal/components/central-loading';
 import { useRouter } from 'next/navigation';

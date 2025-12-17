@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import AstroSidebar from '@internal/components/astro-sidebar';
+import AstroSidebar from '@internal/layouts/astro-sidebar';
 import AppHeader from '@internal/layouts/app-header';
 import { SITE_CONFIG, getBreadcrumbSchema } from '@internal/lib/seo-config';
 
