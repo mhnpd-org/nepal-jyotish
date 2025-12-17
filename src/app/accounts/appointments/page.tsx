@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { auth } from '@internal/api/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { getUserAppointments, getAstrologerAppointments, getAllAppointments } from '@internal/api/appointments';
@@ -244,12 +245,12 @@ export default function AccountsAppointmentsPage() {
                             </span>
                           </td>
                           <td className="py-4 px-6">
-                            <a
+                            <Link
                               href={`/accounts/appointments/detail?id=${a.id}`}
                               className="px-3 py-1.5 text-xs font-semibold bg-gradient-to-r from-rose-600 to-orange-600 text-white rounded-lg hover:from-rose-700 hover:to-orange-700 transition-all inline-block"
                             >
                               विवरण हेर्नुहोस्
-                            </a>
+                            </Link>
                           </td>
                         </tr>
                       );
@@ -317,12 +318,12 @@ export default function AccountsAppointmentsPage() {
                             </span>
                           </td>
                           <td className="py-4 px-6">
-                            <a
+                            <Link
                               href={`/accounts/appointments/detail?id=${a.id}`}
                               className="px-3 py-1.5 text-xs font-semibold bg-gradient-to-r from-rose-600 to-orange-600 text-white rounded-lg hover:from-rose-700 hover:to-orange-700 transition-all inline-block"
                             >
                               विवरण हेर्नुहोस्
-                            </a>
+                            </Link>
                           </td>
                         </tr>
                       );
@@ -395,12 +396,12 @@ export default function AccountsAppointmentsPage() {
                             </span>
                           </td>
                           <td className="py-4 px-6">
-                            <a
+                            <Link
                               href={`/accounts/appointments/detail?id=${a.id}`}
                               className="px-3 py-1.5 text-xs font-semibold bg-gradient-to-r from-rose-600 to-orange-600 text-white rounded-lg hover:from-rose-700 hover:to-orange-700 transition-all inline-block"
                             >
                               विवरण हेर्नुहोस्
-                            </a>
+                            </Link>
                           </td>
                         </tr>
                       );

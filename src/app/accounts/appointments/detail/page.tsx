@@ -272,7 +272,7 @@ function AppointmentDetailContent() {
   };
 
   if (loading) {
-    return <CentralLoading message="लोड हुँदैछ..." />;
+    return <CentralLoading message="लोड हुँदैछ..." fullScreen={false} />;
   }
 
   if (error || !appointment) {
@@ -746,7 +746,7 @@ function AppointmentDetailContent() {
 
 export default function AppointmentDetailPage() {
   return (
-    <Suspense fallback={<CentralLoading message="लोड हुँदैछ..." />}>
+    <Suspense fallback={<CentralLoading message="लोड हुँदैछ..." fullScreen={false} />}>
       <AppointmentDetailContent />
     </Suspense>
   );

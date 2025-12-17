@@ -31,18 +31,6 @@ export default function AccountsLayout({ children }: { children: React.ReactNode
     return () => unsub();
   }, [router]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-rose-50 via-amber-50 to-orange-50 flex items-center justify-center">
-        <CentralLoading message="लोड हुँदैछ..." />
-      </div>
-    );
-  }
-
-  if (!user || !profile) {
-    return null;
-  }
-
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-rose-50 via-amber-50 to-orange-50 w-full overflow-x-hidden">
       <AppHeader 
@@ -53,16 +41,10 @@ export default function AccountsLayout({ children }: { children: React.ReactNode
         fullWidth={true}
       />
       <div className="flex flex-1 relative w-full min-w-0">
-        <AccountsSidebar profile={profile} user={user} />
+        {user && profile && <AccountsSidebar profile={profile} user={user} />}
         <main className="flex-1 min-w-0 p-3 sm:p-4 md:p-7 bg-white/95 backdrop-blur-sm shadow-sm">
           <div className="mx-auto max-w-6xl w-full min-w-0 text-gray-900">
-            <Suspense fallback={
-              <div className="flex items-center justify-center min-h-[400px]">
-                <CentralLoading message="लोड हुँदैछ..." />
-              </div>
-            }>
-              {children}
-            </Suspense>
+            {children}
           </div>
         </main>
       </div>
