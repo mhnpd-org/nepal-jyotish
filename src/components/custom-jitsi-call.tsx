@@ -2,10 +2,67 @@
 
 import React, { useEffect, useRef, useState } from "react";
 
+// TypeScript definitions for Jitsi Meet library
+interface JitsiTrack {
+  getType(): 'audio' | 'video';
+  isLocal(): boolean;
+  getParticipantId(): string;
+  getId(): string;
+  attach(element: HTMLVideoElement | HTMLAudioElement): void;
+  detach(element: HTMLVideoElement | HTMLAudioElement): void;
+  dispose(): void;
+  mute(): void;
+  unmute(): void;
+}
+
+interface JitsiConference {
+  join(): Promise<void>;
+  leave(): Promise<void>;
+  setDisplayName(name: string): void;
+  addTrack(track: JitsiTrack): Promise<void>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  on(event: string, callback: (...args: any[]) => void): void;
+}
+
+interface JitsiConnection {
+  connect(): void;
+  disconnect(): void;
+  initJitsiConference(roomName: string, options: Record<string, unknown>): JitsiConference;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  addEventListener(event: string, callback: (...args: any[]) => void): void;
+}
+
+interface JitsiMeetJSStatic {
+  init(options?: Record<string, unknown>): void;
+  setLogLevel(level: unknown): void;
+  logLevels: Record<string, unknown>;
+  version: string;
+  events: {
+    connection: {
+      CONNECTION_ESTABLISHED: string;
+      CONNECTION_FAILED: string;
+      CONNECTION_DISCONNECTED: string;
+    };
+    conference: {
+      CONFERENCE_JOINED: string;
+      TRACK_ADDED: string;
+      TRACK_REMOVED: string;
+      USER_LEFT: string;
+      USER_JOINED: string;
+    };
+  };
+  JitsiConnection: new (
+    appId: null,
+    token: null,
+    options: Record<string, unknown>
+  ) => JitsiConnection;
+  createLocalTracks(options: { devices: string[] }): Promise<JitsiTrack[]>;
+}
+
 // We'll dynamically load JitsiMeetJS
 declare global {
   interface Window {
-    JitsiMeetJS: any;
+    JitsiMeetJS: JitsiMeetJSStatic;
   }
 }
 
@@ -20,10 +77,10 @@ export default function CustomJitsiCall({ displayName, roomName, onLeave, autoSt
   const remoteVideosRef = useRef<HTMLDivElement>(null);
 
   const [jitsiLoaded, setJitsiLoaded] = useState(false);
-  const [connection, setConnection] = useState<any>(null);
-  const [conference, setConference] = useState<any>(null);
-  const [localTracks, setLocalTracks] = useState<any[]>([]);
-  const [_, setRemoteTracks] = useState<Map<string, any>>(new Map());
+  const [connection, setConnection] = useState<JitsiConnection | null>(null);
+  const [conference, setConference] = useState<JitsiConference | null>(null);
+  const [localTracks, setLocalTracks] = useState<JitsiTrack[]>([]);
+  const [_, setRemoteTracks] = useState<Map<string, JitsiTrack[]>>(new Map());
   const [isMuted, setIsMuted] = useState(false);
   const [videoOff, setVideoOff] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -142,7 +199,7 @@ export default function CustomJitsiCall({ displayName, roomName, onLeave, autoSt
 
       conn.addEventListener(
         window.JitsiMeetJS.events.connection.CONNECTION_FAILED,
-        (error: any) => {
+        (error: unknown) => {
           console.error('Connection failed:', error);
           setError('कनेक्शन असफल भयो। कृपया HTTPS डोमेनमा प्रयास गर्नुहोस्।');
           setIsConnecting(false);
@@ -166,7 +223,7 @@ export default function CustomJitsiCall({ displayName, roomName, onLeave, autoSt
     }
   };
 
-  const onConnectionSuccess = async (conn: any) => {
+  const onConnectionSuccess = async (conn: JitsiConnection) => {
     try {
       // Initialize conference
       const conf = conn.initJitsiConference(roomName, {
@@ -184,14 +241,14 @@ export default function CustomJitsiCall({ displayName, roomName, onLeave, autoSt
       });
 
       // Track added
-      conf.on(window.JitsiMeetJS.events.conference.TRACK_ADDED, (track: any) => {
+      conf.on(window.JitsiMeetJS.events.conference.TRACK_ADDED, (track: JitsiTrack) => {
         if (!track.isLocal()) {
           handleTrackAdded(track);
         }
       });
 
       // Track removed
-      conf.on(window.JitsiMeetJS.events.conference.TRACK_REMOVED, (track: any) => {
+      conf.on(window.JitsiMeetJS.events.conference.TRACK_REMOVED, (track: JitsiTrack) => {
         if (!track.isLocal()) {
           handleTrackRemoved(track);
         }
@@ -245,7 +302,7 @@ export default function CustomJitsiCall({ displayName, roomName, onLeave, autoSt
   };
 
   // Handle track added (following official guide)
-  const handleTrackAdded = (track: any) => {
+  const handleTrackAdded = (track: JitsiTrack) => {
     const participantId = track.getParticipantId();
     const trackType = track.getType();
 
@@ -287,7 +344,7 @@ export default function CustomJitsiCall({ displayName, roomName, onLeave, autoSt
   };
 
   // Handle track removed (following official guide)
-  const handleTrackRemoved = (track: any) => {
+  const handleTrackRemoved = (track: JitsiTrack) => {
     track.dispose();
     const element = document.getElementById(track.getId());
     if (element) {
