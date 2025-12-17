@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Logo from '@internal/layouts/logo';
@@ -61,14 +61,42 @@ interface AstroSidebarProps {
 
 export default function AstroSidebar({ mobileOpen = false, onMobileClose }: AstroSidebarProps) {
   const pathname = usePathname();
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  
+  const handleMobileToggle = () => {
+    setIsMobileSidebarOpen(!isMobileSidebarOpen);
+  };
+  
+  const handleMobileClose = () => {
+    setIsMobileSidebarOpen(false);
+  };
   
   return (
     <>
+      {/* Floating Action Button - Mobile Only */}
+      <button
+        onClick={handleMobileToggle}
+        className="md:hidden fixed bottom-6 right-6 z-40 w-14 h-14 bg-gradient-to-br from-amber-500 to-orange-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center group"
+        aria-label="Toggle navigation menu"
+      >
+        {isMobileSidebarOpen ? (
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-6 w-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        ) : (
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-6 w-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        )}
+        {/* Ripple effect */}
+        <span className="absolute inset-0 rounded-full bg-white opacity-0 group-hover:opacity-20 transition-opacity"></span>
+      </button>
+
       {/* Mobile backdrop overlay */}
-      {mobileOpen && (
+      {isMobileSidebarOpen && (
         <div 
           className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
-          onClick={onMobileClose}
+          onClick={handleMobileClose}
           aria-hidden="true"
         />
       )}
@@ -80,7 +108,7 @@ export default function AstroSidebar({ mobileOpen = false, onMobileClose }: Astr
         "bg-white/95 md:bg-white/80 backdrop-blur-sm",
         "border-r border-amber-200/60 shadow-lg md:shadow-sm",
         "transform transition-transform duration-300 ease-in-out",
-        mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
       ].join(' ')}>
         <div className="pointer-events-none absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-amber-300/40 to-transparent" />
         
@@ -88,7 +116,7 @@ export default function AstroSidebar({ mobileOpen = false, onMobileClose }: Astr
         <div className="md:hidden flex items-center justify-between p-4 border-b border-amber-200/60">
           <Logo size="sm" variant="dark" />
           <button
-            onClick={onMobileClose}
+            onClick={handleMobileClose}
             className="p-2 rounded-lg text-gray-600 hover:bg-amber-50 hover:text-gray-900 transition-colors"
             aria-label="Close menu"
           >
@@ -105,7 +133,7 @@ export default function AstroSidebar({ mobileOpen = false, onMobileClose }: Astr
               <Link
                 key={item.href}
                 href={item.href}
-                onClick={onMobileClose}
+                onClick={handleMobileClose}
                 prefetch={true}
                 className={[
                   'group relative flex items-center rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white',
