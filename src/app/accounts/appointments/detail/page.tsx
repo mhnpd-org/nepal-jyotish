@@ -72,7 +72,6 @@ function AppointmentDetailContent() {
   const [error, setError] = useState<string | null>(null);
   const [commentText, setCommentText] = useState("");
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
-  const [showMeeting, setShowMeeting] = useState(false);
 
   // Auth listener
   useEffect(() => {
@@ -348,7 +347,7 @@ function AppointmentDetailContent() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Content - Left Side */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Video Meeting Card - Primary Position */}
+          {/* Video Meeting Card */}
           {appointment.meetingLink && appointment.status !== 'cancelled' && (
             <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
               <div className="bg-gradient-to-r from-rose-600 to-orange-600 px-6 py-4">
@@ -362,108 +361,63 @@ function AppointmentDetailContent() {
 
               <div className="p-6">
                 {!isScheduledToday ? (
-                  <div className="text-center py-12">
-                    <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full mb-6 ${
+                  <div className="text-center py-8">
+                    <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 ${
                       isPastAppointment 
                         ? 'bg-gray-100 text-gray-400' 
                         : 'bg-gradient-to-br from-amber-100 to-orange-100 text-amber-600'
                     }`}>
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">
                       {isPastAppointment ? 'मिटिङ समाप्त भयो' : 'मिटिङ आउँदै छ'}
                     </h3>
-                    <p className="text-gray-600 mb-2 text-lg">
+                    <p className="text-gray-600 mb-4 text-sm">
                       {isPastAppointment 
                         ? 'यो अपोइन्टमेन्टको मिति बितिसकेको छ।'
                         : `तपाईंको मिटिङ ${adToBs(appointment.scheduledDate)} (विक्रम संवत्) मा ${appointment.scheduledTime} बजे शेड्युल गरिएको छ।`
                       }
                     </p>
                     {!isPastAppointment && (
-                      <>
-                        <p className="text-sm text-gray-500 mb-6">
-                          ईस्वी: {appointment.scheduledDate}
-                        </p>
-                        <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200 rounded-xl p-6 max-w-lg mx-auto">
-                          <div className="flex items-start gap-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-amber-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <div className="text-left">
-                              <p className="text-sm text-amber-900 font-medium mb-2">
-                                मिटिङमा जोडिने विकल्प शेड्युल गरिएको मितिमा मात्र उपलब्ध हुनेछ।
-                              </p>
-                              <p className="text-sm text-amber-800">
-                                तोकिएको दिनमा यसै बक्सबाट गुरुसँग कुरा गर्न सकिन्छ। तोकिएको दिनभन्दा पहिले वा पछि यो बक्समा भिडियो कलको सुविधा देखिने छैन।
-                              </p>
-                            </div>
-                          </div>
+                      <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200 rounded-xl p-4 max-w-md mx-auto">
+                        <div className="flex items-start gap-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          <p className="text-xs text-amber-900 text-left">
+                            भिडियो मिटिङमा जोडिने विकल्प शेड्युल गरिएको मितिमा मात्र उपलब्ध हुनेछ।
+                          </p>
                         </div>
-                      </>
+                      </div>
                     )}
                   </div>
-                ) : !showMeeting ? (
-                  <div className="text-center py-12">
-                    <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-rose-100 to-orange-100 rounded-full mb-6 animate-pulse">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-rose-100 to-orange-100 rounded-full mb-4 animate-pulse">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                       </svg>
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">
                       मिटिङमा सामेल हुनुहोस्
                     </h3>
-                    <p className="text-gray-600 mb-2">
-                      तपाईंको भिडियो परामर्श सुरु गर्न तल क्लिक गर्नुहोस्
+                    <p className="text-gray-600 mb-1 text-sm">
+                      तपाईंको भिडियो परामर्श सुरु गर्न तयार छ
                     </p>
-                    <div className="inline-flex items-center gap-2 bg-green-50 border border-green-200 rounded-full px-4 py-2 mb-8">
+                    <div className="inline-flex items-center gap-2 bg-green-50 border border-green-200 rounded-full px-3 py-1.5 mb-6">
                       <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                      <p className="text-sm text-green-700 font-semibold">
+                      <p className="text-xs text-green-700 font-semibold">
                         आज {appointment.scheduledTime} बजे • लाइभ
                       </p>
                     </div>
-                    <button
-                      onClick={() => setShowMeeting(true)}
-                      className="px-10 py-4 bg-gradient-to-r from-rose-600 to-orange-600 text-white text-lg font-bold rounded-xl hover:from-rose-700 hover:to-orange-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+                    <Link
+                      href={`/accounts/appointments/call?id=${appointmentId}`}
+                      className="inline-block px-8 py-3 bg-gradient-to-r from-rose-600 to-orange-600 text-white text-base font-bold rounded-xl hover:from-rose-700 hover:to-orange-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
                     >
                       🎥 मिटिङ सुरु गर्नुहोस्
-                    </button>
-                    <p className="mt-6 text-xs text-gray-400">
-                      मिटिङ लिङ्क:{" "}
-                      <a
-                        href={appointment.meetingLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-rose-600 hover:underline font-mono"
-                      >
-                        {appointment.meetingLink}
-                      </a>
-                    </p>
-                  </div>
-                ) : (
-                  <div>
-                    <div className="mb-4 flex justify-between items-center bg-gray-50 p-4 rounded-lg">
-                      <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                        <h3 className="text-lg font-bold text-gray-900">
-                          लाइभ मिटिङ
-                        </h3>
-                      </div>
-                      <button
-                        onClick={() => setShowMeeting(false)}
-                        className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all text-sm font-semibold"
-                      >
-                        मिटिङ बन्द गर्नुहोस्
-                      </button>
-                    </div>
-                    <div className="relative rounded-xl overflow-hidden" style={{ paddingBottom: "56.25%", height: 0 }}>
-                      <iframe
-                        src={appointment.meetingLink}
-                        allow="camera; microphone; fullscreen; display-capture"
-                        className="absolute top-0 left-0 w-full h-full border-0"
-                      ></iframe>
-                    </div>
+                    </Link>
                   </div>
                 )}
               </div>
