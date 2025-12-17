@@ -97,9 +97,17 @@ export default function AccountsSidebar({ profile, user }: AccountsSidebarProps)
         {/* Mobile header with user info and close button */}
         <div className="md:hidden flex items-center justify-between p-4 border-b border-rose-200/60">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-rose-200 to-orange-200 flex items-center justify-center text-lg font-bold text-white">
-              {profile?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
-            </div>
+            {(profile as any)?.photoURL || (profile as any)?.imageBase64 || user?.photoURL ? (
+              <img
+                src={(profile as any)?.photoURL || (profile as any)?.imageBase64 || user?.photoURL || ''}
+                alt={profile?.name || user?.displayName || 'User'}
+                className="w-10 h-10 rounded-full object-cover border-2 border-rose-200"
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-rose-200 to-orange-200 flex items-center justify-center text-lg font-bold text-white">
+                {profile?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
+              </div>
+            )}
             <div className="flex flex-col">
               <span className="text-sm font-semibold text-gray-900 truncate max-w-[120px]">
                 {profile?.name || user?.displayName || 'User'}
@@ -127,9 +135,17 @@ export default function AccountsSidebar({ profile, user }: AccountsSidebarProps)
         {/* Desktop user info card */}
         <div className="hidden md:block p-4 border-b border-rose-200/60">
           <div className="text-center">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-rose-200 to-orange-200 flex items-center justify-center text-2xl font-bold text-white mx-auto mb-3">
-              {profile?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
-            </div>
+            {(profile as any)?.photoURL || (profile as any)?.imageBase64 || user?.photoURL ? (
+              <img
+                src={(profile as any)?.photoURL || (profile as any)?.imageBase64 || user?.photoURL || ''}
+                alt={profile?.name || user?.displayName || 'User'}
+                className="w-16 h-16 rounded-full object-cover border-2 border-rose-200 mx-auto mb-3"
+              />
+            ) : (
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-rose-200 to-orange-200 flex items-center justify-center text-2xl font-bold text-white mx-auto mb-3">
+                {profile?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
+              </div>
+            )}
             <h3 className="font-semibold text-gray-900 mb-1 truncate">
               {profile?.name || user?.displayName || 'User'}
             </h3>
