@@ -9,7 +9,7 @@ import { isSuperAdmin } from '@internal/api/roleGuards';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@internal/api/firebase';
 import type { AppUser } from '@internal/api/types';
-import CentralLoading from '@internal/components/central-loading';
+import CentralLoading from '@internal/layouts/central-loading';
 import { useRouter } from 'next/navigation';
 
 export default function AccountsUsersPage() {

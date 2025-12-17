@@ -3,8 +3,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Logo from '@internal/layouts/logo';
-import LoginButton from '@internal/components/login-button';
-import MobileSidebar from '@internal/components/mobile-sidebar';
+import LoginButton from '@internal/layouts/login-button';
+import MobileSidebar from '@internal/layouts/mobile-sidebar';
 
 export interface AppHeaderProps {
   variant?: 'transparent' | 'solid';

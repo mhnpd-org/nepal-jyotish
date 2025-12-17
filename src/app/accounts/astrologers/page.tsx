@@ -7,7 +7,7 @@ import { getUserById as getUserDoc } from '@internal/api/users';
 import { getAllAstrologers } from '@internal/api/admin';
 import { isSuperAdmin } from '@internal/api/roleGuards';
 import type { AppUser } from '@internal/api/types';
-import CentralLoading from '@internal/components/central-loading';
+import CentralLoading from '@internal/layouts/central-loading';
 import { useRouter } from 'next/navigation';
 
 export default function AccountsAstrologersPage() {

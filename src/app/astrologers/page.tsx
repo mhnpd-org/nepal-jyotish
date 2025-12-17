@@ -7,10 +7,10 @@ import { services } from "@internal/app/service-request/page";
 import Link from "next/link";
 import AppHeader from "@internal/layouts/app-header";
 import Footer from "@internal/layouts/footer";
-import LoginDialog from "@internal/components/login-dialog";
+import LoginDialog from "@internal/layouts/login-dialog";
 import { auth } from "@internal/api/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import CentralLoading from '@internal/components/central-loading';
+import CentralLoading from '@internal/layouts/central-loading';
 
 export default function AstrologersPage() {
   const [astrologers, setAstrologers] = useState<Astrologer[]>([]);

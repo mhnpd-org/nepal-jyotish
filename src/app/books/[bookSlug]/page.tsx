@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Footer from '@internal/layouts/footer';
 import AppHeader from '@internal/layouts/app-header';
-import TableOfContentsSidebar from '@internal/components/table-of-contents-sidebar';
+import TableOfContentsSidebar from '@internal/layouts/table-of-contents-sidebar';
 import {
   getBook,
   getAllBookSlugs,

@@ -13,7 +13,7 @@ import { onAuthStateChanged, type User } from "firebase/auth";
 import type { Appointment, Astrologer, AppUser } from "@internal/api/types";
 import { services } from "@internal/app/service-request/page";
 import TimeSlotPicker from "@internal/form-components/time-slot-picker";
-import CentralLoading from "@internal/components/central-loading";
+import CentralLoading from "@internal/layouts/central-loading";
 // @ts-ignore
 import NepaliDate from "nepali-date-converter";
 import { format } from "date-fns";

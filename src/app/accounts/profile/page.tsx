@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import type { Astrologer, AppUser } from "@internal/api/types";
 import type { User } from 'firebase/auth';
 import { services } from "@internal/app/service-request/page";
-import CentralLoading from '@internal/components/central-loading';
+import CentralLoading from '@internal/layouts/central-loading';
 
 export default function AccountsProfilePage() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);

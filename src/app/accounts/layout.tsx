@@ -7,7 +7,7 @@ import { getUserById } from '@internal/api/users';
 import AppHeader from '@internal/layouts/app-header';
 import AccountsSidebar from '@internal/layouts/accounts-sidebar';
 import type { AppUser } from '@internal/api/types';
-import CentralLoading from '@internal/components/central-loading';
+import CentralLoading from '@internal/layouts/central-loading';
 import { useRouter } from 'next/navigation';
 
 export default function AccountsLayout({ children }: { children: React.ReactNode }) {

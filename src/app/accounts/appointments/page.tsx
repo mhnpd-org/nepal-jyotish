@@ -9,7 +9,7 @@ import { getAstrologerById } from '@internal/api/astrologers';
 import { isAstrologer, isNormalUser, isSuperAdmin } from '@internal/api/roleGuards';
 import type { Appointment, Astrologer, AppUser } from '@internal/api/types';
 import { services } from '@internal/app/service-request/page';
-import CentralLoading from '@internal/components/central-loading';
+import CentralLoading from '@internal/layouts/central-loading';
 
 export default function AccountsAppointmentsPage() {
   const [_user, setUser] = useState<import('firebase/auth').User | null>(null);
