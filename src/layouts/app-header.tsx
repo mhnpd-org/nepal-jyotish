@@ -60,7 +60,7 @@ export default function AppHeader({
           <div className="flex items-center gap-3 justify-end">
             {/* Login Button - visible on all screen sizes */}
             <div>
-              <LoginButton language={isNepali ? 'np' : 'en'} />
+              <LoginButton language={isNepali ? 'np' : 'en'} variant={useLightText ? 'light' : 'dark'} />
             </div>
 
             {/* Hamburger menu button - visible on all screen sizes */}
