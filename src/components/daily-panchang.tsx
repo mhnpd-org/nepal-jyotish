@@ -4,13 +4,25 @@ import { Suspense, use, useState, useEffect } from "react";
 import { getDailyPanchang, type Panchanga } from "@mhnpd-org/panchang";
 import { translateSanskritSafe } from "@internal/lib/devanagari";
 
-// Create a stable promise outside the component
-const panchangPromise = getDailyPanchang();
+type PanchangResult = Panchanga | { error: string };
+
+// Create a stable promise outside the component with error handling
+const panchangPromise = getDailyPanchang().catch((error) => {
+  console.error('Failed to fetch daily panchang:', error);
+  return { error: error.message || 'Unable to calculate panchang data' };
+});
 
 function PanchangContent() {
-  const panchang = use(panchangPromise);
+  const result = use(panchangPromise) as PanchangResult;
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [nepalTime, setNepalTime] = useState<Date>(new Date());
+
+  // Handle error state
+  if ('error' in result) {
+    return <ErrorPanchang errorMessage={result.error} />;
+  }
+  
+  const panchang = result;
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -330,6 +342,79 @@ function PanchangContent() {
           यो पञ्चाङ्ग वैदिक ज्योतिष र सूर्य सिद्धान्तमा आधारित छ। तिथि, नक्षत्र,
           योग र करण प्रत्येक दिनको महत्त्वपूर्ण ज्योतिषीय तत्व हुन्।
         </p>
+      </div>
+    </div>
+  );
+}
+
+function ErrorPanchang({ errorMessage }: { errorMessage: string }) {
+  return (
+    <div className="bg-white/95 backdrop-blur rounded-2xl shadow-2xl p-6 sm:p-8">
+      <div className="text-center mb-6">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-red-600 to-rose-500 rounded-full mb-4 shadow-lg">
+          <svg
+            className="w-8 h-8 text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+            />
+          </svg>
+        </div>
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+          पञ्चाङ्ग उपलब्ध छैन
+        </h2>
+        <p className="text-sm text-gray-600 mb-4">
+          Panchang Currently Unavailable
+        </p>
+      </div>
+
+      <div className="bg-gradient-to-br from-red-50 to-rose-50 border-2 border-red-200 rounded-xl p-6 mb-6">
+        <div className="flex items-start gap-3">
+          <svg
+            className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fillRule="evenodd"
+              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <div className="flex-1">
+            <h3 className="text-lg font-semibold text-red-900 mb-2">गणना त्रुटि</h3>
+            <p className="text-sm text-red-800 mb-3">
+              खगोलीय गणनामा समस्या आएको छ। केही स्थानहरू वा मितिहरूमा सूर्य वा चन्द्रको उदय/अस्त समय गणना गर्न सकिँदैन।
+            </p>
+            <p className="text-xs text-red-700 font-mono bg-red-100 rounded p-2">
+              {errorMessage}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+        <h4 className="font-semibold text-amber-900 mb-2 flex items-center gap-2">
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fillRule="evenodd"
+              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+              clipRule="evenodd"
+            />
+          </svg>
+          सुझाव
+        </h4>
+        <ul className="text-sm text-amber-800 space-y-1 list-disc list-inside">
+          <li>कृपया केहि समय पछि पुन: प्रयास गर्नुहोस्</li>
+          <li>यदि समस्या जारी रह्यो भने, हामीलाई सम्पर्क गर्नुहोस्</li>
+          <li>यो सामान्यतया ध्रुवीय क्षेत्रहरू वा विशेष मितिहरूमा हुन्छ</li>
+        </ul>
       </div>
     </div>
   );

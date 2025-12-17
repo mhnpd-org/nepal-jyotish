@@ -1,15 +1,27 @@
 'use client';
 
 import { Suspense, use } from 'react';
-import { getDailyPanchang } from '@mhnpd-org/panchang';
+import { getDailyPanchang, type Panchanga } from '@mhnpd-org/panchang';
 import { translateSanskritSafe } from '@internal/lib/devanagari';
 import Link from 'next/link';
 
-// Create a stable promise outside the component
-const panchangPromise = getDailyPanchang();
+type PanchangResult = Panchanga | { error: string };
+
+// Create a stable promise outside the component with error handling
+const panchangPromise = getDailyPanchang().catch((error) => {
+  console.error('Failed to fetch daily panchang:', error);
+  return { error: error.message || 'Unable to calculate panchang data' };
+});
 
 function PanchangCompactContent() {
-  const panchang = use(panchangPromise);
+  const result = use(panchangPromise) as PanchangResult;
+
+  // Handle error state
+  if ('error' in result) {
+    return <ErrorPanchangCompact errorMessage={result.error} />;
+  }
+  
+  const panchang = result;
 
   const formatNepaliDate = (): string => {
     const vs = panchang.dates.vikramSamvat;
@@ -98,6 +110,47 @@ function PanchangCompactContent() {
         </div>
       </div>
     </Link>
+  );
+}
+
+function ErrorPanchangCompact({ errorMessage }: { errorMessage: string }) {
+  return (
+    <div className="bg-white/95 backdrop-blur rounded-2xl shadow-2xl p-5 md:aspect-auto flex flex-col">
+      {/* Header */}
+      <div className="text-center mb-3">
+        <div className="inline-flex items-center justify-center w-11 h-11 bg-gradient-to-br from-red-600 to-rose-500 rounded-full mb-2 shadow-lg">
+          <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+        </div>
+        <h2 className="text-lg font-bold text-gray-900 mb-0.5">पञ्चाङ्ग उपलब्ध छैन</h2>
+        <p className="text-[10px] text-gray-600">Currently Unavailable</p>
+      </div>
+
+      {/* Error Info */}
+      <div className="bg-gradient-to-br from-red-50 to-rose-50 border-2 border-red-200 rounded-xl p-3 mb-3 flex-1">
+        <div className="text-center">
+          <p className="text-xs font-semibold text-red-900 mb-1.5">
+            खगोलीय गणना त्रुटि
+          </p>
+          <p className="text-[10px] text-red-700 leading-relaxed mb-2">
+            केही स्थानहरूमा सूर्य/चन्द्र गणना गर्न सकिँदैन। कृपया पछि प्रयास गर्नुहोस्।
+          </p>
+          {errorMessage && (
+            <p className="text-[9px] text-red-600 font-mono bg-red-100 rounded px-1.5 py-0.5">
+              {errorMessage}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* Suggestion */}
+      <div className="bg-amber-50 border border-amber-200 rounded-lg p-2.5">
+        <p className="text-[10px] text-amber-800 text-center">
+          यो सामान्यतया ध्रुवीय क्षेत्र वा विशेष मितिमा मात्र हुन्छ
+        </p>
+      </div>
+    </div>
   );
 }
 
