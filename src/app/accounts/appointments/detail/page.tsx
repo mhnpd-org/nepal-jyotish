@@ -3,6 +3,7 @@
 import { Suspense } from "react";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { getAppointmentById, addComment, updateAppointmentStatus } from "@internal/api/appointments";
 import { getBookedTimeSlots } from "@internal/api/appointments";
 import { getAstrologerById } from "@internal/api/astrologers";
@@ -323,156 +324,324 @@ function AppointmentDetailContent() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-7xl mx-auto">
       {/* Header */}
-      <div className="mb-4">
+      <div className="mb-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold text-gray-900">
-            अपोइन्टमेन्ट विवरण
-          </h1>
-          <p className="text-sm text-gray-600">
-            ID: <span className="font-mono text-xs">{appointmentId}</span>
-          </p>
+          <div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-rose-600 to-orange-600 bg-clip-text text-transparent">
+              अपोइन्टमेन्ट विवरण
+            </h1>
+            <p className="text-sm text-gray-500 mt-1">
+              ID: <span className="font-mono text-xs">{appointmentId}</span>
+            </p>
+          </div>
+          <Link
+            href="/accounts/appointments"
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            ← पछाडि जानुहोस्
+          </Link>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Main Content */}
-        <div className="lg:col-span-2 space-y-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Main Content - Left Side */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Video Meeting Card - Primary Position */}
+          {appointment.meetingLink && appointment.status !== 'cancelled' && (
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+              <div className="bg-gradient-to-r from-rose-600 to-orange-600 px-6 py-4">
+                <div className="flex items-center gap-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                  <h2 className="text-xl font-bold text-white">भिडियो मिटिङ</h2>
+                </div>
+              </div>
+
+              <div className="p-6">
+                {!isScheduledToday ? (
+                  <div className="text-center py-12">
+                    <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full mb-6 ${
+                      isPastAppointment 
+                        ? 'bg-gray-100 text-gray-400' 
+                        : 'bg-gradient-to-br from-amber-100 to-orange-100 text-amber-600'
+                    }`}>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                      {isPastAppointment ? 'मिटिङ समाप्त भयो' : 'मिटिङ आउँदै छ'}
+                    </h3>
+                    <p className="text-gray-600 mb-2 text-lg">
+                      {isPastAppointment 
+                        ? 'यो अपोइन्टमेन्टको मिति बितिसकेको छ।'
+                        : `तपाईंको मिटिङ ${adToBs(appointment.scheduledDate)} (विक्रम संवत्) मा ${appointment.scheduledTime} बजे शेड्युल गरिएको छ।`
+                      }
+                    </p>
+                    {!isPastAppointment && (
+                      <>
+                        <p className="text-sm text-gray-500 mb-6">
+                          ईस्वी: {appointment.scheduledDate}
+                        </p>
+                        <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200 rounded-xl p-6 max-w-lg mx-auto">
+                          <div className="flex items-start gap-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-amber-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <div className="text-left">
+                              <p className="text-sm text-amber-900 font-medium mb-2">
+                                मिटिङमा जोडिने विकल्प शेड्युल गरिएको मितिमा मात्र उपलब्ध हुनेछ।
+                              </p>
+                              <p className="text-sm text-amber-800">
+                                तोकिएको दिनमा यसै बक्सबाट गुरुसँग कुरा गर्न सकिन्छ। तोकिएको दिनभन्दा पहिले वा पछि यो बक्समा भिडियो कलको सुविधा देखिने छैन।
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                ) : !showMeeting ? (
+                  <div className="text-center py-12">
+                    <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-rose-100 to-orange-100 rounded-full mb-6 animate-pulse">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                      मिटिङमा सामेल हुनुहोस्
+                    </h3>
+                    <p className="text-gray-600 mb-2">
+                      तपाईंको भिडियो परामर्श सुरु गर्न तल क्लिक गर्नुहोस्
+                    </p>
+                    <div className="inline-flex items-center gap-2 bg-green-50 border border-green-200 rounded-full px-4 py-2 mb-8">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                      <p className="text-sm text-green-700 font-semibold">
+                        आज {appointment.scheduledTime} बजे • लाइभ
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setShowMeeting(true)}
+                      className="px-10 py-4 bg-gradient-to-r from-rose-600 to-orange-600 text-white text-lg font-bold rounded-xl hover:from-rose-700 hover:to-orange-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+                    >
+                      🎥 मिटिङ सुरु गर्नुहोस्
+                    </button>
+                    <p className="mt-6 text-xs text-gray-400">
+                      मिटिङ लिङ्क:{" "}
+                      <a
+                        href={appointment.meetingLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-rose-600 hover:underline font-mono"
+                      >
+                        {appointment.meetingLink}
+                      </a>
+                    </p>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="mb-4 flex justify-between items-center bg-gray-50 p-4 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                        <h3 className="text-lg font-bold text-gray-900">
+                          लाइभ मिटिङ
+                        </h3>
+                      </div>
+                      <button
+                        onClick={() => setShowMeeting(false)}
+                        className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all text-sm font-semibold"
+                      >
+                        मिटिङ बन्द गर्नुहोस्
+                      </button>
+                    </div>
+                    <div className="relative rounded-xl overflow-hidden" style={{ paddingBottom: "56.25%", height: 0 }}>
+                      <iframe
+                        src={appointment.meetingLink}
+                        allow="camera; microphone; fullscreen; display-capture"
+                        className="absolute top-0 left-0 w-full h-full border-0"
+                      ></iframe>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Appointment Info Card */}
-          <div className="bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden">
-            <div className="px-4 py-3 border-b border-gray-100 bg-gradient-to-r from-rose-50 to-orange-50">
-              <h2 className="text-base font-bold text-gray-900">अपोइन्टमेन्ट जानकारी</h2>
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+            <div className="bg-gradient-to-r from-rose-600 to-orange-600 px-6 py-4">
+              <div className="flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h2 className="text-xl font-bold text-white">अपोइन्टमेन्ट जानकारी</h2>
+              </div>
             </div>
 
-            <div className="p-4 space-y-3">
+            <div className="p-6 space-y-4">
               {/* Status */}
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold text-gray-700">स्थिति:</span>
-                <span className={`px-3 py-1 rounded-full text-sm font-semibold border ${statusColors[appointment.status]}`}>
+              <div className="flex items-center justify-between pb-4 border-b border-gray-200">
+                <span className="text-sm font-bold text-gray-700">स्थिति:</span>
+                <span className={`px-4 py-2 rounded-full text-sm font-bold border-2 ${statusColors[appointment.status]}`}>
                   {statusLabels[appointment.status]}
                 </span>
               </div>
 
               {/* Service Type */}
-              <div className="flex items-center justify-between border-t pt-4">
-                  <span className="text-sm font-semibold text-gray-700">सेवा:</span>
-                  <span className="text-gray-900 font-medium">{serviceTitle}</span>
-                </div>
+              <div className="flex items-center justify-between pb-4 border-b border-gray-200">
+                <span className="text-sm font-bold text-gray-700">सेवा:</span>
+                <span className="text-gray-900 font-semibold">{serviceTitle}</span>
+              </div>
 
-                {/* Scheduled Date & Time */}
-                <div className="flex flex-col border-t pt-4 gap-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-gray-700">मिति (विक्रम संवत्):</span>
-                    <span className="text-gray-900 font-medium">
-                      {adToBs(appointment.scheduledDate)} ({getNepaliMonth(appointment.scheduledDate)})
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-gray-700">मिति (ईस्वी):</span>
-                    <span className="text-gray-600 font-medium">
-                      {appointment.scheduledDate}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-gray-700">समय:</span>
-                    <span className="text-gray-900 font-medium">
-                      {appointment.scheduledTime}
-                    </span>
-                  </div>
+              {/* Scheduled Date & Time */}
+              <div className="pb-4 border-b border-gray-200 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-bold text-gray-700">मिति (विक्रम संवत्):</span>
+                  <span className="text-gray-900 font-semibold text-sm">
+                    {adToBs(appointment.scheduledDate)}
+                  </span>
                 </div>
-
-                {/* Duration */}
-                <div className="flex items-center justify-between border-t pt-4">
-                  <span className="text-sm font-semibold text-gray-700">अवधि:</span>
-                  <span className="text-gray-900 font-medium">{appointment.duration} मिनेट</span>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-bold text-gray-700">महिना:</span>
+                  <span className="text-gray-900 font-semibold text-sm">
+                    {getNepaliMonth(appointment.scheduledDate)}
+                  </span>
                 </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-bold text-gray-700">मिति (ईस्वी):</span>
+                  <span className="text-gray-600 font-semibold text-sm">
+                    {appointment.scheduledDate}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-bold text-gray-700">समय:</span>
+                  <span className="text-gray-900 font-bold text-base">
+                    {appointment.scheduledTime}
+                  </span>
+                </div>
+              </div>
 
-                {/* Astrologer Info */}
-                {astrologer && (
-                  <div className="border-t pt-4">
-                    <span className="text-sm font-semibold text-gray-700 block mb-2">ज्योतिषी:</span>
-                    <div className="flex items-center gap-3">
-                      {astrologer.imageBase64 ? (
-                        <img
-                          src={astrologer.imageBase64}
-                          alt={astrologer.name || "Astrologer"}
-                          className="w-12 h-12 rounded-full object-cover border-2 border-rose-200"
-                        />
-                      ) : (
-                        <div className="w-12 h-12 bg-gradient-to-br from-rose-400 to-orange-400 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                          {(astrologer.name || "A").charAt(0)}
-                        </div>
+              {/* Duration */}
+              <div className="flex items-center justify-between pb-4 border-b border-gray-200">
+                <span className="text-sm font-bold text-gray-700">अवधि:</span>
+                <span className="text-gray-900 font-semibold">{appointment.duration} मिनेट</span>
+              </div>
+
+              {/* Astrologer Info */}
+              {astrologer && (
+                <div className="pb-4 border-b border-gray-200">
+                  <span className="text-sm font-bold text-gray-700 block mb-3">ज्योतिषी:</span>
+                  <div className="flex items-center gap-3 bg-gradient-to-r from-rose-50 to-orange-50 p-4 rounded-xl">
+                    {astrologer.imageBase64 ? (
+                      <img
+                        src={astrologer.imageBase64}
+                        alt={astrologer.name || "Astrologer"}
+                        className="w-14 h-14 rounded-full object-cover border-2 border-rose-300"
+                      />
+                    ) : (
+                      <div className="w-14 h-14 bg-gradient-to-br from-rose-400 to-orange-400 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                        {(astrologer.name || "A").charAt(0)}
+                      </div>
+                    )}
+                    <div>
+                      <p className="font-bold text-gray-900">{astrologer.name}</p>
+                      {astrologer.languages && astrologer.languages.length > 0 && (
+                        <p className="text-sm text-gray-600">{astrologer.languages.join(", ")}</p>
                       )}
-                      <div>
-                        <p className="font-semibold text-gray-900">{astrologer.name}</p>
-                        {astrologer.languages && astrologer.languages.length > 0 && (
-                          <p className="text-sm text-gray-600">{astrologer.languages.join(", ")}</p>
-                        )}
-                      </div>
                     </div>
                   </div>
-                )}
+                </div>
+              )}
 
-                {/* User Info (visible to astrologer/admin) */}
-                {(isAstrologerView || userProfile?.role === 'super_admin') && (
-                  <div className="border-t pt-4 space-y-2">
-                    <span className="text-sm font-semibold text-gray-700 block mb-2">ग्राहक जानकारी:</span>
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <span className="text-gray-600">नाम:</span>
-                        <span className="ml-2 text-gray-900 font-medium">{appointment.userName}</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-600">इमेल:</span>
-                        <span className="ml-2 text-gray-900 font-medium">{appointment.userEmail}</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-600">फोन:</span>
-                        <span className="ml-2 text-gray-900 font-medium">{appointment.userPhone}</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-600">स्थान:</span>
-                        <span className="ml-2 text-gray-900 font-medium">{appointment.userLocation}</span>
-                      </div>
+              {/* User Info (visible to astrologer/admin) */}
+              {(isAstrologerView || userProfile?.role === 'super_admin') && (
+                <div className="pb-4 border-b border-gray-200">
+                  <span className="text-sm font-bold text-gray-700 block mb-3">ग्राहक जानकारी:</span>
+                  <div className="grid grid-cols-1 gap-3 text-sm bg-blue-50 p-4 rounded-xl">
+                    <div>
+                      <span className="text-gray-600 font-medium">नाम:</span>
+                      <span className="ml-2 text-gray-900 font-bold">{appointment.userName}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-600 font-medium">इमेल:</span>
+                      <span className="ml-2 text-gray-900 font-semibold break-all">{appointment.userEmail}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-600 font-medium">स्थान:</span>
+                      <span className="ml-2 text-gray-900 font-semibold">{appointment.userLocation}</span>
                     </div>
                   </div>
-                )}
+                </div>
+              )}
 
-                {/* Message */}
-                {appointment.message && (
-                  <div className="border-t pt-4">
-                    <span className="text-sm font-semibold text-gray-700 block mb-2">सन्देश:</span>
-                    <p className="text-gray-700 bg-gray-50 p-3 rounded-lg">{appointment.message}</p>
+              {/* Message */}
+              {appointment.message && (
+                <div>
+                  <span className="text-sm font-bold text-gray-700 block mb-3">सन्देश:</span>
+                  <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-4 rounded-xl border-2 border-gray-200">
+                    <p className="text-gray-700 leading-relaxed">{appointment.message}</p>
                   </div>
-                )}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
 
+        {/* Sidebar - Right Side */}
+        <div className="space-y-6">
+          {/* Actions Card */}
+          {(canManageStatus || (isUserView && appointment.status !== 'completed' && appointment.status !== 'cancelled' && !isPastAppointment)) && (
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-600 to-cyan-600 px-6 py-4">
+                <div className="flex items-center gap-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  <h2 className="text-xl font-bold text-white">कार्यहरू</h2>
+                </div>
+              </div>
+
+              <div className="p-6 space-y-6">
                 {/* Status Management (for astrologer/admin) */}
                 {canManageStatus && appointment.status !== 'completed' && appointment.status !== 'cancelled' && (
-                  <div className="border-t pt-4">
-                    <span className="text-sm font-semibold text-gray-700 block mb-2">स्थिति परिवर्तन गर्नुहोस्:</span>
-                    <div className="flex gap-2">
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-3">
+                      स्थिति परिवर्तन गर्नुहोस्:
+                    </label>
+                    <div className="flex flex-col gap-2">
                       {appointment.status === 'pending' && (
                         <button
                           onClick={() => handleStatusChange('confirmed')}
-                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all text-sm font-semibold"
+                          className="w-full px-5 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all text-sm font-bold shadow-md hover:shadow-lg flex items-center justify-center gap-2"
                         >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
                           पुष्टि गर्नुहोस्
                         </button>
                       )}
                       {appointment.status === 'confirmed' && (
                         <button
                           onClick={() => handleStatusChange('completed')}
-                          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all text-sm font-semibold"
+                          className="w-full px-5 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-all text-sm font-bold shadow-md hover:shadow-lg flex items-center justify-center gap-2"
                         >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
                           पूरा भयो
                         </button>
                       )}
                       {userProfile?.role === 'super_admin' && (
                         <button
                           onClick={() => handleStatusChange('cancelled')}
-                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all text-sm font-semibold"
+                          className="w-full px-5 py-3 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-all text-sm font-bold shadow-md hover:shadow-lg flex items-center justify-center gap-2"
                         >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
                           रद्द गर्नुहोस्
                         </button>
                       )}
@@ -482,93 +651,94 @@ function AppointmentDetailContent() {
 
                 {/* Reschedule (postpone) for users */}
                 {isUserView && appointment.status !== 'completed' && appointment.status !== 'cancelled' && !isPastAppointment && (
-                  <div className="border-t pt-4">
-                    <span className="text-sm font-semibold text-gray-700 block mb-2">मिति परिवर्तन (पछाडि सर्नुहोस्):</span>
+                  <div className={canManageStatus ? 'pt-6 border-t border-gray-200' : ''}>
+                    <label className="block text-sm font-bold text-gray-700 mb-3">
+                      मिति परिवर्तन (पछाडि सर्नुहोस्):
+                    </label>
                     {!showReschedule ? (
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => setShowReschedule(true)}
-                          className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-all text-sm font-semibold"
-                        >
-                          पछाडि सर्नुहोस्
-                        </button>
-                      </div>
+                      <button
+                        onClick={() => setShowReschedule(true)}
+                        className="w-full px-5 py-3 bg-amber-600 text-white rounded-xl hover:bg-amber-700 transition-all text-sm font-bold shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        पछाडि सर्नुहोस्
+                      </button>
                     ) : (
-                      <div className="flex flex-col gap-2">
-                        <div className="grid grid-cols-1 gap-2">
-                          <div>
-                            <label className="block text-xs font-semibold text-gray-700 mb-1">
-                              मिति छान्नुहोस्
-                            </label>
-                            <input
-                              type="date"
-                              value={newDate}
-                              onChange={(e) => setNewDate(e.target.value)}
-                              min={new Date().toISOString().split('T')[0]}
-                              max={(() => {
-                                const maxDate = new Date();
-                                maxDate.setFullYear(maxDate.getFullYear() + 1);
-                                return maxDate.toISOString().split('T')[0];
-                              })()}
-                              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent outline-none transition-all"
-                            />
-                            {newDate && (
-                              <div className="mt-2 p-2 bg-amber-50 border border-amber-200 rounded text-xs">
-                                <div className="flex justify-between items-center">
-                                  <span className="text-gray-600">ईस्वी:</span>
-                                  <span className="font-semibold text-gray-900">{newDate}</span>
-                                </div>
-                                <div className="flex justify-between items-center mt-1">
-                                  <span className="text-gray-600">विक्रम संवत्:</span>
-                                  <span className="font-semibold text-gray-900">
-                                    {adToBs(newDate)} ({getNepaliMonth(newDate)})
-                                  </span>
-                                </div>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-600 mb-2">
+                            मिति छान्नुहोस्
+                          </label>
+                          <input
+                            type="date"
+                            value={newDate}
+                            onChange={(e) => setNewDate(e.target.value)}
+                            min={new Date().toISOString().split('T')[0]}
+                            max={(() => {
+                              const maxDate = new Date();
+                              maxDate.setFullYear(maxDate.getFullYear() + 1);
+                              return maxDate.toISOString().split('T')[0];
+                            })()}
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
+                          />
+                          {newDate && (
+                            <div className="mt-3 p-3 bg-amber-50 border-2 border-amber-200 rounded-xl text-xs">
+                              <div className="flex justify-between items-center mb-1">
+                                <span className="text-gray-600 font-medium">ईस्वी:</span>
+                                <span className="font-bold text-gray-900">{newDate}</span>
                               </div>
-                            )}
-                          </div>
-                          <div>
-                            <label className="block text-xs font-semibold text-gray-700 mb-1">
-                              समय
-                            </label>
-                            {loadingSlots ? (
-                              <div className="text-sm text-gray-500 py-4 px-4 bg-gray-50 rounded-lg border border-gray-200 flex items-center gap-2">
-                                <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                उपलब्ध समय जाँच गर्दै...
+                              <div className="flex justify-between items-center">
+                                <span className="text-gray-600 font-medium">विक्रम संवत्:</span>
+                                <span className="font-bold text-gray-900">
+                                  {adToBs(newDate)} ({getNepaliMonth(newDate)})
+                                </span>
                               </div>
-                            ) : (
-                              <>
-                                <TimeSlotPicker
-                                  selectedDate={newDate}
-                                  selectedTime={newTime}
-                                  onTimeSelect={(time) => setNewTime(time)}
-                                  bookedSlots={bookedSlots}
-                                />
-                                {bookedSlots.length > 0 && (
-                                  <p className="text-xs text-amber-600 mt-2">
-                                    {bookedSlots.length} समय पहिले नै बुक भइसकेको छ
-                                  </p>
-                                )}
-                              </>
-                            )}
-                          </div>
+                            </div>
+                          )}
                         </div>
-                        <div className="flex gap-2">
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-600 mb-2">
+                            समय
+                          </label>
+                          {loadingSlots ? (
+                            <div className="text-sm text-gray-500 py-6 px-4 bg-gray-50 rounded-xl border-2 border-gray-200 flex items-center justify-center gap-2">
+                              <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                              </svg>
+                              उपलब्ध समय जाँच गर्दै...
+                            </div>
+                          ) : (
+                            <>
+                              <TimeSlotPicker
+                                selectedDate={newDate}
+                                selectedTime={newTime}
+                                onTimeSelect={(time) => setNewTime(time)}
+                                bookedSlots={bookedSlots}
+                              />
+                              {bookedSlots.length > 0 && (
+                                <p className="text-xs text-amber-700 mt-2 font-medium">
+                                  ⚠️ {bookedSlots.length} समय पहिले नै बुक भइसकेको छ
+                                </p>
+                              )}
+                            </>
+                          )}
+                        </div>
+                        <div className="flex gap-2 pt-2">
                           <button
                             onClick={handleReschedule}
-                            disabled={isRescheduling || !newDate}
-                            className={`px-4 py-2 rounded-lg text-white font-semibold ${isRescheduling || !newDate ? 'bg-gray-300 cursor-not-allowed' : 'bg-rose-600 hover:bg-rose-700'}`}
+                            disabled={isRescheduling || !newDate || !newTime}
+                            className={`flex-1 px-5 py-3 rounded-xl text-white font-bold shadow-md ${isRescheduling || !newDate || !newTime ? 'bg-gray-300 cursor-not-allowed' : 'bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700'}`}
                           >
                             {isRescheduling ? 'रिच्छित हुँदैछ...' : 'पुष्टि गर्नुहोस्'}
                           </button>
                           <button
                             onClick={() => setShowReschedule(false)}
-                            className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200"
+                            className="px-5 py-3 rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 font-bold"
                           >
-                            रद्द गर्नुहोस्
+                            रद्द
                           </button>
                         </div>
                       </div>
@@ -577,167 +747,83 @@ function AppointmentDetailContent() {
                 )}
               </div>
             </div>
+          )}
 
-            {/* Jitsi Meeting */}
-            {appointment.meetingLink && appointment.status !== 'cancelled' && (
-              <div className="bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden">
-                <div className="bg-gradient-to-r from-rose-600 to-orange-600 px-4 py-3">
-                  <h2 className="text-base font-bold text-white">भिडियो मिटिङ</h2>
-                </div>
-
-                <div className="p-4">
-                  {!isScheduledToday ? (
-                    <div className="text-center py-8">
-                      <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 ${
-                        isPastAppointment 
-                          ? 'bg-gray-100 text-gray-400' 
-                          : 'bg-gradient-to-br from-amber-100 to-orange-100 text-amber-600'
-                      }`}>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                      </div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                        {isPastAppointment ? 'मिटिङ समाप्त भयो' : 'मिटिङ आउँदै छ'}
-                      </h3>
-                      <p className="text-gray-600 mb-2">
-                        {isPastAppointment 
-                          ? 'यो अपोइन्टमेन्टको मिति बितिसकेको छ।'
-                          : `तपाईंको मिटिङ ${adToBs(appointment.scheduledDate)} (विक्रम संवत्) मा ${appointment.scheduledTime} बजे शेड्युल गरिएको छ।`
-                        }
-                      </p>
-                      {!isPastAppointment && (
-                        <p className="text-sm text-gray-500">
-                          ईस्वी: {appointment.scheduledDate}
-                        </p>
-                      )}
-                      {!isPastAppointment && (
-                        <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 max-w-md mx-auto">
-                          <p className="text-sm text-amber-800">
-                            <span className="font-semibold">नोट:</span> मिटिङमा जोडिने विकल्प शेड्युल गरिएको मितिमा मात्र उपलब्ध हुनेछ।
-                          </p>
-                          <p className="text-sm text-amber-800 mt-2">
-                            तोकिएको दिनमा यसै बक्सबाट गुरुसँग कुरा गर्न सकिन्छ। तोकिएको दिनभन्दा पहिले वा पछि यो बक्समा भिडियो कलको सुविधा देखिने छैन।
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  ) : !showMeeting ? (
-                    <div className="text-center py-8">
-                      <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-rose-100 to-orange-100 rounded-full mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                        </svg>
-                      </div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                        मिटिङमा सामेल हुनुहोस्
-                      </h3>
-                      <p className="text-gray-600 mb-2">
-                        तपाईंको भिडियो परामर्श सुरु गर्न तल क्लिक गर्नुहोस्
-                      </p>
-                      <p className="text-sm text-green-600 font-semibold mb-6">
-                        आज {appointment.scheduledTime} बजे
-                      </p>
-                      <button
-                        onClick={() => setShowMeeting(true)}
-                        className="px-8 py-3 bg-gradient-to-r from-rose-600 to-orange-600 text-white font-semibold rounded-lg hover:from-rose-700 hover:to-orange-700 transition-all shadow-md hover:shadow-lg"
-                      >
-                        मिटिङ सुरु गर्नुहोस्
-                      </button>
-                      <p className="mt-4 text-sm text-gray-500">
-                        मिटिङ लिङ्क:{" "}
-                        <a
-                          href={appointment.meetingLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-rose-600 hover:underline font-mono"
-                        >
-                          {appointment.meetingLink}
-                        </a>
-                      </p>
-                    </div>
-                  ) : (
-                    <div>
-                      <div className="mb-4 flex justify-between items-center">
-                        <h3 className="text-lg font-semibold text-gray-900">
-                          लाइभ मिटिङ
-                        </h3>
-                        <button
-                          onClick={() => setShowMeeting(false)}
-                          className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all text-sm font-semibold"
-                        >
-                          मिटिङ बन्द गर्नुहोस्
-                        </button>
-                      </div>
-                      <div className="relative" style={{ paddingBottom: "56.25%", height: 0 }}>
-                        <iframe
-                          src={appointment.meetingLink}
-                          allow="camera; microphone; fullscreen; display-capture"
-                          className="absolute top-0 left-0 w-full h-full border-0 rounded-lg"
-                        ></iframe>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-        </div>
-
-        {/* Sidebar */}
-        <div className="space-y-4">
-            {/* Comments Section */}
-            <div className="bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden">
-              <div className="bg-gradient-to-r from-rose-600 to-orange-600 px-4 py-3">
-                <h2 className="text-base font-bold text-white">टिप्पणीहरू</h2>
-              </div>
-
-              <div className="p-4">
-                {/* Comment Form */}
-                {user && (isUserView || isAstrologerView || userProfile?.role === 'super_admin') && (
-                  <form onSubmit={handleAddComment} className="mb-4">
-                    <textarea
-                      value={commentText}
-                      onChange={(e) => setCommentText(e.target.value)}
-                      placeholder="टिप्पणी लेख्नुहोस्..."
-                      rows={3}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent outline-none transition-all resize-none"
-                    />
-                    <button
-                      type="submit"
-                      disabled={isSubmittingComment || !commentText.trim()}
-                      className={`mt-2 w-full px-4 py-2 rounded-lg font-semibold transition-all ${
-                        isSubmittingComment || !commentText.trim()
-                          ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                          : "bg-gradient-to-r from-rose-600 to-orange-600 text-white hover:from-rose-700 hover:to-orange-700 shadow-md"
-                      }`}
-                    >
-                      {isSubmittingComment ? "पठाउँदै..." : "टिप्पणी थप्नुहोस्"}
-                    </button>
-                  </form>
-                )}
-
-                {/* Comments List */}
-                <div className="space-y-3 max-h-80 overflow-y-auto">
-                  {appointment.comments && appointment.comments.length > 0 ? (
-                    appointment.comments.map((comment, index) => (
-                      <div key={index} className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="font-semibold text-gray-900">{comment.userName}</span>
-                          <span className="text-xs text-gray-500">
-                            {new Date(comment.timestamp).toLocaleString('ne-NP')}
-                          </span>
-                        </div>
-                        <p className="text-gray-700 text-sm">{comment.text}</p>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-gray-500 text-sm text-center py-4">
-                      अहिलेसम्म कुनै टिप्पणी छैन
-                    </p>
-                  )}
-                </div>
+          {/* Comments Section */}
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+            <div className="bg-gradient-to-r from-purple-600 to-indigo-600 px-6 py-4">
+              <div className="flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+                <h2 className="text-xl font-bold text-white">टिप्पणीहरू</h2>
               </div>
             </div>
+
+            <div className="p-6">
+              {/* Comment Form */}
+              {user && (isUserView || isAstrologerView || userProfile?.role === 'super_admin') && (
+                <form onSubmit={handleAddComment} className="mb-6">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    नयाँ टिप्पणी थप्नुहोस्
+                  </label>
+                  <textarea
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                    placeholder="टिप्पणी लेख्नुहोस्..."
+                    rows={4}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all resize-none"
+                  />
+                  <button
+                    type="submit"
+                    disabled={isSubmittingComment || !commentText.trim()}
+                    className={`mt-3 w-full px-6 py-3 rounded-xl font-semibold transition-all ${
+                      isSubmittingComment || !commentText.trim()
+                        ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                        : "bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700 shadow-md hover:shadow-lg"
+                    }`}
+                  >
+                    {isSubmittingComment ? "पठाउँदै..." : "टिप्पणी थप्नुहोस्"}
+                  </button>
+                </form>
+              )}
+
+              {/* Comments List */}
+              <div className="space-y-4 max-h-96 overflow-y-auto">
+                {appointment.comments && appointment.comments.length > 0 ? (
+                  appointment.comments.map((comment, index) => (
+                    <div key={index} className="bg-gradient-to-br from-gray-50 to-gray-100 p-5 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-indigo-500 flex items-center justify-center text-white font-bold">
+                            {comment.userName.charAt(0).toUpperCase()}
+                          </div>
+                          <div>
+                            <span className="font-bold text-gray-900 block">{comment.userName}</span>
+                            <span className="text-xs text-gray-500">
+                              {new Date(comment.timestamp).toLocaleString('ne-NP')}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <p className="text-gray-700 leading-relaxed">{comment.text}</p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-12">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                      </svg>
+                    </div>
+                    <p className="text-gray-500 font-medium">
+                      अहिलेसम्म कुनै टिप्पणी छैन
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -1,19 +1,17 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect } from 'react';
 import { auth } from '@internal/api/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { getUserById } from '@internal/api/users';
 import AppHeader from '@internal/layouts/app-header';
 import AccountsSidebar from '@internal/layouts/accounts-sidebar';
 import type { AppUser } from '@internal/api/types';
-import CentralLoading from '@internal/layouts/central-loading';
 import { useRouter } from 'next/navigation';
 
 export default function AccountsLayout({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<import('firebase/auth').User | null>(null);
   const [profile, setProfile] = useState<AppUser | null>(null);
-  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -25,7 +23,6 @@ export default function AccountsLayout({ children }: { children: React.ReactNode
       setUser(u);
       const doc = await getUserById(u.uid);
       setProfile(doc);
-      setLoading(false);
     });
 
     return () => unsub();

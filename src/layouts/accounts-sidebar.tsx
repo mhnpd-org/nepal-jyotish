@@ -97,9 +97,9 @@ export default function AccountsSidebar({ profile, user }: AccountsSidebarProps)
         {/* Mobile header with user info and close button */}
         <div className="md:hidden flex items-center justify-between p-4 border-b border-rose-200/60">
           <div className="flex items-center gap-3">
-            {(profile as any)?.photoURL || (profile as any)?.imageBase64 || user?.photoURL ? (
+            {(profile && 'photoURL' in profile && profile.photoURL) || (profile && 'imageBase64' in profile && profile.imageBase64) || user?.photoURL ? (
               <img
-                src={(profile as any)?.photoURL || (profile as any)?.imageBase64 || user?.photoURL || ''}
+                src={((profile && 'photoURL' in profile && profile.photoURL) || (profile && 'imageBase64' in profile && profile.imageBase64) || user?.photoURL || '') as string}
                 alt={profile?.name || user?.displayName || 'User'}
                 className="w-10 h-10 rounded-full object-cover border-2 border-rose-200"
               />
@@ -135,9 +135,9 @@ export default function AccountsSidebar({ profile, user }: AccountsSidebarProps)
         {/* Desktop user info card */}
         <div className="hidden md:block p-4 border-b border-rose-200/60">
           <div className="text-center">
-            {(profile as any)?.photoURL || (profile as any)?.imageBase64 || user?.photoURL ? (
+            {(profile && 'photoURL' in profile && profile.photoURL) || (profile && 'imageBase64' in profile && profile.imageBase64) || user?.photoURL ? (
               <img
-                src={(profile as any)?.photoURL || (profile as any)?.imageBase64 || user?.photoURL || ''}
+                src={((profile && 'photoURL' in profile && profile.photoURL) || (profile && 'imageBase64' in profile && profile.imageBase64) || user?.photoURL || '') as string}
                 alt={profile?.name || user?.displayName || 'User'}
                 className="w-16 h-16 rounded-full object-cover border-2 border-rose-200 mx-auto mb-3"
               />
