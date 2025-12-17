@@ -45,19 +45,20 @@ export default function AppHeader({
   return (
     <>
       <header className={headerClasses}>
-        <div className={`grid grid-cols-3 items-center py-4 ${
+        <div className={`flex items-center justify-between py-4 ${
           fullWidth ? 'px-3 sm:px-4' : 'px-4 sm:px-6'
         }`}>
-          {/* Left spacer - empty on purpose for centering */}
-          <div></div>
-
-          {/* Center - Logo */}
-          <div className="flex justify-center">
+          {/* Logo - left on mobile, center on desktop */}
+          <div className="flex-shrink-0 sm:hidden">
+            <Logo size={logoSize} variant={logoVariant} />
+          </div>
+          
+          <div className="hidden sm:flex flex-1 justify-center">
             <Logo size={logoSize} variant={logoVariant} />
           </div>
 
           {/* Right - Login button and hamburger menu */}
-          <div className="flex items-center gap-3 justify-end">
+          <div className="flex items-center gap-3 justify-end sm:flex-shrink-0">
             {/* Login Button - visible on all screen sizes */}
             <div>
               <LoginButton language={isNepali ? 'np' : 'en'} variant={useLightText ? 'light' : 'dark'} />
