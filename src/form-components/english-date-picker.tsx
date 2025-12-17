@@ -20,7 +20,7 @@ export function EnglishDatePicker<T extends FieldValues = FieldValues>({
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
       {label && (
-        <label className="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200">
+        <label className="text-sm sm:text-base font-semibold text-gray-800">
           {label} {required && <span className="text-red-500">*</span>}
         </label>
       )}
@@ -34,7 +34,7 @@ export function EnglishDatePicker<T extends FieldValues = FieldValues>({
             <input
               {...field}
               type="date"
-              className="w-full rounded-lg border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 sm:px-4 py-2.5 text-sm sm:text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:border-orange-500 transition-all cursor-pointer"
+              className="w-full rounded-lg border-2 border-gray-200 bg-white px-3 sm:px-4 py-2.5 text-sm sm:text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:border-orange-500 transition-all cursor-pointer"
               aria-invalid={error ? "true" : "false"}
             />
             {error && (

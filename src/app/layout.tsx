@@ -223,7 +223,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ne" dir="ltr" suppressHydrationWarning>
+    <html lang="ne" dir="ltr" suppressHydrationWarning style={{ colorScheme: 'light' }}>
       <head>
         {/* Google Analytics - Global site tag (gtag.js) */}
         <Script

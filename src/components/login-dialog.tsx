@@ -29,11 +29,11 @@ export default function LoginDialog({ open, onClose }: Props) {
         role="dialog"
         aria-modal="true"
         aria-label="Sign in dialog"
-        className="relative w-full max-w-md mx-auto bg-white dark:bg-gray-900 rounded-xl shadow-2xl overflow-hidden"
+        className="relative w-full max-w-md mx-auto bg-white rounded-xl shadow-2xl overflow-hidden"
       >
         <div className="p-8 flex flex-col items-center text-center">
-          <div className="flex items-center justify-center w-20 h-20 rounded-full bg-amber-100 dark:bg-rose-700 mb-4">
-            <span className="text-4xl font-bold text-rose-600 dark:text-white">ॐ</span>
+          <div className="flex items-center justify-center w-20 h-20 rounded-full bg-amber-100 mb-4">
+            <span className="text-4xl font-bold text-rose-600">ॐ</span>
           </div>
 
           <div className="mb-2">

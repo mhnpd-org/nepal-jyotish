@@ -156,7 +156,7 @@ export default function TribhagiDashaVerticalPage() {
           त्रिभागि महादशा क्रम र यसको अन्तर्दशा विवरण
         </p>
       </header>
-      <ol className="relative divide-y divide-rose-100/60 border border-rose-200/40 rounded-lg bg-rose-50/20 dark:bg-rose-50/10 p-2 sm:p-3">
+      <ol className="relative divide-y divide-rose-100/60 border border-rose-200/40 rounded-lg bg-rose-50/20 p-2 sm:p-3">
         {list.map((d, i) => (
           <DashaItem key={d.dashaLord + i} item={d} index={i} />
         ))}

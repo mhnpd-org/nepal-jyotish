@@ -103,10 +103,10 @@ export default function JanmaPage() {
       >
         {/* Header - clean and simple */}
         <header className="mb-6 sm:mb-8 text-center sm:text-left">
-          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-gray-900">
             {labels.title}
           </h1>
-          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-2 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 mt-2 leading-relaxed">
             {labels.description}
           </p>
         </header>
@@ -115,19 +115,19 @@ export default function JanmaPage() {
         <div className="flex flex-col gap-4 sm:gap-6">
             {/* Name (optional) */}
             <div className="flex flex-col gap-2 w-full">
-              <label htmlFor="name" className="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200">{labels.name}</label>
+              <label htmlFor="name" className="text-sm sm:text-base font-semibold text-gray-800">{labels.name}</label>
               <input
                 id="name"
                 type="text"
                 placeholder={labels.name}
-                className="rounded-lg border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 sm:px-4 py-2.5 text-sm sm:text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:border-orange-500 transition-all"
+                className="rounded-lg border-2 border-gray-200 bg-white px-3 sm:px-4 py-2.5 text-sm sm:text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:border-orange-500 transition-all"
                 {...register("name")}
               />
             </div>
 
             {/* Date of Birth (required) */}
             <div className="flex flex-col gap-2 w-full">
-              <label className="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200">
+              <label className="text-sm sm:text-base font-semibold text-gray-800">
                 {labels.date_of_birth} <span className="text-red-500">*</span>
               </label>
               
@@ -158,7 +158,7 @@ export default function JanmaPage() {
                     />
                   )
                 ) : (
-                  <div className="h-11 w-full rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                  <div className="h-11 w-full rounded-lg bg-gray-200 animate-pulse" />
                 )}
               </div>
             </div>
@@ -175,7 +175,7 @@ export default function JanmaPage() {
                   required={true}
                 />
               ) : (
-                <div className="h-11 w-full rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                <div className="h-11 w-full rounded-lg bg-gray-200 animate-pulse" />
               )}
             </div>
 
@@ -184,7 +184,7 @@ export default function JanmaPage() {
               {hydrated ? (
                 <DistrictPicker control={control} name="placeOfBirth" label={labels.place_of_birth} required className="" />
               ) : (
-                <div className="h-11 w-full rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                <div className="h-11 w-full rounded-lg bg-gray-200 animate-pulse" />
               )}
             </div>
           </div>

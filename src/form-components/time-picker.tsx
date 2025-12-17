@@ -21,7 +21,7 @@ export function TimePicker<TFieldValues extends FieldValues>({
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
       {label && (
-        <label className="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200">
+        <label className="text-sm sm:text-base font-semibold text-gray-800">
           {label} {required && <span className="text-red-500">*</span>}
         </label>
       )}
@@ -50,7 +50,7 @@ export function TimePicker<TFieldValues extends FieldValues>({
                 value={displayValue}
                 onChange={handleTimeChange}
                 onBlur={field.onBlur}
-                className="w-full px-3 sm:px-4 py-2.5 text-sm sm:text-base border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all cursor-pointer"
+                className="w-full px-3 sm:px-4 py-2.5 text-sm sm:text-base border-2 border-gray-200 bg-white text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all cursor-pointer"
                 aria-invalid={error ? "true" : "false"}
               />
               

@@ -72,7 +72,7 @@ export function BirthDetailsBanner({ janmaDetails }: BirthDetailsBannerProps) {
     : '';
 
   return (
-    <div className="bg-gradient-to-r from-orange-50 via-rose-50 to-pink-50 dark:from-orange-950/20 dark:via-rose-950/20 dark:to-pink-950/20 border border-orange-200 dark:border-orange-800/50 rounded-xl p-4 sm:p-6 shadow-sm mb-6">
+    <div className="bg-gradient-to-r from-orange-50 via-rose-50 to-pink-50 border border-orange-200 rounded-xl p-4 sm:p-6 shadow-sm mb-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         {/* Birth Details */}
         <div className="flex-1 space-y-3">
@@ -80,7 +80,7 @@ export function BirthDetailsBanner({ janmaDetails }: BirthDetailsBannerProps) {
           {janmaDetails.name && (
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-gradient-to-r from-orange-500 to-rose-500"></div>
-              <span className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+              <span className="text-lg font-semibold text-gray-800">
                 {janmaDetails.name}
               </span>
             </div>
@@ -90,12 +90,12 @@ export function BirthDetailsBanner({ janmaDetails }: BirthDetailsBannerProps) {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
             {/* Date */}
             <div className="flex items-center gap-2">
-              <CalendarIcon className="w-4 h-4 text-orange-600 dark:text-orange-400 flex-shrink-0" />
+              <CalendarIcon className="w-4 h-4 text-orange-600 flex-shrink-0" />
               <div className="flex flex-col">
-                <span className="text-gray-600 dark:text-gray-400 text-xs">
+                <span className="text-gray-600 text-xs">
                   जन्म मिति ({janmaDetails.calendarType === 'AD' ? 'ई.स.' : 'वि.स.'})
                 </span>
-                <span className="font-medium text-gray-800 dark:text-gray-200">
+                <span className="font-medium text-gray-800">
                   {formattedDate}
                 </span>
               </div>
@@ -103,12 +103,12 @@ export function BirthDetailsBanner({ janmaDetails }: BirthDetailsBannerProps) {
 
             {/* Time */}
             <div className="flex items-center gap-2">
-              <ClockIcon className="w-4 h-4 text-rose-600 dark:text-rose-400 flex-shrink-0" />
+              <ClockIcon className="w-4 h-4 text-rose-600 flex-shrink-0" />
               <div className="flex flex-col">
-                <span className="text-gray-600 dark:text-gray-400 text-xs">
+                <span className="text-gray-600 text-xs">
                   जन्म समय
                 </span>
-                <span className="font-medium text-gray-800 dark:text-gray-200">
+                <span className="font-medium text-gray-800">
                   {formattedTime || 'N/A'}
                 </span>
               </div>
@@ -116,12 +116,12 @@ export function BirthDetailsBanner({ janmaDetails }: BirthDetailsBannerProps) {
 
             {/* Place */}
             <div className="flex items-center gap-2">
-              <MapPinIcon className="w-4 h-4 text-pink-600 dark:text-pink-400 flex-shrink-0" />
+              <MapPinIcon className="w-4 h-4 text-pink-600 flex-shrink-0" />
               <div className="flex flex-col">
-                <span className="text-gray-600 dark:text-gray-400 text-xs">
+                <span className="text-gray-600 text-xs">
                   जन्म स्थान
                 </span>
-                <span className="font-medium text-gray-800 dark:text-gray-200">
+                <span className="font-medium text-gray-800">
                   {janmaDetails.placeOfBirth.district_np}
                 </span>
               </div>
@@ -133,7 +133,7 @@ export function BirthDetailsBanner({ janmaDetails }: BirthDetailsBannerProps) {
         <div className="sm:flex-shrink-0">
           <button
             onClick={handleEditDetails}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-orange-700 dark:text-orange-300 bg-white dark:bg-gray-800 border border-orange-200 dark:border-orange-700 rounded-lg hover:bg-orange-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-all"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-orange-700 bg-white border border-orange-200 rounded-lg hover:bg-orange-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-all"
           >
             <EditIcon className="w-4 h-4" />
             <span>परिवर्तन गर्नुहोस्</span>
@@ -142,16 +142,16 @@ export function BirthDetailsBanner({ janmaDetails }: BirthDetailsBannerProps) {
       </div>
 
       {/* Subtitle */}
-      <div className="mt-4 pt-3 border-t border-orange-200 dark:border-orange-800/50">
+      <div className="mt-4 pt-3 border-t border-orange-200">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <p className="text-xs text-gray-500 dark:text-gray-400 text-center sm:text-left">
+          <p className="text-xs text-gray-500 text-center sm:text-left">
             यो कुण्डली उपरोक्त जन्म विवरणका आधारमा तयार गरिएको हो।
           </p>
           
           <div className="flex justify-center sm:justify-end">
             <Link
               href="/contact?from=Astro Tools"
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 underline underline-offset-2 hover:no-underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500 transition-all"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-rose-600 hover:text-rose-700 underline underline-offset-2 hover:no-underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500 transition-all"
               aria-label="समस्या रिपोर्ट गर्नुहोस् वा सहायता माग्नुहोस्"
             >
               <SupportIcon className="w-3 h-3" />

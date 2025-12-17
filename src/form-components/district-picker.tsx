@@ -164,10 +164,10 @@ export function DistrictPicker<TFieldValues extends FieldValues>(props: District
 
 					return (
 						<div className={`w-full ${className}`}>
-							<label className="block text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200 mb-2">
+							<label className="block text-sm sm:text-base font-semibold text-gray-800 mb-2">
 								{label}{required && <span className="text-red-500 ml-1">*</span>}
 							</label>
-							<div className="[&_.district-select__control]:!bg-white dark:[&_.district-select__control]:!bg-gray-900 [&_.district-select__control]:!border-gray-200 dark:[&_.district-select__control]:!border-gray-700 [&_.district-select__single-value]:!text-gray-900 dark:[&_.district-select__single-value]:!text-gray-100 [&_.district-select__input]:!text-gray-900 dark:[&_.district-select__input]:!text-gray-100">
+							<div className="[&_.district-select__control]:!bg-white [&_.district-select__control]:!border-gray-200 [&_.district-select__single-value]:!text-gray-900 [&_.district-select__input]:!text-gray-900">
 								<Select
 									instanceId={`${name}-district-select`}
 									isDisabled={disabled}

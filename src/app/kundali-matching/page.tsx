@@ -147,17 +147,17 @@ export default function KundaliMatchingPage() {
   return (
     <>
       <AppHeader variant="solid" language="np" currentPage="services" />
-      <main className="min-h-screen w-full px-4 sm:px-6 lg:px-8 py-8 bg-gradient-to-br from-rose-50 via-orange-50 to-amber-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <main className="min-h-screen w-full px-4 sm:px-6 lg:px-8 py-8 bg-gradient-to-br from-rose-50 via-orange-50 to-amber-50">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="w-full max-w-6xl mx-auto"
         >
         {/* Header */}
         <header className="mb-8 text-center">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-100 mb-3">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-gray-900 mb-3">
             कुण्डली मिलान
           </h1>
-          <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto">
             विवाहको लागि वैदिक ज्योतिष अनुसार कुण्डली मिलान। अष्टकूट गुण मिलान, दोष विश्लेषण र विवाह संकेतकहरू।
           </p>
         </header>
@@ -165,8 +165,8 @@ export default function KundaliMatchingPage() {
         {/* Two Column Form */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-8">
           {/* Male Details */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-8 border border-blue-100 dark:border-blue-900">
-            <h2 className="text-xl sm:text-2xl font-bold text-blue-900 dark:text-blue-200 mb-6 flex items-center gap-2">
+          <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 border border-blue-100">
+            <h2 className="text-xl sm:text-2xl font-bold text-blue-900 mb-6 flex items-center gap-2">
               <span className="text-2xl">👨</span>
               वरको विवरण
             </h2>
@@ -174,21 +174,21 @@ export default function KundaliMatchingPage() {
             <div className="flex flex-col gap-5">
               {/* Male Name */}
               <div className="flex flex-col gap-2">
-                <label htmlFor="male-name" className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+                <label htmlFor="male-name" className="text-sm font-semibold text-gray-800">
                   पूरा नाम (वैकल्पिक)
                 </label>
                 <input
                   id="male-name"
                   type="text"
                   placeholder="वरको नाम"
-                  className="rounded-lg border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500 transition-all"
+                  className="rounded-lg border-2 border-gray-200 bg-white px-4 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500 transition-all"
                   {...register("male.name")}
                 />
               </div>
 
               {/* Male Date of Birth */}
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+                <label className="text-sm font-semibold text-gray-800">
                   जन्म मिति <span className="text-red-500">*</span>
                 </label>
                 <CalendarToggle
@@ -213,7 +213,7 @@ export default function KundaliMatchingPage() {
                       />
                     )
                   ) : (
-                    <div className="h-11 w-full rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                    <div className="h-11 w-full rounded-lg bg-gray-200 animate-pulse" />
                   )}
                 </div>
               </div>
@@ -228,7 +228,7 @@ export default function KundaliMatchingPage() {
                     required={true}
                   />
                 ) : (
-                  <div className="h-11 w-full rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                  <div className="h-11 w-full rounded-lg bg-gray-200 animate-pulse" />
                 )}
               </div>
 
@@ -242,15 +242,15 @@ export default function KundaliMatchingPage() {
                     required
                   />
                 ) : (
-                  <div className="h-11 w-full rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                  <div className="h-11 w-full rounded-lg bg-gray-200 animate-pulse" />
                 )}
               </div>
             </div>
           </div>
 
           {/* Female Details */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-8 border border-pink-100 dark:border-pink-900">
-            <h2 className="text-xl sm:text-2xl font-bold text-pink-900 dark:text-pink-200 mb-6 flex items-center gap-2">
+          <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 border border-pink-100">
+            <h2 className="text-xl sm:text-2xl font-bold text-pink-900 mb-6 flex items-center gap-2">
               <span className="text-2xl">👩</span>
               वधुको विवरण
             </h2>
@@ -258,21 +258,21 @@ export default function KundaliMatchingPage() {
             <div className="flex flex-col gap-5">
               {/* Female Name */}
               <div className="flex flex-col gap-2">
-                <label htmlFor="female-name" className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+                <label htmlFor="female-name" className="text-sm font-semibold text-gray-800">
                   पूरा नाम (वैकल्पिक)
                 </label>
                 <input
                   id="female-name"
                   type="text"
                   placeholder="वधुको नाम"
-                  className="rounded-lg border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500 focus-visible:border-pink-500 transition-all"
+                  className="rounded-lg border-2 border-gray-200 bg-white px-4 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500 focus-visible:border-pink-500 transition-all"
                   {...register("female.name")}
                 />
               </div>
 
               {/* Female Date of Birth */}
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+                <label className="text-sm font-semibold text-gray-800">
                   जन्म मिति <span className="text-red-500">*</span>
                 </label>
                 <CalendarToggle
@@ -297,7 +297,7 @@ export default function KundaliMatchingPage() {
                       />
                     )
                   ) : (
-                    <div className="h-11 w-full rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                    <div className="h-11 w-full rounded-lg bg-gray-200 animate-pulse" />
                   )}
                 </div>
               </div>
@@ -312,7 +312,7 @@ export default function KundaliMatchingPage() {
                     required={true}
                   />
                 ) : (
-                  <div className="h-11 w-full rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                  <div className="h-11 w-full rounded-lg bg-gray-200 animate-pulse" />
                 )}
               </div>
 
@@ -326,7 +326,7 @@ export default function KundaliMatchingPage() {
                     required
                   />
                 ) : (
-                  <div className="h-11 w-full rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                  <div className="h-11 w-full rounded-lg bg-gray-200 animate-pulse" />
                 )}
               </div>
             </div>
@@ -356,7 +356,7 @@ export default function KundaliMatchingPage() {
           <button
             type="button"
             onClick={handleReset}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg border-2 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 px-8 py-3 text-base font-semibold transition-all"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg border-2 border-gray-300 hover:border-gray-400 bg-white hover:bg-gray-50 text-gray-700 px-8 py-3 text-base font-semibold transition-all"
           >
             नयाँ फारम
           </button>

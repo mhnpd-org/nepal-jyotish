@@ -35,7 +35,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
       <div
         ref={ref}
         className={cn(
-          "rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950",
+          "rounded-xl border border-gray-200 bg-white",
           subtle ? "shadow-sm" : "shadow",
           unpadded ? "" : "p-6",
           className
@@ -49,11 +49,11 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
 
   // Gradient variant (matches Janma page styling)
   return (
-    <div className={cn("relative w-full rounded-2xl p-[1px] bg-[var(--vedanga-gradient)]", subtle ? "shadow-md" : "shadow-lg shadow-orange-200/40 dark:shadow-rose-900/30", className)}>
+    <div className={cn("relative w-full rounded-2xl p-[1px] bg-[var(--vedanga-gradient)]", subtle ? "shadow-md" : "shadow-lg shadow-orange-200/40", className)}>
       <div
         ref={ref}
         className={cn(
-          "relative rounded-[1.05rem] bg-white/90 dark:bg-gray-950/70 backdrop-blur-sm border border-white/40 dark:border-white/10 overflow-hidden",
+          "relative rounded-[1.05rem] bg-white/90 backdrop-blur-sm border border-white/40 overflow-hidden",
           unpadded ? "" : "px-6 sm:px-8 py-6 sm:py-8"
         )}
         {...rest}
@@ -70,7 +70,7 @@ export type CardSectionProps = HTMLAttributes<HTMLDivElement>;
 
 export const CardHeader = forwardRef<HTMLDivElement, CardSectionProps>(function CardHeader({ className, children, ...rest }, ref) {
   return (
-    <div ref={ref} className={cn("flex flex-col gap-2 pb-5 border-b border-white/50 dark:border-white/10 relative z-10", className)} {...rest}>
+    <div ref={ref} className={cn("flex flex-col gap-2 pb-5 border-b border-white/50 relative z-10", className)} {...rest}>
       {children}
     </div>
   );
@@ -86,7 +86,7 @@ export const CardContent = forwardRef<HTMLDivElement, CardSectionProps>(function
 
 export const CardFooter = forwardRef<HTMLDivElement, CardSectionProps>(function CardFooter({ className, children, ...rest }, ref) {
   return (
-    <div ref={ref} className={cn("flex items-center gap-4 pt-4 mt-2 border-t border-white/40 dark:border-white/10 relative z-10", className)} {...rest}>
+    <div ref={ref} className={cn("flex items-center gap-4 pt-4 mt-2 border-t border-white/40 relative z-10", className)} {...rest}>
       {children}
     </div>
   );
@@ -102,7 +102,7 @@ export const CardTitle = forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTM
 
 export const CardDescription = forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(function CardDescription({ className, children, ...rest }, ref) {
   return (
-    <p ref={ref} className={cn("text-xs md:text-sm text-gray-700/80 dark:text-gray-300", className)} {...rest}>
+    <p ref={ref} className={cn("text-xs md:text-sm text-gray-700/80", className)} {...rest}>
       {children}
     </p>
   );
