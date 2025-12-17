@@ -4,26 +4,15 @@ import React, { useState, useEffect } from "react";
 import LoginDialog from "./login-dialog";
 import { auth } from "@internal/api/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { getUserById } from "@internal/api/users";
-import type { AppUser } from '@internal/api/types';
 
 
 export default function LoginButton({ language = 'en', variant = 'dark' }: { language?: 'en' | 'np', variant?: 'light' | 'dark' }) {
   const [open, setOpen] = useState(false);
   const [authUser, setAuthUser] = useState<import('firebase/auth').User | null>(null);
-  const [profile, setProfile] = useState<AppUser | null>(null);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (u) => {
       setAuthUser(u);
-      // fetch Firestore user doc if available
-      if (u) {
-        getUserById(u.uid).then((doc: AppUser | null) => {
-          setProfile(doc);
-        }).catch(() => {});
-      } else {
-        setProfile(null);
-      }
     });
     return () => unsub();
   }, []);
