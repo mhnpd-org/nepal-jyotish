@@ -235,28 +235,36 @@ function VideoCallRenderer({
     const api = new window.JitsiMeetExternalAPI(jitsiHost, {
       roomName,
       parentNode: containerRef.current,
-      // width: "100%",
+      width: "100%",
       height: "80vh",
       userInfo: { displayName },
       configOverwrite: {
-        prejoinPageEnabled: false,
+        prejoinPageEnabled: true,
         disableDeepLinking: true,
+        "speaker-selection" : false,
         startWithAudioMuted: false,
         startWithVideoMuted: false,
+        disableProfile: true
       },
       interfaceConfigOverwrite: {
+        APP_NAME: "Nepal Jyotish",
+        NATIVE_APP_NAME: "Nepal Jyotish",
         MOBILE_APP_PROMO: false,
         SHOW_JITSI_WATERMARK: false,
+        SHOW_BRAND_WATERMARK: true,
         SHOW_POWERED_BY: false,
         SHOW_CHROME_EXTENSION_BANNER: false,
         HIDE_INVITE_MORE_HEADER: true,
+        GENERATE_ROOMNAMES_ON_WELCOME_PAGE: false,
+        DISPLAY_WELCOME_PAGE_CONTENT: false,
+        SHOW_JITSI_WELCOME_PAGE_LOGO: false,
         TOOLBAR_BUTTONS: [
           "microphone",
           "camera",
           "desktop",
           "chat",
-          "raisehand",
-          "tileview",
+          // "raisehand",
+          // "tileview",
           "hangup",
           "settings",
         ],
@@ -352,10 +360,10 @@ function VideoCallRenderer({
         onError={() => setEmbedError("Jitsi UI स्क्रिप्ट लोड हुन सकेन")}
       />
 
-      <div key={instanceKey} style={{ height: callHeight ? `${callHeight}px` : "calc(100vh - 64px)" }} className="w-full max-w-full bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white flex flex-col overflow-hidden">
+      <div key={instanceKey} style={{ height: callHeight ? `${callHeight}px` : "calc(100vh - 84px)" }} className="w-full max-w-full bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white flex flex-col overflow-hidden">
         <div
           ref={headerRef}
-          className="bg-gray-900/70 border-b border-gray-800 px-4 py-3 flex items-center justify-between flex-shrink-0 backdrop-blur"
+          className="bg-gray-900/70 border-b border-gray-800 px-4 py-1 flex items-center justify-between flex-shrink-0 backdrop-blur"
         >
           <div className="flex items-center gap-3">
             <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
