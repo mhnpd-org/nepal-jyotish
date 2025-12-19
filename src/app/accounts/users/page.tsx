@@ -128,12 +128,12 @@ export default function AccountsUsersPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">👥 प्रयोगकर्ताहरू</h1>
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-rose-600 to-orange-600 bg-clip-text text-transparent mb-2">👥 प्रयोगकर्ताहरू</h1>
         <p className="text-gray-600">सबै प्रयोगकर्ताहरू व्यवस्थापन गर्नुहोस्</p>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-rose-50 to-orange-50">
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="p-6 border-b border-gray-200">
           <h2 className="text-xl font-semibold text-gray-900">सबै प्रयोगकर्ताहरू</h2>
           <p className="text-sm text-gray-600 mt-1">जम्मा: {users.length} प्रयोगकर्ताहरू</p>
         </div>
@@ -155,15 +155,15 @@ export default function AccountsUsersPage() {
                 </thead>
                 <tbody>
                   {paginatedUsers.map((u, idx) => (
-                    <tr key={getUid(u)} className="border-b border-gray-100 hover:bg-rose-50/30 transition-colors">
+                    <tr key={getUid(u)} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                       <td className="py-4 px-6 text-sm text-gray-900">{(page - 1) * itemsPerPage + idx + 1}</td>
                       <td className="py-4 px-6 text-sm text-gray-900 font-medium">{u.name || 'N/A'}</td>
                       <td className="py-4 px-6 text-sm text-gray-600">{u.email}</td>
                       <td className="py-4 px-6">
-                        <span className={`px-3 py-1 text-xs font-medium rounded-full ${
-                          u.role === 'super_admin' ? 'bg-purple-100 text-purple-700' :
-                          u.role === 'astrologer' ? 'bg-amber-100 text-amber-700' :
-                          'bg-gray-100 text-gray-700'
+                        <span className={`px-3 py-1 text-xs font-medium rounded-full border ${
+                          u.role === 'super_admin' ? 'bg-white text-rose-700 border-rose-200' :
+                          u.role === 'astrologer' ? 'bg-white text-orange-700 border-orange-200' :
+                          'bg-gray-50 text-gray-700 border-gray-200'
                         }`}>
                           {u.role === 'super_admin' ? 'सुपर एडमिन' :
                            u.role === 'astrologer' ? 'ज्योतिषी' : 'प्रयोगकर्ता'}
@@ -179,7 +179,7 @@ export default function AccountsUsersPage() {
                           ) : u.role !== 'astrologer' ? (
                             <button
                               onClick={() => handleRoleChange(getUid(u), 'astrologer')}
-                              className="px-3 py-1 bg-amber-600 text-white text-xs font-medium rounded hover:bg-amber-700 transition-colors"
+                              className="px-3 py-1 bg-gradient-to-r from-rose-600 to-orange-600 text-white text-xs font-medium rounded hover:from-rose-700 hover:to-orange-700 transition-colors shadow-sm"
                               title="ज्योतिषीमा स्तरोन्नति गर्नुहोस्"
                             >
                               ⭐ स्तरोन्नति
@@ -187,7 +187,7 @@ export default function AccountsUsersPage() {
                           ) : (
                             <button
                               onClick={() => handleRoleChange(getUid(u), 'user')}
-                              className="px-3 py-1 bg-gray-600 text-white text-xs font-medium rounded hover:bg-gray-700 transition-colors"
+                              className="px-3 py-1 bg-gradient-to-r from-rose-600 to-orange-600 text-white text-xs font-medium rounded hover:from-rose-700 hover:to-orange-700 transition-colors shadow-sm"
                               title="प्रयोगकर्तामा अवनति गर्नुहोस्"
                             >
                               👤 अवनति

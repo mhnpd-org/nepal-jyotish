@@ -349,13 +349,13 @@ function AppointmentDetailContent() {
         <div className="lg:col-span-2 space-y-6">
           {/* Video Meeting Card */}
           {appointment.meetingLink && appointment.status !== 'cancelled' && (
-            <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-              <div className="bg-gradient-to-r from-rose-600 to-orange-600 px-6 py-4">
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="px-6 py-4 border-b border-gray-200">
                 <div className="flex items-center gap-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                   </svg>
-                  <h2 className="text-xl font-bold text-white">भिडियो मिटिङ</h2>
+                  <h2 className="text-xl font-bold bg-gradient-to-r from-rose-600 to-orange-600 bg-clip-text text-transparent">भिडियो मिटिङ</h2>
                 </div>
               </div>
 
@@ -365,7 +365,7 @@ function AppointmentDetailContent() {
                     <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 ${
                       isPastAppointment 
                         ? 'bg-gray-100 text-gray-400' 
-                        : 'bg-gradient-to-br from-amber-100 to-orange-100 text-amber-600'
+                        : 'bg-gray-100 text-rose-600'
                     }`}>
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -381,12 +381,12 @@ function AppointmentDetailContent() {
                       }
                     </p>
                     {!isPastAppointment && (
-                      <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200 rounded-xl p-4 max-w-md mx-auto">
+                      <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 max-w-md mx-auto">
                         <div className="flex items-start gap-2">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-rose-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
-                          <p className="text-xs text-amber-900 text-left">
+                          <p className="text-xs text-gray-800 text-left">
                             भिडियो मिटिङमा जोडिने विकल्प शेड्युल गरिएको मितिमा मात्र उपलब्ध हुनेछ।
                           </p>
                         </div>
@@ -395,7 +395,7 @@ function AppointmentDetailContent() {
                   </div>
                 ) : (
                   <div className="text-center py-8">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-rose-100 to-orange-100 rounded-full mb-4 animate-pulse">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                       </svg>
@@ -406,15 +406,15 @@ function AppointmentDetailContent() {
                     <p className="text-gray-600 mb-1 text-sm">
                       तपाईंको भिडियो परामर्श सुरु गर्न तयार छ
                     </p>
-                    <div className="inline-flex items-center gap-2 bg-green-50 border border-green-200 rounded-full px-3 py-1.5 mb-6">
+                    <div className="inline-flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-full px-3 py-1.5 mb-6">
                       <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                      <p className="text-xs text-green-700 font-semibold">
+                      <p className="text-xs text-gray-700 font-semibold">
                         आज {appointment.scheduledTime} बजे • लाइभ
                       </p>
                     </div>
                     <Link
                       href={`/accounts/appointments/call?id=${appointmentId}`}
-                      className="inline-block px-8 py-3 bg-gradient-to-r from-rose-600 to-orange-600 text-white text-base font-bold rounded-xl hover:from-rose-700 hover:to-orange-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+                      className="inline-block px-8 py-3 bg-gradient-to-r from-rose-600 to-orange-600 text-white text-base font-bold rounded-xl hover:from-rose-700 hover:to-orange-700 transition-all shadow-sm hover:shadow-md"
                     >
                       🎥 मिटिङ सुरु गर्नुहोस्
                     </Link>
@@ -425,13 +425,13 @@ function AppointmentDetailContent() {
           )}
 
           {/* Appointment Info Card */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-            <div className="bg-gradient-to-r from-rose-600 to-orange-600 px-6 py-4">
+          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-200">
               <div className="flex items-center gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <h2 className="text-xl font-bold text-white">अपोइन्टमेन्ट जानकारी</h2>
+                <h2 className="text-xl font-bold bg-gradient-to-r from-rose-600 to-orange-600 bg-clip-text text-transparent">अपोइन्टमेन्ट जानकारी</h2>
               </div>
             </div>
 
@@ -488,7 +488,7 @@ function AppointmentDetailContent() {
               {astrologer && (
                 <div className="pb-4 border-b border-gray-200">
                   <span className="text-sm font-bold text-gray-700 block mb-3">ज्योतिषी:</span>
-                  <div className="flex items-center gap-3 bg-gradient-to-r from-rose-50 to-orange-50 p-4 rounded-xl">
+                  <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 p-4 rounded-xl">
                     {astrologer.imageBase64 ? (
                       <img
                         src={astrologer.imageBase64}
@@ -514,7 +514,7 @@ function AppointmentDetailContent() {
               {(isAstrologerView || userProfile?.role === 'super_admin') && (
                 <div className="pb-4 border-b border-gray-200">
                   <span className="text-sm font-bold text-gray-700 block mb-3">ग्राहक जानकारी:</span>
-                  <div className="grid grid-cols-1 gap-3 text-sm bg-blue-50 p-4 rounded-xl">
+                  <div className="grid grid-cols-1 gap-3 text-sm bg-gray-50 border border-gray-200 p-4 rounded-xl">
                     <div>
                       <span className="text-gray-600 font-medium">नाम:</span>
                       <span className="ml-2 text-gray-900 font-bold">{appointment.userName}</span>
@@ -535,7 +535,7 @@ function AppointmentDetailContent() {
               {appointment.message && (
                 <div>
                   <span className="text-sm font-bold text-gray-700 block mb-3">सन्देश:</span>
-                  <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-4 rounded-xl border-2 border-gray-200">
+                  <div className="bg-white p-4 rounded-xl border border-gray-200">
                     <p className="text-gray-700 leading-relaxed">{appointment.message}</p>
                   </div>
                 </div>
@@ -548,13 +548,13 @@ function AppointmentDetailContent() {
         <div className="space-y-6">
           {/* Actions Card */}
           {(canManageStatus || (isUserView && appointment.status !== 'completed' && appointment.status !== 'cancelled' && !isPastAppointment)) && (
-            <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-              <div className="bg-gradient-to-r from-blue-600 to-cyan-600 px-6 py-4">
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="px-6 py-4 border-b border-gray-200">
                 <div className="flex items-center gap-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
-                  <h2 className="text-xl font-bold text-white">कार्यहरू</h2>
+                  <h2 className="text-xl font-bold bg-gradient-to-r from-rose-600 to-orange-600 bg-clip-text text-transparent">कार्यहरू</h2>
                 </div>
               </div>
 
@@ -569,7 +569,7 @@ function AppointmentDetailContent() {
                       {appointment.status === 'pending' && (
                         <button
                           onClick={() => handleStatusChange('confirmed')}
-                          className="w-full px-5 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all text-sm font-bold shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                          className="w-full px-5 py-3 bg-gradient-to-r from-rose-600 to-orange-600 text-white rounded-xl hover:from-rose-700 hover:to-orange-700 transition-all text-sm font-bold shadow-sm hover:shadow-md flex items-center justify-center gap-2"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -580,7 +580,7 @@ function AppointmentDetailContent() {
                       {appointment.status === 'confirmed' && (
                         <button
                           onClick={() => handleStatusChange('completed')}
-                          className="w-full px-5 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-all text-sm font-bold shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                          className="w-full px-5 py-3 bg-gradient-to-r from-rose-600 to-orange-600 text-white rounded-xl hover:from-rose-700 hover:to-orange-700 transition-all text-sm font-bold shadow-sm hover:shadow-md flex items-center justify-center gap-2"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -591,7 +591,7 @@ function AppointmentDetailContent() {
                       {userProfile?.role === 'super_admin' && (
                         <button
                           onClick={() => handleStatusChange('cancelled')}
-                          className="w-full px-5 py-3 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-all text-sm font-bold shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                          className="w-full px-5 py-3 bg-white text-rose-700 border border-rose-200 rounded-xl hover:border-rose-300 transition-all text-sm font-bold shadow-sm hover:shadow-md flex items-center justify-center gap-2"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -612,7 +612,7 @@ function AppointmentDetailContent() {
                     {!showReschedule ? (
                       <button
                         onClick={() => setShowReschedule(true)}
-                        className="w-full px-5 py-3 bg-amber-600 text-white rounded-xl hover:bg-amber-700 transition-all text-sm font-bold shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                        className="w-full px-5 py-3 border border-gray-200 text-gray-800 rounded-xl hover:bg-gray-50 transition-all text-sm font-bold flex items-center justify-center gap-2"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -638,7 +638,7 @@ function AppointmentDetailContent() {
                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
                           />
                           {newDate && (
-                            <div className="mt-3 p-3 bg-amber-50 border-2 border-amber-200 rounded-xl text-xs">
+                            <div className="mt-3 p-3 bg-gray-50 border border-gray-200 rounded-xl text-xs">
                               <div className="flex justify-between items-center mb-1">
                                 <span className="text-gray-600 font-medium">ईस्वी:</span>
                                 <span className="font-bold text-gray-900">{newDate}</span>
@@ -684,7 +684,7 @@ function AppointmentDetailContent() {
                           <button
                             onClick={handleReschedule}
                             disabled={isRescheduling || !newDate || !newTime}
-                            className={`flex-1 px-5 py-3 rounded-xl text-white font-bold shadow-md ${isRescheduling || !newDate || !newTime ? 'bg-gray-300 cursor-not-allowed' : 'bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700'}`}
+                            className={`flex-1 px-5 py-3 rounded-xl text-white font-bold ${isRescheduling || !newDate || !newTime ? 'bg-gray-300 cursor-not-allowed' : 'bg-gradient-to-r from-rose-600 to-orange-600 hover:from-rose-700 hover:to-orange-700'} shadow-sm hover:shadow-md`}
                           >
                             {isRescheduling ? 'रिच्छित हुँदैछ...' : 'पुष्टि गर्नुहोस्'}
                           </button>
@@ -704,13 +704,13 @@ function AppointmentDetailContent() {
           )}
 
           {/* Comments Section */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-            <div className="bg-gradient-to-r from-purple-600 to-indigo-600 px-6 py-4">
+          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-200">
               <div className="flex items-center gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                 </svg>
-                <h2 className="text-xl font-bold text-white">टिप्पणीहरू</h2>
+                <h2 className="text-xl font-bold bg-gradient-to-r from-rose-600 to-orange-600 bg-clip-text text-transparent">टिप्पणीहरू</h2>
               </div>
             </div>
 
@@ -726,7 +726,7 @@ function AppointmentDetailContent() {
                     onChange={(e) => setCommentText(e.target.value)}
                     placeholder="टिप्पणी लेख्नुहोस्..."
                     rows={4}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all resize-none"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-rose-500 focus:border-rose-500 outline-none transition-all resize-none"
                   />
                   <button
                     type="submit"
@@ -734,7 +734,7 @@ function AppointmentDetailContent() {
                     className={`mt-3 w-full px-6 py-3 rounded-xl font-semibold transition-all ${
                       isSubmittingComment || !commentText.trim()
                         ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                        : "bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700 shadow-md hover:shadow-lg"
+                        : "bg-gradient-to-r from-rose-600 to-orange-600 text-white hover:from-rose-700 hover:to-orange-700 shadow-sm hover:shadow-md"
                     }`}
                   >
                     {isSubmittingComment ? "पठाउँदै..." : "टिप्पणी थप्नुहोस्"}
@@ -746,10 +746,10 @@ function AppointmentDetailContent() {
               <div className="space-y-4 max-h-96 overflow-y-auto">
                 {appointment.comments && appointment.comments.length > 0 ? (
                   appointment.comments.map((comment, index) => (
-                    <div key={index} className="bg-gradient-to-br from-gray-50 to-gray-100 p-5 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
+                    <div key={index} className="bg-white p-5 rounded-xl border border-gray-200 hover:border-gray-300 transition-colors">
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-indigo-500 flex items-center justify-center text-white font-bold">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-rose-600 to-orange-600 flex items-center justify-center text-white font-bold">
                             {comment.userName.charAt(0).toUpperCase()}
                           </div>
                           <div>

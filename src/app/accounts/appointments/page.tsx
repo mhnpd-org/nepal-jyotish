@@ -261,16 +261,9 @@ export default function AccountsAppointmentsPage() {
     variant?: 'user' | 'astrologer' | 'admin';
   }) => {
     const serviceTitle = services.find(s => s.id === appointment.serviceType)?.title || appointment.serviceType;
-    
-    const variantColors = {
-      user: 'from-rose-600 to-orange-600',
-      astrologer: 'from-amber-600 to-rose-600',
-      admin: 'from-purple-600 to-blue-600'
-    };
 
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 overflow-hidden">
-        <div className={`h-1.5 bg-gradient-to-r ${variantColors[variant]}`} />
+      <div className="bg-white rounded-xl border border-gray-200 hover:border-gray-300 transition-colors overflow-hidden">
         <div className="p-4 sm:p-5">
           <div className="flex items-start justify-between gap-3 mb-3">
             <div className="flex-1 min-w-0">
@@ -317,7 +310,7 @@ export default function AccountsAppointmentsPage() {
 
           <Link
             href={`/accounts/appointments/detail?id=${appointment.id}`}
-            className={`block w-full text-center px-4 py-2.5 text-sm font-semibold bg-gradient-to-r ${variantColors[variant]} text-white rounded-lg hover:shadow-md transition-all`}
+            className="block w-full text-center px-4 py-2.5 text-sm font-semibold bg-gradient-to-r from-rose-600 to-orange-600 text-white rounded-lg hover:shadow-md transition-all"
           >
             विवरण हेर्नुहोस्
           </Link>
@@ -329,7 +322,7 @@ export default function AccountsAppointmentsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">📅 अपोइन्टमेन्टहरू</h1>
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-rose-600 to-orange-600 bg-clip-text text-transparent mb-2">📅 अपोइन्टमेन्टहरू</h1>
         <p className="text-gray-600">आफ्नो परामर्श हेर्नुहोस् र व्यवस्थापन गर्नुहोस्</p>
       </div>
 
@@ -338,8 +331,8 @@ export default function AccountsAppointmentsPage() {
           <button
             className={`px-4 py-2 rounded-lg font-medium transition-all ${
               tab === 'user'
-                ? 'bg-gradient-to-r from-rose-600 to-orange-600 text-white shadow-md'
-                : 'bg-white text-gray-700 border border-gray-200 hover:border-rose-300'
+                ? 'bg-gradient-to-r from-rose-600 to-orange-600 text-white shadow-sm'
+                : 'bg-white text-gray-700 border border-gray-200 hover:border-gray-300'
             }`}
             onClick={() => setTab('user')}
           >
@@ -350,8 +343,8 @@ export default function AccountsAppointmentsPage() {
           <button
             className={`px-4 py-2 rounded-lg font-medium transition-all ${
               tab === 'astrologer'
-                ? 'bg-gradient-to-r from-amber-600 to-rose-600 text-white shadow-md'
-                : 'bg-white text-gray-700 border border-gray-200 hover:border-amber-300'
+                ? 'bg-gradient-to-r from-rose-600 to-orange-600 text-white shadow-sm'
+                : 'bg-white text-gray-700 border border-gray-200 hover:border-gray-300'
             }`}
             onClick={() => setTab('astrologer')}
           >
@@ -362,8 +355,8 @@ export default function AccountsAppointmentsPage() {
           <button
             className={`px-4 py-2 rounded-lg font-medium transition-all ${
               tab === 'all'
-                ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-md'
-                : 'bg-white text-gray-700 border border-gray-200 hover:border-purple-300'
+                ? 'bg-gradient-to-r from-rose-600 to-orange-600 text-white shadow-sm'
+                : 'bg-white text-gray-700 border border-gray-200 hover:border-gray-300'
             }`}
             onClick={() => setTab('all')}
           >
@@ -374,8 +367,8 @@ export default function AccountsAppointmentsPage() {
 
       {tab === 'user' && (
         <>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-8">
-            <div className="p-4 sm:p-6 border-b border-gray-100 bg-gradient-to-r from-rose-50 to-orange-50">
+          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden mb-8">
+            <div className="p-4 sm:p-6 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900">तपाईंको बुकिङहरू</h2>
               <p className="text-sm text-gray-600 mt-1">जम्मा: {upcomingUserAppointments.length} अपोइन्टमेन्टहरू</p>
             </div>
@@ -409,8 +402,8 @@ export default function AccountsAppointmentsPage() {
 
           {/* Past Appointments Section */}
           {pastUserAppointments.length > 0 && (
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-              <div className="p-4 sm:p-6 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-slate-50">
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="p-4 sm:p-6 border-b border-gray-200">
                 <h2 className="text-xl font-semibold text-gray-900">विगतको अपोइन्टमेन्टहरू</h2>
                 <p className="text-sm text-gray-600 mt-1">जम्मा: {pastUserAppointments.length} अपोइन्टमेन्टहरू</p>
               </div>
@@ -441,8 +434,8 @@ export default function AccountsAppointmentsPage() {
 
       {tab === 'astrologer' && (
         <>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-8">
-            <div className="p-4 sm:p-6 border-b border-gray-100 bg-gradient-to-r from-amber-50 to-rose-50">
+          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden mb-8">
+            <div className="p-4 sm:p-6 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900">उपस्थित हुने अपोइन्टमेन्टहरू</h2>
               <p className="text-sm text-gray-600 mt-1">जम्मा: {upcomingAstroAppointments.length} अपोइन्टमेन्टहरू</p>
             </div>
@@ -473,8 +466,8 @@ export default function AccountsAppointmentsPage() {
 
           {/* Past Appointments Section */}
           {pastAstroAppointments.length > 0 && (
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-              <div className="p-4 sm:p-6 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-slate-50">
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="p-4 sm:p-6 border-b border-gray-200">
                 <h2 className="text-xl font-semibold text-gray-900">विगतको अपोइन्टमेन्टहरू</h2>
                 <p className="text-sm text-gray-600 mt-1">जम्मा: {pastAstroAppointments.length} अपोइन्टमेन्टहरू</p>
               </div>
@@ -501,8 +494,8 @@ export default function AccountsAppointmentsPage() {
       )}
 
       {tab === 'all' && isSuperAdmin(profile) && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="p-4 sm:p-6 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-blue-50">
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="p-4 sm:p-6 border-b border-gray-200">
             <h2 className="text-xl font-semibold text-gray-900">सबै अपोइन्टमेन्टहरू</h2>
             <p className="text-sm text-gray-600 mt-1">जम्मा: {sortedAllAppointments.length} अपोइन्टमेन्टहरू</p>
           </div>

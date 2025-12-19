@@ -89,7 +89,7 @@ export default function AccountsAstrologersPage() {
               onClick={() => onPageChange(p)}
               className={`px-3 py-1 rounded ${
                 currentPage === p
-                  ? 'bg-gradient-to-r from-amber-600 to-rose-600 text-white'
+                  ? 'bg-gradient-to-r from-rose-600 to-orange-600 text-white'
                   : 'border border-gray-300 hover:bg-gray-50'
               }`}
             >
@@ -112,12 +112,12 @@ export default function AccountsAstrologersPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">⭐ ज्योतिषीहरू</h1>
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-rose-600 to-orange-600 bg-clip-text text-transparent mb-2">⭐ ज्योतिषीहरू</h1>
         <p className="text-gray-600">सबै ज्योतिषीहरू हेर्नुहोस्</p>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-amber-50 to-rose-50">
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="p-6 border-b border-gray-200">
           <h2 className="text-xl font-semibold text-gray-900">सबै ज्योतिषीहरू</h2>
           <p className="text-sm text-gray-600 mt-1">जम्मा: {astrologers.length} ज्योतिषीहरू</p>
         </div>
@@ -139,12 +139,12 @@ export default function AccountsAstrologersPage() {
                 </thead>
                 <tbody>
                   {paginatedAstrologers.map((a, idx) => (
-                    <tr key={getUid(a)} className="border-b border-gray-100 hover:bg-amber-50/30 transition-colors">
+                    <tr key={getUid(a)} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                       <td className="py-4 px-6 text-sm text-gray-900">{(page - 1) * itemsPerPage + idx + 1}</td>
                       <td className="py-4 px-6 text-sm text-gray-900 font-medium">{a.name || 'N/A'}</td>
                       <td className="py-4 px-6 text-sm text-gray-600">{a.email}</td>
                       <td className="py-4 px-6">
-                        <span className="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-medium rounded-full">
+                        <span className="px-3 py-1 text-xs font-medium rounded-full border border-orange-200 text-orange-700 bg-white">
                           ज्योतिषी
                         </span>
                       </td>
@@ -154,7 +154,7 @@ export default function AccountsAstrologersPage() {
                       <td className="py-4 px-6">
                         <a
                           href={`/astrologers/detail?id=${getUid(a)}`}
-                          className="px-3 py-1.5 text-xs font-semibold bg-gradient-to-r from-amber-600 to-rose-600 text-white rounded-lg hover:from-amber-700 hover:to-rose-700 transition-all inline-block"
+                          className="px-3 py-1.5 text-xs font-semibold bg-gradient-to-r from-rose-600 to-orange-600 text-white rounded-lg hover:from-rose-700 hover:to-orange-700 transition-all inline-block shadow-sm"
                         >
                           विवरण हेर्नुहोस्
                         </a>

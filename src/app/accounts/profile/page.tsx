@@ -159,8 +159,8 @@ export default function AccountsProfilePage() {
 
   return (
     <div>
-      <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+      <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8">
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-rose-600 to-orange-600 bg-clip-text text-transparent mb-2">
           {isAstro ? '⭐ ज्योतिषी प्रोफाइल' : '👤 मेरो प्रोफाइल'}
         </h1>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
@@ -169,12 +169,12 @@ export default function AccountsProfilePage() {
           </p>
           <div className="flex items-center gap-3">
             {successMessage && (
-              <div className="px-4 py-2 bg-green-50 border border-green-200 text-green-800 rounded-lg text-sm">
+              <div className="px-4 py-2 border border-green-200 text-green-800 rounded-lg text-sm bg-white">
                 {successMessage}
               </div>
             )}
             {errorMessage && (
-              <div className="px-4 py-2 bg-rose-50 border border-rose-200 text-rose-800 rounded-lg text-sm">
+              <div className="px-4 py-2 border border-rose-200 text-rose-800 rounded-lg text-sm bg-white">
                 {errorMessage}
               </div>
             )}
@@ -196,7 +196,7 @@ export default function AccountsProfilePage() {
                     className="w-24 h-24 rounded-full object-cover border-2 border-rose-200"
                   />
                 ) : (
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-rose-200 to-orange-200 flex items-center justify-center text-3xl font-bold text-white">
+                  <div className="w-24 h-24 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center text-3xl font-bold text-gray-700">
                     {profile.name?.charAt(0).toUpperCase() || 'A'}
                   </div>
                 )}
@@ -319,7 +319,7 @@ export default function AccountsProfilePage() {
                   />
                   <button
                     onClick={addLanguage}
-                    className="px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700"
+                    className="px-4 py-2 border border-gray-300 text-gray-800 rounded-lg hover:bg-gray-50"
                   >
                     थप्नुहोस्
                   </button>
@@ -328,10 +328,10 @@ export default function AccountsProfilePage() {
                   {profile.languages?.map((l) => (
                     <span
                       key={l}
-                      className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm flex items-center gap-2"
+                      className="px-3 py-1 bg-gray-50 border border-gray-200 text-gray-800 rounded-full text-sm flex items-center gap-2"
                     >
                       {l}
-                      <button onClick={() => removeLanguage(l)} className="text-blue-600 hover:text-blue-900">
+                      <button onClick={() => removeLanguage(l)} className="text-gray-500 hover:text-gray-700">
                         ×
                       </button>
                     </span>
@@ -376,7 +376,7 @@ export default function AccountsProfilePage() {
             <button
               onClick={handleSave}
               disabled={saving}
-              className="w-full py-3 bg-gradient-to-r from-rose-600 to-orange-600 text-white font-semibold rounded-lg hover:from-rose-700 hover:to-orange-700 transition-all disabled:opacity-50"
+              className="w-full py-3 bg-gradient-to-r from-rose-600 to-orange-600 text-white font-semibold rounded-lg hover:from-rose-700 hover:to-orange-700 transition-all disabled:opacity-50 shadow-sm"
             >
               {saving ? "सुरक्षित गर्दै..." : "प्रोफाइल सुरक्षित गर्नुहोस्"}
             </button>
