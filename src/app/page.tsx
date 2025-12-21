@@ -248,12 +248,6 @@ export default function LandingPage() {
             </h2>
             <p className="text-2xl font-bold text-white drop-shadow">ज्योतिष ज्ञान</p>
           </div>
-          <Link
-            href="/kundali-matching"
-            className="px-5 py-2.5 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold rounded-lg transition-all shadow-md hover:shadow-lg text-sm whitespace-nowrap"
-          >
-            कुण्डली मिलान
-          </Link>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {blogs.map((b) => (
