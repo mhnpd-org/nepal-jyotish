@@ -22,7 +22,7 @@
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
-    "@mhnpd-org/panchang": "^1.1.10",
+    "@mhnpd-org/panchang": "^1.1.11",
     "@next/mdx": "^16.0.10",
     "d3": "^7.9.0",
     "date-fns": "^4.1.0",
