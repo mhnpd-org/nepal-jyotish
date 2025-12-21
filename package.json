@@ -23,7 +23,7 @@
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@mhnpd-org/panchang": "^1.1.11",
-    "@next/mdx": "^16.0.10",
+    "@next/mdx": "^16.1.0",
     "d3": "^7.9.0",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
