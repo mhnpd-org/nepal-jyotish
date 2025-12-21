@@ -321,7 +321,7 @@ function PanchangContent() {
             </span>
           </div>
           <div className="flex items-start gap-2">
-            <span className="text-teal-700">राशि:</span>
+            <span className="text-teal-700">चन्द्र राशि:</span>
             <span className="font-semibold text-teal-900">
               {translateSanskritSafe(panchang.nakshatra.rashi)}
             </span>
