@@ -163,10 +163,10 @@ export default function LandingPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">परम्परागत चाइना (Janma Patrika)</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">परम्परागत जन्मकुण्डली (Janma Patrika)</h3>
               <p className="text-gray-700 leading-relaxed mb-4">
-                सूर्य सिद्धान्त (Surya Siddhanta) आधारित सटीक खगोलीय गणनाबाट पूर्ण जन्म कुण्डली तुरुन्तै तयार गर्नुहोस्। 
-                तपाईंको जन्म मिति, समय र स्थानको आधारमा Traditional Nepali kundali Chart।
+                सूर्यसिद्धान्त (Surya Siddhanta) आधारित सटीक खगोलीय गणनाबाट पूर्ण जन्मकुण्डली तुरुन्तै तयार गर्नुहोस्।
+                तपाईंको जन्म मिति, समय र स्थानको आधारमा तयार गरिएको Traditional Nepali Kundali Chart।
               </p>
               <ul className="space-y-2 text-sm text-gray-600">
                 <li className="flex items-start gap-2">
@@ -192,16 +192,16 @@ export default function LandingPage() {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">ग्रह गति र स्थिति (Planetary Motion)</h3>
               <p className="text-gray-700 leading-relaxed mb-4">
-                Vedic Jyotish अनुसार नौ ग्रहहरूको विस्तृत स्थिति, गति, राशि, नक्षत्र, र तिनीहरूको प्रभाव तपाईंको जीवनमा सरल भाषामा बुझ्नुहोस्।
+                वैदिक ज्योतिष (Vedic Jyotish) अनुसार, नौ ग्रहहरूको विस्तृत स्थिति, गति, राशि, नक्षत्र, र तिनीहरूले तपाईंको जीवनमा पार्ने प्रभाव सरल भाषामा बुझ्नुहोस्।
               </p>
               <ul className="space-y-2 text-sm text-gray-600">
                 <li className="flex items-start gap-2">
                   <span className="text-rose-600 mt-0.5">•</span>
-                  <span>ग्रह बल र शुभाशुभ फल (Graha Bala & Effects)</span>
+                  <span>ग्रह बल र शुभ-अशुभ फल (Graha Bala & Effects)</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-rose-600 mt-0.5">•</span>
-                  <span>नक्षत्र र पाद विवरण (Nakshatra Details)</span>
+                  <span>नक्षत्र र पाद विवरण (Nakshatra & Pada Details)</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-rose-600 mt-0.5">•</span>
