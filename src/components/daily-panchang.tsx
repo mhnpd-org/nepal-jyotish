@@ -1,5 +1,6 @@
 "use client";
 
+import { DateTime } from "luxon";
 import { Suspense, use, useState, useEffect } from "react";
 import { getDailyPanchang, type Panchanga } from "@mhnpd-org/panchang";
 import { translateSanskritSafe } from "@internal/lib/devanagari";
@@ -45,14 +46,22 @@ function PanchangContent() {
     });
   };
 
-  const formatDateNepali = (date: Date): string => {
+  const formatDateNepali = (value: Date | string): string => {
     const nepaliDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
-    const timeStr = formatTime(date);
+
+    const dateTime =
+      typeof value === "string"
+        ? DateTime.fromISO(value, { setZone: true }) // Respect the offset in the ISO string
+        : DateTime.fromJSDate(value);
+
+    if (!dateTime.isValid) return "N/A";
+
+    const timeStr = dateTime.toFormat("HH:mm:ss");
     return timeStr
       .split("")
-      .map((char) => {
-        const digit = parseInt(char);
-        return isNaN(digit) ? char : nepaliDigits[digit];
+      .map((char:string) => {
+        const digit = parseInt(char, 10);
+        return Number.isNaN(digit) ? char : nepaliDigits[digit];
       })
       .join("");
   };
